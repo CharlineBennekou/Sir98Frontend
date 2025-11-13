@@ -48,6 +48,7 @@ export default function TimerTest() {
   return (
     <div style={{ padding: 24, fontFamily: "system-ui, sans-serif" }}>
       <button onClick={handleClick}>Send notification</button>
+      <p>:)</p>
     </div>
   );
 }
