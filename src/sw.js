@@ -18,3 +18,14 @@ self.addEventListener('notificationclick', (event) => {
   console.log('Notification clicked');
   // You can focus/open a client here later if you want
 });
+
+self.addEventListener("push", (event) => {
+  console.log("Push event received", event);
+
+  event.waitUntil(
+    self.registration.showNotification("Push Notification", {
+      body: "This is a push message triggered from DevTools!",
+      tag: "devtools-push",
+    })
+  );
+});
