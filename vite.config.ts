@@ -39,8 +39,18 @@ export default defineConfig({
         enabled: true,                   
         navigateFallback: 'index.html',
         suppressWarnings: true,
-        type: 'module',                   
+        type: 'module',  
+                         
       },
     }),
+    
   ],
+  server: {
+    host: true,              
+    port: 5173,              
+    // https: {
+    //   key:  fs.readFileSync(path.resolve(__dirname, 'cert/192.168.8.15-key.pem')),
+    //   cert: fs.readFileSync(path.resolve(__dirname, 'cert/192.168.8.15.pem')),
+    // },
+  },
 });
