@@ -1,4 +1,4 @@
-import React from "react";
+//import React from "react";
 
 export default function TimerTest() {
   const handleClick = async () => {
@@ -36,7 +36,7 @@ export default function TimerTest() {
       await reg.showNotification("Test notification", {
         body: "If you see this, SW notifications work.",
         tag: "demo",
-        renotify: true,
+        //renotify: true,
       });
       console.log("showNotification() resolved");
     } catch (error) {
