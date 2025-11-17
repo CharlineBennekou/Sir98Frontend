@@ -1,0 +1,38 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import type { Activity } from '../../types/activity';
+
+export const activitiesApi = createApi({
+  reducerPath: 'activitiesApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:5164/api/',
+  }),
+  endpoints: (builder) => ({
+    fetchActivities: builder.query<Activity[], void>({
+      query: () => ({
+        url: 'activity',
+        method: 'GET'
+      }),
+      transformResponse: (response: any[]) => {
+        return response.map(activity => ({
+          id: activity.id,
+          title: activity.title,
+          start: new Date(activity.start),
+          end: new Date(activity.end),
+          address: activity.address,
+          image: activity.image,
+          link: activity.link,
+          cancelled: activity.cancelled,
+          instructors: activity.instructors?.map((inst: any) => ({
+            id: inst.id,
+            email: inst.email,
+            number: inst.number,
+            firstName: inst.firstName,
+            image: inst.image
+          })) ?? []
+        })) as Activity[];
+      }
+    }),
+  }),
+});
+
+export const { useFetchActivitiesQuery } = activitiesApi;
