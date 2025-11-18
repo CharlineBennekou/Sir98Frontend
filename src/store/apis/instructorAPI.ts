@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { Instructor } from '../../types/activity';
+import type { Instructor } from '../../types/instructor';
 
 export const instructorsApi = createApi({
   reducerPath: 'instructorsApi',
