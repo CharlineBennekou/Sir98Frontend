@@ -1,10 +1,4 @@
-export interface Instructor {
-  id: number;
-  email: string;
-  number: string;
-  firstName: string;
-  image: string;
-}
+import type { Instructor } from './/instructor';
 
 export interface Activity1 {
   id: number;
