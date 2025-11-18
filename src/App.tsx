@@ -1,5 +1,6 @@
 import './App.css'
 import ActivityList from './components/activities/ActivityList'
+import ActivityTestingData from './components/activities/ActivityTestingData'
 
 function App() {
   return (
@@ -9,6 +10,9 @@ function App() {
       </header>
 
       <main>
+        <section style={{ marginBottom: 12 }}>
+          <ActivityTestingData />
+        </section>
         <ActivityList />
       </main>
     </div>
