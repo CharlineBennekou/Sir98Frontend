@@ -6,7 +6,7 @@ export interface Instructor {
   image: string;
 }
 
-export interface Activity {
+export interface Activity1 {
   id: number;
   title: string;
   start: Date;        // convert string → Date
