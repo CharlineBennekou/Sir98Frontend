@@ -1,4 +1,4 @@
-import React from "react";
+//import React from "react";
 import { useFetchActivitiesQuery } from "../../store/apis/activityAPI";
 import { useFetchInstructorsQuery } from "../../store/apis/instructorAPI";
 
