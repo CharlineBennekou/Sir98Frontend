@@ -1,0 +1,285 @@
+.activity-card {
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+  margin: 12px 0;
+  background: #bc3939;
+}
+
+
+.activity-image {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+
+.image-title {
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  transform: translateX(-50%);
+  color: #0f0a0a;
+  font-size: 22px;
+  font-weight: 700;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+
+/* helper classes: add e.g. <div class="activity-card zoom-in"> or "zoom-out" */
+.activity-card.zoom-in .activity-image {
+  background-size: 110% auto;
+}
+
+
+.activity-card.zoom-out .activity-image {
+  background-size: 80% auto;
+}
+
+
+/* overlay-top variant: center the title near the top and keep actions at left */
+/* panel under image with divider-like look */
+.info-panel {
+  background: #e6f9c8;
+  /* light green */
+  padding: 14px 16px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  color: #123;
+}
+
+
+.image-title {
+  font-size: 22px;
+}
+
+
+/* top-right controls inside image (notification button) */
+.top-right-controls {
+  position: absolute;
+  /* inset further from the rounded corner so the large button isn't clipped */
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 6;
+}
+
+
+.top-right-controls .icon-button {
+  background: rgba(255, 255, 255, 0.92);
+  color: #111;
+  padding: 10px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  min-height: 64px;
+}
+
+
+.top-right-controls .icon-button svg {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+
+
+.details-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+
+.details-button {
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+
+.details-panel {
+  padding: 12px 8px 4px 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  background: #fff;
+}
+
+
+.info-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.icon-button {
+  background: rgba(0, 0, 0, 0.06);
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #111;
+}
+
+
+.icon-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+
+.icon-button:hover {
+  background: rgba(0, 0, 0, 0.09);
+}
+
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.info-row svg {
+  width: 20px;
+  height: 20px;
+  color: #1b5e20;
+  flex: 0 0 20px;
+}
+
+
+.info-text {
+  font-size: 14px;
+}
+
+
+.info-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+
+.date-small {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+
+/* subscribe-area styles removed (lower controls deleted) */
+
+
+.cancelled {
+  opacity: 0.8;
+}
+
+
+.cancelled-pill {
+  margin-top: 8px;
+  background: #f8d7da;
+  color: #721c24;
+  padding: 6px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  font-weight: 700
+}
+
+
+.subscribed {
+  outline: 3px solid #7f5af0;
+}
+
+
+
+
+/* NEW CSS TO ACTIVITYCARD*/
+
+/* --- FIX: Tekst synlig og læsbar --- */
+
+
+.activity-body {
+  background: #ACEB66;
+  padding: 16px;
+  color: #111;
+}
+
+.activity-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: #111;
+}
+
+.activity-instructor,
+.activity-location,
+.activity-time {
+  color: #333;
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+.activity-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+
+  justify-content: center;
+}
+
+/* Knappen "Se detaljer" */
+.details-btn {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #000;
+}
+
+.details-btn:hover {
+  background: #f5f5f5;
+}
+
+/* Knappen "Tilmeld dig" */
+.subscribe-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.subscribe-btn.active {
+  background: #4a3aff; /* lilla */
+}
+
+.subscribe-btn:hover {
+  opacity: 0.9;
+}
