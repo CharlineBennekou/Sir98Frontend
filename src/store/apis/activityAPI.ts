@@ -12,24 +12,24 @@ endpoints: (builder) => ({
       url: 'activity',
       method: 'GET'
     }),
-      transformResponse: (response: any[]) => {
-        return response.map(activity => ({
-          id: activity.id,
-          title: activity.title,
-          start: new Date(activity.start),
-          end: new Date(activity.end),
-          address: activity.address,
-          image: activity.image,
-          link: activity.link,
-          cancelled: activity.cancelled,
-          instructors: activity.instructors?.map((inst: any) => ({
-            id: inst.id,
-            email: inst.email,
-            number: inst.number,
-            firstName: inst.firstName,
-            image: inst.image
-          })) ?? []
-        })) as Activity1[];
+          transformResponse: (response: any[]) => {
+          return response.map(activity => ({
+            id: activity.id,
+            title: activity.title,
+            start: activity.start,  // <-- behold som string
+            end: activity.end,      // <-- behold som string
+            address: activity.address,
+            image: activity.image,
+            link: activity.link,
+            cancelled: activity.cancelled,
+            instructors: activity.instructors?.map((inst: any) => ({
+              id: inst.id,
+              email: inst.email,
+              number: inst.number,
+              firstName: inst.firstName,
+              image: inst.image
+              })) ?? []
+          })) as Activity1[];
       }
     }),
   }),

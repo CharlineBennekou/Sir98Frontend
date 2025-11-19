@@ -1,48 +1,71 @@
-import '../../activities.css'
-import { type Activity } from './types'
-import type { Activity1 } from '../../types/activity';
-
-
+import '../../styles/ActivityCarsStyle.css'
+import type { Activity1 } from '../../types/activity'
 
 type Props = {
-    activity: Activity
+    activity: Activity1
     subscribed: boolean
     onToggle: (id: string) => void
-
-    // NEW PROP: handler that parent can use to open the dialog
-    //onViewDetails?: (activity: Activity1) => void
-    onViewDetails?: (activity: Activity | Activity1) => void
+    onViewDetails?: (activity: Activity1) => void
 }
 
 export default function ActivityCard({ activity, subscribed, onToggle, onViewDetails }: Props) {
+
+    const startTime = activity.start ? new Date(activity.start) : null;
+    const endTime = activity.end ? new Date(activity.end) : null;
+
+    const instructorName =
+        activity.instructors?.length
+            ? activity.instructors[0]?.firstName
+            : "Instruktør ikke angivet"
+
     return (
         <div className={`activity-card ${activity.cancelled ? 'cancelled' : ''} ${subscribed ? 'subscribed' : ''}`}>
-            {activity.image && <div className="activity-image" style={{ backgroundImage: `url(${activity.image})` }} />}
-            <div className="activity-body">
-                <h3 className="activity-title">{activity.title}</h3>
-                <div className="activity-meta">
-                    <div className="activity-date">{activity.date}</div>
-                    <div className="activity-time">{activity.startTime}{activity.endTime ? ` - ${activity.endTime}` : ''}</div>
-                    {activity.location && <div className="activity-location">{activity.location}</div>}
-                </div>
-                <div className="activity-actions">
-                    <label className="subscribe-label">
-                        <input type="checkbox" checked={subscribed} onChange={() => onToggle(activity.id)} />
-                        <span>Subscribe</span>
-                    </label>
+            
+            {activity.image && (
+                <div
+                    className="activity-image"
+                    style={{ backgroundImage: `url(${activity.image})` }}
+                />
+            )}
 
-                    {/* NEW: Simple "View Details" button */}
-                    {/* This will later open a dialog using activity API data */}
+            <div className="activity-body">
+
+                <h3 className="activity-title">{activity.title}</h3>
+
+                <p className="activity-instructor">{instructorName}</p>
+
+                {activity.address && (
+                    <p className="activity-location">{activity.address}</p>
+                )}
+
+                <div className="activity-time">
+                    {startTime
+                        ? startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        : ""}
+                    {endTime
+                        ? ` - ${endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                        : ""}
+                </div>
+
+                <div className="activity-actions">
                     <button
-                        className="activity-details-btn"
+                        className="details-btn"
                         onClick={() => onViewDetails?.(activity)}
                     >
-                        View Details
+                        Se detaljer
                     </button>
-                    {/* NEW END */}
 
+                    <button
+                        className={`subscribe-btn ${subscribed ? "active" : ""}`}
+                        onClick={() => onToggle(activity.id.toString())}
+                    >
+                        {subscribed ? "Tilmeldt" : "Tilmeld dig"}
+                    </button>
                 </div>
-                {activity.cancelled && <div className="cancelled-pill">AFLYST</div>}
+
+                {activity.cancelled && (
+                    <div className="cancelled-pill">AFLYST</div>
+                )}
             </div>
         </div>
     )
