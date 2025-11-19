@@ -222,7 +222,7 @@
 
 
 .activity-body {
-  background: yellow;
+  background: #ACEB66;
   padding: 16px;
   color: #111;
 }
@@ -246,6 +246,8 @@
   display: flex;
   gap: 12px;
   margin-top: 12px;
+
+  justify-content: center;
 }
 
 /* Knappen "Se detaljer" */
