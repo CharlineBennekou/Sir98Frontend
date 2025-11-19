@@ -1,6 +1,7 @@
 import ActivityCard from './ActivityCard'
 import { useFetchActivitiesQuery } from "../../store/apis/activityAPI";
 import { useEffect, useState } from 'react'
+import type { Activity } from '../../types/activity';
 
 const STORAGE_KEY = 'sir98.subscriptions'
 
@@ -29,7 +30,7 @@ export default function ActivityList() {
     <div>
       <h2>Aktiviteter</h2>
       <div>
-        {activities.map(a => (
+        {activities.map((a: Activity) => (
           <ActivityCard 
             key={a.id}
             activity={a}
