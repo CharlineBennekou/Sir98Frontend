@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { Activity1 } from '../../types/activity';
+import type { Activity } from '../../types/activity';
 
 export const activitiesApi = createApi({
   reducerPath: 'activitiesApi',
@@ -7,7 +7,7 @@ baseQuery: fetchBaseQuery({
   baseUrl: 'https://sir98backend20251119084937-b4g4eucyewf0dvf7.canadacentral-01.azurewebsites.net/api/',
 }),
 endpoints: (builder) => ({
-  fetchActivities: builder.query<Activity1[], void>({
+  fetchActivities: builder.query<Activity[], void>({
     query: () => ({
       url: 'activity',
       method: 'GET'
@@ -29,7 +29,7 @@ endpoints: (builder) => ({
               firstName: inst.firstName,
               image: inst.image
               })) ?? []
-          })) as Activity1[];
+          })) as Activity[];
       }
     }),
   }),

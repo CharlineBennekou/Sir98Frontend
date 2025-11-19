@@ -1,11 +1,11 @@
-import '../../styles/ActivityCarsStyle.css'
-import type { Activity1 } from '../../types/activity'
+import '../../styles/ActivityCardStyle.css'
+import type { Activity } from '../../types/activity'
 
 type Props = {
-    activity: Activity1
+    activity: Activity
     subscribed: boolean
     onToggle: (id: string) => void
-    onViewDetails?: (activity: Activity1) => void
+    onViewDetails?: (activity: Activity) => void
 }
 
 export default function ActivityCard({ activity, subscribed, onToggle, onViewDetails }: Props) {

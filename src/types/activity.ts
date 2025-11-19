@@ -1,6 +1,6 @@
 import type { Instructor } from './/instructor';
 
-export interface Activity1 {
+export interface Activity {
   id: number;
   title: string;
   start?: string;  // <-- ændres fra Date til string
