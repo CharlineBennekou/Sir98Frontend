@@ -3,11 +3,11 @@ import type { Instructor } from './/instructor';
 export interface Activity1 {
   id: number;
   title: string;
-  start: Date;        // convert string → Date
-  end: Date;
-  address: string;
-  image: string;
+  start?: string;  // <-- ændres fra Date til string
+  end?: string;
+  address?: string;
+  image?: string;
   link: string;
   cancelled: boolean;
-  instructors: Instructor[];  // convert null → []
+  instructors: Instructor[];
 }

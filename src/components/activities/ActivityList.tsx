@@ -1,41 +1,41 @@
-import { useEffect, useState } from 'react'
 import ActivityCard from './ActivityCard'
-import { type Activity } from './types'
-import { mockActivities } from '../../mockActivity/MockActivities'
+import { useFetchActivitiesQuery } from "../../store/apis/activityAPI";
+import { useEffect, useState } from 'react'
 
 const STORAGE_KEY = 'sir98.subscriptions'
 
 export default function ActivityList() {
-  const [activities] = useState<Activity[]>(mockActivities)
+  const { data: activities = [], isLoading, isError } = useFetchActivitiesQuery()
+
   const [subs, setSubs] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) setSubs(JSON.parse(raw))
-    } catch (e) {
-      console.error('Load subs failed', e)
-    }
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (raw) setSubs(JSON.parse(raw))
   }, [])
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(subs))
-    } catch (e) {
-      console.error('Save subs failed', e)
-    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(subs))
   }, [subs])
 
   function toggle(id: string) {
     setSubs(prev => ({ ...prev, [id]: !prev[id] }))
   }
 
+  if (isLoading) return <p>Henter aktiviteter…</p>
+  if (isError) return <p>Kunne ikke hente aktiviteter.</p>
+
   return (
     <div>
       <h2>Aktiviteter</h2>
       <div>
         {activities.map(a => (
-          <ActivityCard key={a.id} activity={a} subscribed={!!subs[a.id]} onToggle={toggle} />
+          <ActivityCard 
+            key={a.id}
+            activity={a}
+            subscribed={!!subs[a.id]}
+            onToggle={toggle}
+          />
         ))}
       </div>
     </div>
