@@ -2,8 +2,10 @@ import '../../styles/NewActivityCardStyle.css'
 import type { Activity } from '../../types/activity'
 import { FiUser, FiMapPin, FiClock } from "react-icons/fi"
 import ActivityDetail from './ActivityDetail';
-import React, { useState } from "react";
-
+import { useState } from "react";
+import BadmintonImage from '../../assets/badminton.jpg';
+import FootballImage from '../../assets/football.jpg';
+import SwimmingImage from '../../assets/swimming.jpg'; 
 
 type Props = {
     activity: Activity
@@ -12,29 +14,34 @@ type Props = {
     onViewDetails?: (activity: Activity) => void
 }
 
-export default function ActivityCard({ activity, subscribed, onToggle, onViewDetails }: Props) {
+export default function ActivityCard({ activity, subscribed, onToggle }: Props) {
 
     const startTime = activity.start ? new Date(activity.start) : null;
     const endTime = activity.end ? new Date(activity.end) : null;
     const [dialogOpen, setDialogOpen] = useState(false);
 
-
+    const activityImages: Record<string, string> = 
+    {
+        Badminton: BadmintonImage,
+        Fodbold: FootballImage,
+        Svømning: SwimmingImage
+    };
 
     const instructorName =
         activity.instructors?.length
             ? activity.instructors[0]?.firstName
-            : "Instruktør ikke angivet"
+            : "Uden instruktør";
 
     return (
         <>
         <div className={`activity-card ${activity.cancelled ? 'cancelled' : ''} ${subscribed ? 'subscribed' : ''}`}>
             
-            {activity.image && (
-                <div
-                    className="activity-image"
-                    style={{ backgroundImage: `url(${activity.image})` }}
-                />
-            )}
+            {activityImages[activity.title] && (
+    <div
+        className="activity-image"
+        style={{ backgroundImage: `url(${activityImages[activity.title]})` }}
+    />
+)}
 
             <div className="activity-body">
 

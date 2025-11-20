@@ -1,5 +1,8 @@
 import '../../styles/ActivityDetailStyle.css'
 import type { Activity } from "../../types/activity";
+import BadmintonImage from '../../assets/badminton.jpg';
+import FootballImage from '../../assets/football.jpg';
+import SwimmingImage from '../../assets/swimming.jpg'; 
 
 type Props = {
   activity: Activity;
@@ -15,6 +18,13 @@ export default function DialogBox({ activity, open, onClose, onToggle, subscribe
   const start = activity.start ? new Date(activity.start) : null;
   const end = activity.end ? new Date(activity.end) : null;
 
+      const activityImages: Record<string, string> = 
+    {
+        Badminton: BadmintonImage,
+        Fodbold: FootballImage,
+        Svømning: SwimmingImage
+    };
+
   return (
     <div className="dialog-overlay" onClick={onClose}>
       <div className="dialog-content" onClick={(e) => e.stopPropagation()}>
@@ -22,10 +32,14 @@ export default function DialogBox({ activity, open, onClose, onToggle, subscribe
         {/* Titel */}
         <h2>{activity.title}</h2>
 
-        {/* Billede */}
-        {activity.image && (
-          <img className="dialog-image" src={activity.image} alt={activity.title} />
-        )}
+       
+      {activityImages[activity.title] && (
+  <div
+    className="activity-image"
+    style={{ backgroundImage: `url(${activityImages[activity.title]})` }}
+  />
+)}
+
 
         {/* Instruktør */}
         <p>

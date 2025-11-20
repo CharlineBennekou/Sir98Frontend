@@ -13,10 +13,11 @@
 /* --- Billede --- */
 
 .activity-image {
-  height: 180px;
+  height: 250px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
 }
 
 
