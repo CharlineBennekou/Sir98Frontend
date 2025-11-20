@@ -44,7 +44,9 @@ export default function DialogBox({ activity, open, onClose, onToggle, subscribe
         {/* Instruktør */}
         <p>
           <strong>Instruktør:</strong>{" "}
-          {activity.instructors?.[0]?.firstName ?? "Ikke angivet"}
+          {activity.instructors && activity.instructors.length > 0
+            ? activity.instructors.map((i) => i.firstName).join(" & ")
+            : "Ikke angivet"}
         </p>
 
         {/* Adresse */}

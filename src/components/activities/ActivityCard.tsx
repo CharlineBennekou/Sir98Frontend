@@ -29,8 +29,8 @@ export default function ActivityCard({ activity, subscribed, onToggle }: Props) 
 
     const instructorName =
         activity.instructors?.length
-            ? activity.instructors[0]?.firstName
-            : "Uden instruktør";
+            ? activity.instructors.map((i) => i.firstName).join(" & ")
+            : "Ikke angivet";
 
     return (
         <>
