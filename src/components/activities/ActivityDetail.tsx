@@ -8,11 +8,9 @@ type Props = {
   activity: Activity;
   open: boolean;
   onClose: () => void;
-  onToggle: (id: string) => void;
-  subscribed: boolean;
 };
 
-export default function DialogBox({ activity, open, onClose, onToggle, subscribed }: Props) {
+export default function DialogBox({ activity, open, onClose }: Props) {
   if (!open) return null;
 
   const start = activity.start ? new Date(activity.start) : null;
@@ -26,23 +24,33 @@ export default function DialogBox({ activity, open, onClose, onToggle, subscribe
     };
 
   return (
-    <div className="dialog-overlay" onClick={onClose}>
+    
+    <div className={`dialog-overlay ${activity.cancelled ? "cancelled-detail-card" : ""}`} onClick={onClose}>
       <div className="dialog-content" onClick={(e) => e.stopPropagation()}>
         
+              {/* AFLYST badge – kun hvis aflyst */}
+      {activity.cancelled && (
+        <div className="cancelled-detail-banner">
+          AFLYST
+        </div>
+      )}
+
+<div className="dialog-body">
+
         {/* Titel */}
-        <h2>{activity.title}</h2>
+        <h2 className='detail-title'>{activity.title}</h2>
 
        
       {activityImages[activity.title] && (
   <div
-    className="activity-image"
+    className="dialog-image"
     style={{ backgroundImage: `url(${activityImages[activity.title]})` }}
   />
 )}
 
 
         {/* Instruktør */}
-        <p>
+        <p className="activity-detail-instructor">
           <strong>Instruktør:</strong>{" "}
           {activity.instructors && activity.instructors.length > 0
             ? activity.instructors.map((i) => i.firstName).join(" & ")
@@ -73,12 +81,9 @@ export default function DialogBox({ activity, open, onClose, onToggle, subscribe
           </p>
         )}
 
-        {/* Cancelled badge */}
-        {activity.cancelled && (
-          <div className="dialog-cancelled">AFLYST</div>
-        )}
 
-        {/* Knapper */}
+
+        {/* Knapper
         <div className="dialog-actions">
           <button
             className={`subscribe-btn-dialog ${subscribed ? "active" : ""}`}
@@ -90,8 +95,9 @@ export default function DialogBox({ activity, open, onClose, onToggle, subscribe
           <button className="close-btn-dialog" onClick={onClose}>
             Luk
           </button>
-        </div>
+        </div> */}
       </div>
+        </div>
     </div>
   );
 }

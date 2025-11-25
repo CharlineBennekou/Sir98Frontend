@@ -19,23 +19,22 @@ export default function ActivityList() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(subs))
   }, [subs])
 
-  function toggle(id: string) {
-    setSubs(prev => ({ ...prev, [id]: !prev[id] }))
-  }
+  // function toggle(id: string) {
+  //   setSubs(prev => ({ ...prev, [id]: !prev[id] }))
+  // }
 
   if (isLoading) return <p>Henter aktiviteter…</p>
   if (isError) return <p>Kunne ikke hente aktiviteter.</p>
 
   return (
     <div>
-      <h2>Aktiviteter</h2>
+      <h2 >Aktiviteter</h2>
       <div>
         {activities.map((a: Activity) => (
           <ActivityCard 
             key={a.id}
             activity={a}
             subscribed={!!subs[a.id]}
-            onToggle={toggle}
           />
         ))}
       </div>

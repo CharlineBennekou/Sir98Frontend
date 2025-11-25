@@ -4,7 +4,7 @@ import type { Activity } from '../../types/activity';
 export const activitiesApi = createApi({
   reducerPath: 'activitiesApi',
 baseQuery: fetchBaseQuery({
-  baseUrl: 'https://sir98backend20251119084937-b4g4eucyewf0dvf7.canadacentral-01.azurewebsites.net/api/',
+  baseUrl: 'https://sir98backend2025v2-ayf5erhdhhawcjff.canadacentral-01.azurewebsites.net/api/',
 }),
 endpoints: (builder) => ({
   fetchActivities: builder.query<Activity[], void>({

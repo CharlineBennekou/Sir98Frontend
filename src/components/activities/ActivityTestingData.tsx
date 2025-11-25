@@ -25,7 +25,8 @@ export default function ActivityTestingData() {
         justifyContent: "center", // centers the content
         gap: "200px",           // increased spacing between the two blocks
         padding: "20px",       // padding around the whole layout
-        alignItems: "flex-start"
+        alignItems: "flex-start",
+        color: "#111"
       }}
     >
       {/* Activities */}

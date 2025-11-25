@@ -11,7 +11,7 @@
 
 /* Selve dialogboksen */
 .dialog-content {
-  background: #fff;          /* hvid baggrund */
+  background: #bad798;          
   color: #111;               /* mørk tekst */
   padding: 24px;
   border-radius: 14px;
@@ -25,6 +25,20 @@
   animation: fadeIn 0.2s ease;
 }
 
+.detail-title {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111;
+  text-align: center;
+}
+
+.activity-detail-instructor {
+    margin-top: 16px;
+    
+}
+
 /* Fade animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-8px); }
@@ -33,10 +47,15 @@
 
 /* Billede */
 .dialog-image {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 12px;
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  border-radius: 12px;
+  border: 2px solid white;
 }
+
 
 /* AFLYST badge */
 .dialog-cancelled {
@@ -88,4 +107,43 @@
 
 .subscribe-btn-dialog.active {
   background: #4a3aff;
+}
+
+
+/* Hele kortet bliver rødt hvis aflyst */
+.cancelled-detail-card {
+  background: #7f7c7c !important;   /* lys rød baggrund */
+  border: 1px solid white;        /* mørkerød kant */
+}
+
+/* Stor tydelig "AFLYST" banner */
+.cancelled-detail-banner {
+  background: #ffcccc;
+  color: #600;
+  padding: 10px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Sørger for at info-sektionen også bliver rød */
+.cancelled-detail-card .dialog-body {
+  background: #ffcccc !important; /* lys rød */
+  color: #600 !important;         /* mørkerød tekst for læsbarhed */
+}
+
+.cancelled-detail-card .detail-title,
+.cancelled-detail-card .activity-detail-instructor,
+.cancelled-detail-card .activity-location,
+.cancelled-detail-card .activity-time {
+  color: #600 !important; /* Ens farve på alt tekst */
+}
+
+.cancelled-detail-card .dialog-image {
+  filter: grayscale(20%) saturate(60%);
+  opacity: 25%; /* gør billedet svagere */
+}
+
+.cancelled-detail-card .dialog-content {
+  background: #ffcccc;          
 }

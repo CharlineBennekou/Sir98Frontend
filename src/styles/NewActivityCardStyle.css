@@ -7,6 +7,9 @@
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
   margin: 12px 0;
   background: #fff; /* neutral baggrund */
+  border: 1px solid #ccc;
+  box-shadow: 10 10px 10px rgba(0, 0, 0, 0.1);
+
 }
 
 
@@ -43,9 +46,10 @@
 .activity-location,
 .activity-time {
   color: #333;
-  font-size: 14px;
+  font-size: 18px;
   margin: 4px 0;
 }
+
 
 
 /* --- Actions --- */
@@ -64,8 +68,9 @@
   font-weight: 600;
   border-radius: 8px;
   cursor: pointer;
-  border: none;
+  /* border: none; */
   text-align: center;
+  border: 1px solid #ccc;
 }
 
 .details-btn {
@@ -94,7 +99,7 @@
 
 /* --- Cancelled --- */
 
-.cancelled {
+/* .cancelled {
   opacity: 0.8;
 }
 
@@ -106,7 +111,7 @@
   border-radius: 4px;
   display: inline-block;
   font-weight: 700;
-}
+} */
 
 
 /* --- Optional: subscribed outline --- */
@@ -130,4 +135,76 @@
 .activity-time {
   display: flex;
   align-items: center;
+}
+
+
+/* Wrapper så vi kan placere knappen */
+.activity-image-wrapper {
+  position: relative;
+}
+
+/* Klokke-knap */
+.bell-button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ikon størrelse */
+.bell-button svg {
+  width: 20px;
+  height: 20px;
+  color: #111;
+}
+
+/* Hover effekt */
+.bell-button:hover {
+  background: white;
+}
+
+
+
+
+/* Hele kortet bliver rødt hvis aflyst */
+.cancelled-card {
+  background: #7f7c7c !important;   /* lys rød baggrund */
+  border: 1px solid white;        /* mørkerød kant */
+}
+
+/* Stor tydelig "AFLYST" banner */
+.cancelled-banner {
+  background: #ffcccc;
+  color: #600;
+  padding: 10px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Sørger for at info-sektionen også bliver rød */
+.cancelled-card .activity-body {
+  background: #ffcccc !important; /* lys rød */
+  color: #600 !important;         /* mørkerød tekst for læsbarhed */
+}
+
+.cancelled-card .activity-title,
+.cancelled-card .activity-instructor,
+.cancelled-card .activity-location,
+.cancelled-card .activity-time {
+  color: #600 !important; /* Ens farve på alt tekst */
+}
+
+.cancelled-card .activity-image {
+  filter: grayscale(20%) saturate(60%);
+  opacity: 25%; /* gør billedet svagere */
 }

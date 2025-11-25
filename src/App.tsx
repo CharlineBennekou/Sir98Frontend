@@ -1,6 +1,5 @@
 import './App.css'
 import ActivityList from './components/activities/ActivityList'
-import ActivityTestingData from './components/activities/ActivityTestingData'
 import {Navbar} from './components/layout/Navbar'
 import { useState } from 'react'
 
@@ -14,9 +13,7 @@ function App() {
       </header>
 
       <main>
-        <section style={{ marginBottom: 12 }}>
-          <ActivityTestingData />
-        </section>
+        
         <ActivityList />
       </main>
     </div>
