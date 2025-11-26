@@ -2,6 +2,7 @@ import ActivityCard from './ActivityCard'
 import { useFetchActivitiesQuery } from "../../store/apis/activityAPI";
 import { useEffect, useState } from 'react'
 import type { Activity } from '../../types/activity';
+import '../../styles/ActivityListStyle.css';
 
 const STORAGE_KEY = 'sir98.subscriptions'
 
@@ -27,17 +28,19 @@ export default function ActivityList() {
   if (isError) return <p>Kunne ikke hente aktiviteter.</p>
 
   return (
-    <div>
-      <h2 >Aktiviteter</h2>
-      <div>
-        {activities.map((a: Activity) => (
-          <ActivityCard 
-            key={a.id}
-            activity={a}
-            subscribed={!!subs[a.id]}
-          />
-        ))}
-      </div>
+  <div>
+    <h2>Aktiviteter</h2>
+
+    <div className="activity-grid">
+      {activities.map((a: Activity) => (
+        <ActivityCard 
+          key={a.id}
+          activity={a}
+          subscribed={!!subs[a.id]}
+        />
+      ))}
     </div>
-  )
+
+  </div>
+)
 }

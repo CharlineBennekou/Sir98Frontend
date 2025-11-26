@@ -1,0 +1,7 @@
+/* Container der centrerer cards */
+.activity-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* ⭐ centrerer cards vandret */
+  width: 100%;
+}
