@@ -1,4 +1,5 @@
 import '../../styles/NavigationStyle.css';
+import { Link } from 'react-router-dom';
 
 export function Navigation() {
     return (
@@ -6,18 +7,18 @@ export function Navigation() {
             {/* Desktop navigation */}
             <nav className="nav-desktop">
                 <ul>
-                    <li><a href="#Aktiviteter">Aktiviteter</a></li>
-                    <li><a href="#MineAktiviteter">Instruktør</a></li>
-                    <li><a href="#Kontakt">Konto</a></li>
+                    <li><Link to="/">Aktiviteter</Link></li>
+                    <li><Link to="/instructor">Instruktør</Link></li>
+                    <li><Link to="/account">Konto</Link></li>
                 </ul>
             </nav>
 
             {/* Mobile navigation */}
             <nav className="nav-mobile">
                 <ul>
-                    <li><a href="#Aktiviteter">Aktiviteter</a></li>
-                    <li><a href="#MineAktiviteter">Instruktør</a></li>
-                    <li><a href="#Kontakt">Konto</a></li>
+                    <li><Link to="/">Aktiviteter</Link></li>
+                    <li><Link to="/instructor">Instruktør</Link></li>
+                    <li><Link to="/account">Konto</Link></li>
                 </ul>
             </nav>
         </>
