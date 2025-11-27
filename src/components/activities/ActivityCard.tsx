@@ -25,6 +25,9 @@ export default function ActivityCard({ activity, subscribed }: Props) {
         Svømning: SwimmingImage
     };
 
+      const imageUrl = activityImages[activity.title];
+
+
     const instructorName =
         activity.instructors?.length
             ? activity.instructors.map((i) => i.firstName).join(" & ")
@@ -48,10 +51,13 @@ export default function ActivityCard({ activity, subscribed }: Props) {
                     <div className="activity-image-wrapper">
                         <div
                             className="activity-image"
-                            style={{ backgroundImage: `url(${activityImages[activity.title]})` }}
+                            style={{ backgroundImage: `url(${imageUrl})` }}
                         />
 
-                        {/* 🔔 klokke ikon */}
+                        {/* titel på billedet */}             
+                        <h3 className="activity-title-overlay">{activity.title}</h3>
+
+                        {/* klokke ikon */}
                         <button
                             className="bell-button"
                             onClick={(e) => {
@@ -66,7 +72,7 @@ export default function ActivityCard({ activity, subscribed }: Props) {
 
                 <div className="activity-body">
 
-                    <h3 className="activity-title">{activity.title}</h3>
+                    
 
                     <p className="activity-instructor">
                         <FiUser className="icon" /> {instructorName}

@@ -45,16 +45,7 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Billede */
-.dialog-image {
-  height: 250px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-  border-radius: 12px;
-  border: 2px solid white;
-}
+
 
 
 /* AFLYST badge */
@@ -68,52 +59,92 @@
   display: inline-block;
 }
 
-/* Knapper nederst */
-.dialog-actions {
+
+/* Billed-wrapper for at placere klokke-ikonet */
+.dialog-image-wrapper {
+  position: relative;
+  width: 100%;
+  background-color: #7f7c7c; /* samme baggrund som oversigten */
+  border-radius: 14px;        /* match dialog-image */
+  border-color: 1px white;
+
+}
+
+
+.dialog-image {
+  width: 100%;
+  height: 250px; /* eller hvad du mener passer */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+}
+
+.bell-button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   display: flex;
-  flex-direction: column; /* ⭐ lodret */
-  gap: 12px;              /* afstand mellem knapper */
-  margin-top: 24px;
-  align-items: stretch;   /* fyld hele bredden */
+  justify-content: center;
+  align-items: center;
 }
 
-/* Luk-knap */
-.close-btn-dialog {
-  padding: 12px 0;         /* højere knap */
-  background: #ddd;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
+.bell-button svg {
+  width: 20px;
+  height: 20px;
+  color: #111;
+}
+
+.bell-button:hover {
+  background: white;
+}
+
+/* Tilbage pil øverst til venstre — uden baggrund */
+.dialog-back-button {
+  position: absolute;
+  top: 25px;
+  left: 14px;
+  background: none;
   border: none;
-  width: 100%;   
-  color: black;          /* samme bredde som tilmeld */
-}
-
-.close-btn-dialog:hover {
-  background: #ccc;
-}
-
-/* Tilmeld-knap */
-.subscribe-btn-dialog {
-  padding: 12px 0;
-  background: #000;
-  color: #fff;
-  border-radius: 8px;
-  border: none;
+  padding: 0;
   cursor: pointer;
-  font-weight: 600;
-  width: 100%;            /* fylder hele bredden */
+  z-index: 20;
 }
 
-.subscribe-btn-dialog.active {
-  background: #4a3aff;
+.dialog-back-button svg {
+  width: 28px;   /* lidt større så den stadig er nem at trykke på */
+  height: 28px;
+  color: black;  /* skift farve hvis du vil have den hvid på billeder */
+}
+
+/* Optional: lille mørkere effekt når man trykker */
+.dialog-back-button:active svg {
+  opacity: 0.6;
+}
+
+/* Billede */
+.dialog-image {
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  border-radius: 12px;
+  border: 2px solid white;
+  
 }
 
 
 /* Hele kortet bliver rødt hvis aflyst */
 .cancelled-detail-card {
-  background: #7f7c7c !important;   /* lys rød baggrund */
-  border: 1px solid white;        /* mørkerød kant */
+  background: #ffcccc !important;   /* lys rød baggrund */
 }
 
 /* Stor tydelig "AFLYST" banner */
@@ -127,23 +158,49 @@
 }
 
 /* Sørger for at info-sektionen også bliver rød */
-.cancelled-detail-card .dialog-body {
+.cancelled-detail-banner .dialog-body {
   background: #ffcccc !important; /* lys rød */
   color: #600 !important;         /* mørkerød tekst for læsbarhed */
 }
 
-.cancelled-detail-card .detail-title,
-.cancelled-detail-card .activity-detail-instructor,
-.cancelled-detail-card .activity-location,
-.cancelled-detail-card .activity-time {
+.cancelled-detail-banner .detail-title,
+.cancelled-detail-banner .activity-detail-instructor,
+.cancelled-detail-banner .activity-location,
+.cancelled-detail-banner .activity-time {
   color: #600 !important; /* Ens farve på alt tekst */
 }
 
 .cancelled-detail-card .dialog-image {
-  filter: grayscale(20%) saturate(60%);
-  opacity: 25%; /* gør billedet svagere */
-}
+  filter: grayscale(20%) saturate(60%) !important;
+  opacity: 25% !important;
 
+}
+ 
 .cancelled-detail-card .dialog-content {
   background: #ffcccc;          
+}
+
+
+/* Skrå AFLYST tekst hen over billedet */
+.image-cancelled-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 5px;
+  right: 5px;
+  top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 14px;
+
+
+  font-size: 58px;
+  font-weight: 700;
+  color: rgba(132, 19, 19, 0.75);
+  
+
+  transform: rotate(-25deg);
+  pointer-events: none;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+  z-index: 15;
 }

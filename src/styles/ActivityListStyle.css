@@ -5,3 +5,38 @@
   align-items: center;   /* ⭐ centrerer cards vandret */
   width: 100%;
 }
+
+/* --- Tabs / View Switcher --- */
+.activity-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 6px;
+  border-radius: 12px;
+}
+
+/* Inaktive knapper */
+.tab-btn {
+  flex: 1;
+  padding: 12px 0;
+  border: none;
+  border-radius: 10px;
+  background: #e6e6e6;
+  color: #333;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+/* Hover-effekten */
+.tab-btn:hover {
+  background: #dcdcdc;
+}
+
+/* Den aktive tab – passer til dit card-body look */
+.tab-btn.active {
+  background: #ACEB6688; /* samme stil som activity-body */
+  color: #111;
+  border: 1px solid #95ce57; /* lidt mørkere grøn kant */
+}

@@ -32,14 +32,21 @@
   color: #111;
 }
 
-.activity-title {
-  font-size: 20px;
+
+
+/* Titel ovenpå billedet */
+.activity-title-overlay {
+  position: absolute;
+  bottom: 8px;          /* lodret position, kan justeres */
+  left: 50%;
+  transform: translateX(-50%);  /* centrer vandret */
+  color: #fff;
+  font-size: 32px;
   font-weight: 700;
-  margin: 0 0 6px 0;
-  color: #111;
-  text-align: left;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.6); /* for bedre kontrast */
+  text-align: center;
+  z-index: 5; /* sørger for at den ligger ovenpå billedet */
+  pointer-events: none; /* klik går igennem */
 }
 
 .activity-instructor,
@@ -177,7 +184,7 @@
 
 /* Hele kortet bliver rødt hvis aflyst */
 .cancelled-card {
-  background: #7f7c7c !important;   /* lys rød baggrund */
+  background: #7f7c7c !important;   
   border: 1px solid white;        /* mørkerød kant */
 }
 
