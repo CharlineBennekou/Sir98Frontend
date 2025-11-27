@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import type { Activity } from '../../types/activity';
 import '../../styles/ActivityListStyle.css';
 import { useNavigate } from "react-router-dom"; 
-import CreateActivityForm from './CreateActivityForm';
 
 const STORAGE_KEY = 'sir98.subscriptions'
 
@@ -67,7 +66,7 @@ export default function ActivityList() {
 
   return (
     <div>
-      <h2>Aktiviteter</h2>
+      <h2 className='aktivitet-header-titel'>Aktiviteter</h2>
 
 
       {/* Opret aktivitet knap */}
