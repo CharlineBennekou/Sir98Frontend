@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import ActivityList from './components/activities/ActivityList'
 import CreateActivityForm from './components/activities/CreateActivityForm';
 import { Navigation } from './components/layout/Navigation'
+import ActivityMenu from './components/activities/ActivityMenu';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ActivityList />} />
           <Route path="/create" element={<CreateActivityForm />} />
+          <Route path="/menu" element={<ActivityMenu />} />
         </Routes>
       </main>
     </div>
