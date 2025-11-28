@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "../../styles/CreateActivityFormStyle.css";
+import AppHeader from "../layout/AppHeader";
+
 
 export default function CreateActivityForm() {
   const [title, setTitle] = useState("");
@@ -29,6 +31,9 @@ export default function CreateActivityForm() {
   }
 
   return (
+    <>
+    <AppHeader title="Opret Ny Aktivitet" />
+        <div style={{ marginTop: 70 }}></div>
     <div className="create-activity-container">
       <h2>Opret Ny Aktivitet</h2>
 
@@ -107,5 +112,6 @@ export default function CreateActivityForm() {
         </button>
       </form>
     </div>
+    </>
   );
 }

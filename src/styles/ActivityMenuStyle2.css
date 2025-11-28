@@ -1,0 +1,61 @@
+/* Wrapper */
+.im-menu-wrapper {
+  width: 100%;
+  max-width: 420px;
+  margin: 24px auto;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+/* Grid with equal columns */
+.im-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Cards */
+.im-menu-card {
+  background: #fff;
+  border-radius: 14px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+
+  border: 1px solid #ddd;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  height: 140px;
+  width: 150px;          /* ← FIX */
+  box-sizing: border-box; /* ← FIX */
+}
+
+.im-menu-card span {
+  white-space: nowrap; /* ← sørger for at tekst ikke laver to linjer */
+}
+
+/* Icon */
+.im-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+
+/* Mobile 1-column layout */
+@media (max-width: 400px) {
+  .im-menu-grid {
+    grid-template-columns: 1fr;
+  }
+}

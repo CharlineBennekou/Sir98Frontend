@@ -1,0 +1,76 @@
+import { useNavigate } from "react-router-dom";
+import { FiList, FiActivity, FiCalendar, FiUser, FiBell } from "react-icons/fi";
+import { LiaUserTieSolid } from "react-icons/lia";
+
+import "../../styles/ActivityMenustyle2.css";
+import AppHeader from "../layout/AppHeader";
+
+export default function ActivityMenu2() {
+  const navigate = useNavigate();
+
+  const menuItems = [
+    {
+      label: "Alle aktiviteter",
+      icon: <FiList />,
+      onClick: () => navigate("/aktiviteter"),
+      color: "#4CAF50",
+    },
+    {
+      label: "Træninger",
+      icon: <FiActivity />,
+      onClick: () => navigate("/aktiviteter?type=training"),
+      color: "#2196F3",
+    },
+    {
+      label: "Begivenheder",
+      icon: <FiCalendar />,
+      onClick: () => navigate("/aktiviteter?type=events"),
+      color: "#FF9800",
+    },
+    {
+      label: "Mine aktiviteter",
+      icon: <FiBell />,
+      onClick: () => navigate("/aktiviteter?type=mine"),
+      color: "#9C27B0",
+    },
+
+    // KAN LET UDVIDES EFTER BEHOV:
+    {
+      label: "Instruktører",
+      icon: <LiaUserTieSolid />,
+      onClick: () => navigate("/create"),
+      color: "#E91E63",
+    },
+    {
+      label: "Kontoindstillinger",
+      icon: <FiUser />,
+      onClick: () => navigate("/konto"),
+      color: "#607D8B",
+    }
+  ];
+
+  return (
+    <>
+        <AppHeader title="Forside" />
+    <div className="im-menu-wrapper">
+    <div style={{ marginTop: 70 }}></div>
+
+      <div className="im-menu-grid">
+        {menuItems.map((item, idx) => (
+          <div
+            key={idx}
+            className="im-menu-card"
+            onClick={item.onClick}
+          >
+            <div className="im-icon-wrapper" style={{ background: item.color }}>
+              {item.icon}
+            </div>
+
+            <span className="im-menu-label">{item.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+    </>
+  );
+}

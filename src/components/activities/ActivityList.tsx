@@ -3,16 +3,15 @@ import { useFetchActivitiesQuery } from "../../store/apis/activityAPI";
 import { useEffect, useState } from 'react'
 import type { Activity } from '../../types/activity';
 import '../../styles/ActivityListStyle.css';
-import { useNavigate } from "react-router-dom"; 
+import AppHeader from "../layout/AppHeader";
 
 const STORAGE_KEY = 'sir98.subscriptions'
 
 export default function ActivityList() {
-  const navigate = useNavigate();
+
   const { data: activities = [], isLoading, isError } = useFetchActivitiesQuery()
 
   const [subs, setSubs] = useState<Record<string, boolean>>({})
-  const [activeView, setActiveView] = useState("all") // 👈 UI state
 
   useEffect(() => {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -65,49 +64,11 @@ export default function ActivityList() {
   const grouped = groupByDate(activities);
 
   return (
+    <>
+    <AppHeader title="Alle aktiviteter" />
+    <div style={{ marginTop: 70 }}></div>
     <div>
-      <h2 className='aktivitet-header-titel'>Aktiviteter</h2>
-
-
-      {/* Opret aktivitet knap */}
-      <button 
-        className="create-activity-btn"
-        onClick={() => navigate("/create")}
-      >
-      Opret aktivitet
-      </button>
-
-
-      {/* UI Tabs */}
-      <div className="activity-tabs"> 
-        <button 
-          className={`tab-btn ${activeView === "all" ? "active" : ""}`}
-          onClick={() => setActiveView("all")}
-        >
-          Alle
-        </button>
-
-        <button 
-          className={`tab-btn ${activeView === "training" ? "active" : ""}`}
-          onClick={() => setActiveView("training")}
-        >
-          Træninger
-        </button>
-
-        <button 
-          className={`tab-btn ${activeView === "events" ? "active" : ""}`}
-          onClick={() => setActiveView("events")}
-        >
-          Begivenheder
-        </button>
-
-        <button 
-          className={`tab-btn ${activeView === "mine" ? "active" : ""}`}
-          onClick={() => setActiveView("mine")}
-        >
-          Mine
-        </button>
-      </div>
+  
 
       {/* --- Dato-grupperet liste --- */}
       {Object.entries(grouped).map(([dateKey, items]) => (
@@ -130,5 +91,6 @@ export default function ActivityList() {
         </div>
       ))}
     </div>
+    </>
   )
 }
