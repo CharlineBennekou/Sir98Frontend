@@ -38,7 +38,7 @@ export default function ActivityMenu2() {
     {
       label: "Instruktører",
       icon: <LiaUserTieSolid />,
-      onClick: () => navigate("/create"),
+      onClick: () => navigate("/instructor"),
       color: "#E91E63",
     },
     {

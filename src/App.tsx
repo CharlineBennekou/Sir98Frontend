@@ -5,6 +5,7 @@ import CreateActivityForm from './components/activities/CreateActivityForm';
 //import { Navigation } from './components/layout/Navigation'
 import ActivityMenu from './components/activities/ActivityMenu';
 import ActivityMenu2 from './components/activities/ActivityMenu2';
+import InstructorList from './components/instructors/InstructorList';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
 
           <Route path="/create" element={<CreateActivityForm />} />
           <Route path="/aktiviteter" element={<ActivityList />} />
+          <Route path="/instructor" element={<InstructorList />} />
         </Routes>
       </main>
     </div>

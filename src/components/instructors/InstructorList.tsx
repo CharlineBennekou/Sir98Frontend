@@ -1,7 +1,9 @@
-import InstructorCard from '../components/instructors/InstructorCard';
-import { useFetchInstructorsQuery } from "../store/apis/instructorAPI";
-import type { Instructor } from '../types/instructors';
-import "../styles/InstructorListStyle.css";
+import InstructorCard from './InstructorCard';
+import { useFetchInstructorsQuery } from "../../store/apis/instructorAPI";
+import type { Instructor } from '../../types/instructors';
+import "../../styles/InstructorListStyle.css";
+import AppHeader from "../layout/AppHeader";
+
 
 export default function InstructorList() {
     const { data: instructors = [], isLoading, isError } = useFetchInstructorsQuery();
@@ -12,6 +14,10 @@ export default function InstructorList() {
     if (isError) return <p>Kunne ikke hente instruktører.</p>;
 
     return (
+        <>
+        <AppHeader title="Instruktører" />
+            <div style={{ marginTop: 70 }}></div>
+
         <div className="instructor-list-page">
             <h2>Instruktører</h2>
             <div className="instructor-list">
@@ -24,6 +30,6 @@ export default function InstructorList() {
                 ))}
             </div>
         </div>
-          
+      </>
     );
 }
