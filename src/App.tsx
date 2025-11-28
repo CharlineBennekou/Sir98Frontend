@@ -1,25 +1,28 @@
 import './App.css'
+import { Routes, Route } from 'react-router-dom';
 import ActivityList from './components/activities/ActivityList'
-import ActivityTestingData from './components/activities/ActivityTestingData'
-import {Navbar} from './components/layout/Navbar'
-import { useState } from 'react'
+import CreateActivityForm from './components/activities/CreateActivityForm';
+//import { Navigation } from './components/layout/Navigation'
+import ActivityMenu from './components/activities/ActivityMenu';
+import ActivityMenu2 from './components/activities/ActivityMenu2';
 
 function App() {
-  const [currentTab, setCurrentTab] =  useState<string>('overview');
   return (
     <div className="app-root" style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>
-      <Navbar current={currentTab} onChange={setCurrentTab} />
-      <header style={{ textAlign: 'center', marginBottom: 8 }}>
-        <h1>Sir 98 - Aktiviteter</h1>
-      </header>
-
+      
       <main>
-        <section style={{ marginBottom: 12 }}>
-          <ActivityTestingData />
-        </section>
-        <ActivityList />
+        <Routes>
+          <Route path="/" element={<ActivityMenu2 />} /> --- Nummer 1 ---
+
+          <Route path="/2" element={<ActivityMenu />} /> --- Nummer 2 ---
+
+
+          <Route path="/create" element={<CreateActivityForm />} />
+          <Route path="/aktiviteter" element={<ActivityList />} />
+        </Routes>
       </main>
     </div>
   )
 }
+
 export default App

@@ -1,0 +1,40 @@
+/* Wrapper der holder menuen centreret */
+.menu-wrapper {
+  width: 335px;
+  margin: 24px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Hver menu-knap */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  background: #fff;
+  border-radius: 12px;
+
+  padding: 16px 18px;
+  font-size: 18px;
+  color: #111;
+
+  border: 1px solid #ccc;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
+}
+
+.menu-item:hover {
+  background: #ACEB6688; /* samme grønne body-farve som dine kort */
+  transform: translateY(-2px);
+}
+
+/* Ikon stil (ens med dine andre) */
+.menu-icon {
+  width: 20px;
+  height: 20px;
+  color: #111;
+}

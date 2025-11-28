@@ -1,0 +1,52 @@
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  height: 60px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+
+  display: flex;
+  justify-content: center;
+
+  z-index: 2000;
+}
+
+/* Centreret container – matcher rest af appen */
+.header-inner {
+  width: 100%;
+  max-width: 420px; /* Samme som dit layout */
+  padding: 0 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+  margin: 0;
+}
+
+.back-btn {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: black;
+}
+
+.right-spacer {
+  position: absolute;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+}
