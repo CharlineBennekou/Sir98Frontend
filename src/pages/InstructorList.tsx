@@ -1,8 +1,8 @@
-import InstructorCard from './InstructorCard';
-import { useFetchInstructorsQuery } from "../../store/apis/instructorAPI";
-import type { Instructor } from '../../types/instructors';
-import "../../styles/InstructorListStyle.css";
-import AppHeader from "../layout/AppHeader";
+import InstructorCard from '../components/instructors/InstructorCard';
+import { useFetchInstructorsQuery } from "../store/apis/instructorAPI";
+import type { Instructor } from '../types/instructors';
+import "./../styles/InstructorListStyle.css";
+import AppHeader from "../components/layout/AppHeader";
 
 
 export default function InstructorList() {

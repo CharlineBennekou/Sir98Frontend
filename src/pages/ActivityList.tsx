@@ -1,9 +1,9 @@
-import ActivityCard from './ActivityCard'
-import { useFetchActivitiesQuery } from "../../store/apis/activityAPI";
+import ActivityCard from '../components/activities/ActivityCard'
+import { useFetchActivitiesQuery } from "../store/apis/activityAPI";
 import { useEffect, useState } from 'react'
-import type { Activity } from '../../types/activity';
-import '../../styles/ActivityListStyle.css';
-import AppHeader from "../layout/AppHeader";
+import type { Activity } from '../types/activity';
+import './../styles/ActivityListStyle.css';
+import AppHeader from "../components/layout/AppHeader";
 
 const STORAGE_KEY = 'sir98.subscriptions'
 

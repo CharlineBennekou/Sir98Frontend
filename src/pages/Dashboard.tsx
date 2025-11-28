@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { FiList, FiActivity, FiCalendar, FiUser, FiBell } from "react-icons/fi";
 import { LiaUserTieSolid } from "react-icons/lia";
+import "./../styles/DashboardStyle.css";
 
-import "../../styles/ActivityMenustyle2.css";
-import AppHeader from "../layout/AppHeader";
+import AppHeader from "../components/layout/AppHeader";
 
-export default function ActivityMenu2() {
+export default function Dashboard() {
   const navigate = useNavigate();
 
   const menuItems = [

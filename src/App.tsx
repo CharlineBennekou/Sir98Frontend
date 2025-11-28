@@ -1,11 +1,9 @@
 import './App.css'
 import { Routes, Route } from 'react-router-dom';
-import ActivityList from './components/activities/ActivityList'
-import CreateActivityForm from './components/activities/CreateActivityForm';
-//import { Navigation } from './components/layout/Navigation'
-import ActivityMenu from './components/activities/ActivityMenu';
-import ActivityMenu2 from './components/activities/ActivityMenu2';
-import InstructorList from './components/instructors/InstructorList';
+import ActivityList from './pages/ActivityList'
+import CreateActivityForm from './pages/CreateActivityForm';
+import Dashboard from './pages/Dashboard';
+import InstructorList from './pages/InstructorList';
 
 function App() {
   return (
@@ -13,10 +11,7 @@ function App() {
       
       <main>
         <Routes>
-          <Route path="/" element={<ActivityMenu2 />} /> --- Nummer 1 ---
-
-          <Route path="/2" element={<ActivityMenu />} /> --- Nummer 2 ---
-
+          <Route path="/" element={<Dashboard />} /> --- Nummer 1 ---
 
           <Route path="/create" element={<CreateActivityForm />} />
           <Route path="/aktiviteter" element={<ActivityList />} />

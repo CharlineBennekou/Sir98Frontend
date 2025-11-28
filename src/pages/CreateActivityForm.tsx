@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "../../styles/CreateActivityFormStyle.css";
-import AppHeader from "../layout/AppHeader";
+import "./../styles/CreateActivityFormStyle.css";
+import AppHeader from "../components/layout/AppHeader";
 
 
 export default function CreateActivityForm() {
