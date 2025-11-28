@@ -4,11 +4,11 @@ import type { Instructor } from '../../types/instructor';
 export const instructorsApi = createApi({
   reducerPath: 'instructorsApi',
 baseQuery: fetchBaseQuery({
-  baseUrl: 'https://sir98backend2025v2-ayf5erhdhhawcjff.canadacentral-01.azurewebsites.net/api/',
+  baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/', 
 }),
 endpoints: (builder) => ({
   fetchInstructors: builder.query<Instructor[], void>({
-    query: () => ({
+    query: () => ({ 
       url: 'instructor',
       method: 'GET'
     }),

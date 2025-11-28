@@ -30,7 +30,7 @@ export default function InstructorCard({ instructor }: Props) {
 
     return (
         
-            <div className="instructor-card">
+         <div className="instructor-card">
             <div className = "instructor-image-wrap">
                 <img className ="instructor-image"
                   src = {imageUrl} 

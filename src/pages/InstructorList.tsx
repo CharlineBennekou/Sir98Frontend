@@ -19,7 +19,6 @@ export default function InstructorList() {
             <div style={{ marginTop: 70 }}></div>
 
         <div className="instructor-list-page">
-            <h2>Instruktører</h2>
             <div className="instructor-list">
                 {instructors.map((ins: Instructor) => (
                     <div className = "instructor-list-item" key={ins.id}>

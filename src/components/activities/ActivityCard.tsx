@@ -15,8 +15,8 @@ type Props = {
 
 export default function ActivityCard({ activity, subscribed }: Props) {
 
-    const startTime = activity.start ? new Date(activity.start) : null;
-    const endTime = activity.end ? new Date(activity.end) : null;
+    const startTime = activity.startUtc ? new Date(activity.startUtc) : null;
+    const endTime = activity.endUtc ? new Date(activity.endUtc) : null;
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const activityImages: Record<string, string> = {

@@ -49,9 +49,9 @@ export default function ActivityList() {
     const groups: Record<string, Activity[]> = {};
 
     list.forEach(a => {
-      if (!a.start) return;
+      if (!a.startUtc) return;
 
-      const d = new Date(a.start);
+      const d = new Date(a.startUtc);
       const key = d.toISOString().split("T")[0]; // fx "2025-02-24"
 
       if (!groups[key]) groups[key] = [];

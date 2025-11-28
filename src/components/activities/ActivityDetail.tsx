@@ -27,8 +27,8 @@ export default function DialogBox({ activity, open, onClose }: Props) {
 
   if (!open) return null;
 
-  const start = activity.start ? new Date(activity.start) : null;
-  const end = activity.end ? new Date(activity.end) : null;
+  const start = activity.startUtc ? new Date(activity.startUtc) : null;
+  const end = activity.endUtc ? new Date(activity.endUtc) : null;
 
   const activityImages: Record<string, string> = {
     Badminton: BadmintonImage,
