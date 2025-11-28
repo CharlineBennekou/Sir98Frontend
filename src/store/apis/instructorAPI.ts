@@ -14,14 +14,14 @@ endpoints: (builder) => ({
     }),
       transformResponse: (response: any[]) => {
         return response.map(instructor => ({
-            id: instructor.id,
-            email: instructor.email,
-            number: instructor.number,
-            firstName: instructor.firstName,
-            image: instructor.image
+          id: instructor.id,
+          email: instructor.email,
+          number: instructor.number,
+          firstName: instructor.firstName,
+          image: instructor.image
         })) as Instructor[];
       }
-    }), 
+    }),
   }),
 });
 
