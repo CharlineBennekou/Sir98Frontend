@@ -6,6 +6,7 @@ import { useState } from "react";
 import BadmintonImage from '../../assets/badminton.jpg';
 import FootballImage from '../../assets/football.jpg';
 import SwimmingImage from '../../assets/swimming.jpg'; 
+import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
 
 type Props = {
     activity: Activity
@@ -22,7 +23,8 @@ export default function ActivityCard({ activity, subscribed }: Props) {
     const activityImages: Record<string, string> = {
         Badminton: BadmintonImage,
         Fodbold: FootballImage,
-        Svømning: SwimmingImage
+        Svømning: SwimmingImage,
+        Cirkeltræning: CirkeltrainingImage
     };
 
       const imageUrl = activityImages[activity.title];

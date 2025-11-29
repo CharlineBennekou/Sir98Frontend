@@ -13,11 +13,13 @@ export default function ActivityList() {
 
   const [subs, setSubs] = useState<Record<string, boolean>>({})
 
+  // --- Load subscriptions from localStorage ---
   useEffect(() => {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) setSubs(JSON.parse(raw))
   }, [])
 
+  // --- Save subscriptions whenever changed ---
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(subs))
   }, [subs])
@@ -63,23 +65,31 @@ export default function ActivityList() {
 
   const grouped = groupByDate(activities);
 
+  // --- Sorter datoer så "I dag" eller nærmeste dato står først ---
+  const sortedDates = Object.keys(grouped).sort((a, b) => {
+    const today = new Date();
+    const dateA = new Date(a);
+    const dateB = new Date(b);
+
+    const diffA = Math.abs(dateA.getTime() - today.getTime());
+    const diffB = Math.abs(dateB.getTime() - today.getTime());
+
+    return diffA - diffB; // mindste forskel først
+  });
+
   return (
     <>
-    <AppHeader title="Alle aktiviteter" />
-    <div style={{ marginTop: 70 }}></div>
-    <div>
-  
+      <AppHeader title="Alle aktiviteter" />
+      <div style={{ marginTop: 70 }}></div>
 
-      {/* --- Dato-grupperet liste --- */}
-      {Object.entries(grouped).map(([dateKey, items]) => (
+      {sortedDates.map((dateKey) => (
         <div key={dateKey} className="day-group">
-
           <h3 className={`day-title ${formatDateHeader(dateKey) === "I dag" ? "today" : ""}`}>
             {formatDateHeader(dateKey)}
           </h3>
 
           <div className="activity-grid">
-            {items.map((a: Activity) => (
+            {grouped[dateKey].map((a: Activity) => (
               <ActivityCard 
                 key={a.id}
                 activity={a}
@@ -87,10 +97,8 @@ export default function ActivityList() {
               />
             ))}
           </div>
-
         </div>
       ))}
-    </div>
     </>
   )
 }

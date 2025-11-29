@@ -1,23 +1,66 @@
-/* Container der centrerer cards */
+/* =========================================================
+   Activity Grid / Container
+   ---------------------------------------------------------
+   Holder alle ActivityCard komponenter centreret i kolonne
+   ========================================================= */
 .activity-grid {
   display: flex;
-  flex-direction: column;
-  align-items: center;   /* ⭐ centrerer cards vandret */
+  flex-direction: column; /* lodret layout */
+  align-items: center;    /* centrerer cards vandret */
   width: 100%;
 }
 
-/* --- Tabs / View Switcher --- */
+/* =========================================================
+   Dato-grupper (day-group)
+   ---------------------------------------------------------
+   Wrapper for alle aktiviteter på samme dato
+   ========================================================= */
+.day-group {
+  margin-bottom: 30px;
+  display: flex;            /* gør container til flex */
+  flex-direction: column;   /* lodret layout */
+  align-items: center;      /* centrerer indhold vandret */
+}
+/* Dato-label */
+.day-title {
+  display: inline-block;
+  background: #e6e6e6;
+  padding: 6px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 10px 0;          /* kun lodret margin */
+  text-transform: capitalize;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  border: 1px solid #d0d0d0;
+  text-align: center;
+}
+
+
+/* "I dag" styling for dato-label */
+.day-title.today {
+  background: #ACEB6688;       /* samme farve som card-body */
+  border-color: #ACEB6688;
+  font-weight: 700;
+}
+
+/* =========================================================
+   Tabs / View Switcher
+   ---------------------------------------------------------
+   Hvis du har faner for forskellige visninger
+   ========================================================= */
 .activity-tabs {
   display: flex;
-  gap: 10px;
+  gap: 10px;          /* afstand mellem faner */
   margin-bottom: 18px;
   padding: 6px;
   border-radius: 12px;
 }
 
-/* Inaktive knapper */
+/* Inaktive faner */
 .tab-btn {
-  flex: 1;
+  flex: 1;                    /* fylder lige meget */
   padding: 12px 0;
   border: none;
   border-radius: 10px;
@@ -26,47 +69,26 @@
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
-  transition: 0.25s;
+  transition: background 0.25s;
 }
 
-/* Hover-effekten */
+/* Hover-effekt på tab */
 .tab-btn:hover {
   background: #dcdcdc;
 }
 
-/* Den aktive tab – passer til dit card-body look */
+/* Aktiv tab */
 .tab-btn.active {
-  background: #ACEB6688; /* samme stil som activity-body */
+  background: #ACEB6688; /* matcher card-body */
   color: #111;
   border: 1px solid #95ce57; /* lidt mørkere grøn kant */
 }
 
-
-.day-group {
-  margin-bottom: 30px;
-}
-
-/* Selve dato-boksen */
-.day-title {
-  display: inline-block;
-  background: #e6e6e6;         /* blød grå */
-  padding: 6px 16px;
-  border-radius: 18px;         /* runde hjørner */
-  font-size: 14px;
-  font-weight: 600;
-  margin: 10px 0 1px 4px;
-  text-transform: capitalize;
-  color: #333;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15); /* let skygge */
-  border: 1px solid #d0d0d0;  /* diskret kant */
-}
-
-.day-title.today {
-  background: #ACEB6688;
-  border-color: #ACEB6688;
-  font-weight: 700;
-}
-
+/* =========================================================
+   Opret-aktivitet-knap
+   ---------------------------------------------------------
+   Bruges til oprettelse af ny aktivitet
+   ========================================================= */
 .create-activity-btn {
   background: #ACEB6688;
   border: none;
@@ -84,6 +106,11 @@
   background: #9AD65688;
 }
 
+/* =========================================================
+   Side Header (hvis brugt)
+   ---------------------------------------------------------
+   Titel for aktivitetssiden
+   ========================================================= */
 .aktivitet-header-titel {
   text-align: center;
   font-size: 36px;
