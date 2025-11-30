@@ -92,6 +92,75 @@
   margin-top: 16px;
 }
 
+
+
+/* Wrapper for instructor section */
+.detail-instructor-card {
+  margin-top: -10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;;
+}
+
+/* One instructor card */
+.detail-instructor-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+.detail-instructor-none {
+    margin-top: -16px;;
+}
+
+/* Image */
+.detail-instructor-image-wrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+
+.detail-instructor-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Text info */
+.detail-instructor-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-instructor-name {
+  font-size: 17px;
+  font-weight: 600;
+  color: #222;
+}
+
+.detail-instructor-role {
+  font-size: 13px;
+  color: #666;
+}
+
+.detail-instructor-contact {
+  font-size: 13px;
+  color: #333;
+}
+
+
+
+
+
+
 /* =========================================================
    Billede og overlays
    ========================================================= */

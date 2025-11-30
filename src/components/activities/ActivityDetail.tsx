@@ -103,12 +103,41 @@ useEffect(() => {
 
 
 
-          <p className="activity-detail-instructor">
-            <strong>Instruktør:</strong>{" "}
-            {activity.instructors && activity.instructors.length > 0
-              ? activity.instructors.map((i) => i.firstName).join(" & ")
-              : "Ikke angivet"}
-          </p>
+        <p className="activity-detail-instructor">
+        <strong>Instruktør:</strong>
+        </p>
+
+        {/* Hvis der er instruktører */}
+        {activity.instructors && activity.instructors.length > 0 ? (
+        <div className="detail-instructor-card">
+            {activity.instructors.map((inst) => (
+            <div className="detail-instructor-item" key={inst.id}>
+                
+                <div className="detail-instructor-image-wrap">
+                <img
+                    src={inst.image ? inst.image : "/assets/instructors/placeholder.png"}
+                    alt={inst.firstName}
+                />
+                </div>
+
+                <div className="detail-instructor-info">
+                <div className="detail-instructor-name">{inst.firstName}</div>
+
+                {inst.number && (
+                    <div className="detail-instructor-contact">{inst.number}</div>
+                )}
+
+                {inst.email && (
+                    <div className="detail-instructor-contact">{inst.email}</div>
+                )}
+                </div>
+
+            </div>
+            ))}
+        </div>
+        ) : (
+        <p className="detail-instructor-none">Ikke angivet</p>
+        )}
 
           {activity.link && (
             <p>
