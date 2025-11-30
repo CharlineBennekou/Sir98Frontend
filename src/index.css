@@ -72,3 +72,9 @@ html, body {
   overflow-x: hidden; /* forhindrer at noget skubber layoutet */
   -webkit-text-size-adjust: 100%;
 }
+
+html.no-scroll,
+body.no-scroll {
+  overflow: hidden !important;
+  
+}

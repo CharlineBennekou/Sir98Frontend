@@ -14,16 +14,15 @@ type Props = {
 
 export default function DialogBox({ activity, open, onClose }: Props) {
 
-    useEffect(() => {
-        if (open) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, [open]);
+useEffect(() => {
+  if (open) {
+    document.documentElement.classList.add("no-scroll");
+    document.body.classList.add("no-scroll");
+  } else {
+    document.documentElement.classList.remove("no-scroll");
+    document.body.classList.remove("no-scroll");
+  }
+}, [open]);
 
   if (!open) return null;
 
@@ -91,6 +90,18 @@ export default function DialogBox({ activity, open, onClose }: Props) {
             {start ? start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}
             {end ? ` - ${end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : ""}
           </p>
+
+          {activity.description && (
+            <div className="detail-section">
+                <h3 className="detail-section-title">Beskrivelse:</h3>
+
+                <div className="detail-description-box">
+                    <p className="detail-description">{activity.description}</p>
+                </div>
+            </div>
+          )}
+
+
 
           <p className="activity-detail-instructor">
             <strong>Instruktør:</strong>{" "}

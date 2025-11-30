@@ -1,17 +1,17 @@
 /* Wrapper */
 .im-menu-wrapper {
   width: 100%;
-  max-width: 420px;
-  margin: 24px auto;
+  max-width: 480px; /* lidt mere luft */
+  margin: 32px auto;
   box-sizing: border-box;
   align-items: center;
 }
 
-/* Grid with equal columns */
+/* Grid */
 .im-menu-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  gap: 18px; /* større mellemrum */
   width: 100%;
   box-sizing: border-box;
 }
@@ -19,41 +19,44 @@
 /* Cards */
 .im-menu-card {
   background: #fff;
-  border-radius: 14px;
+  border-radius: 16px;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 
   border: 1px solid #ddd;
   box-shadow: 0 6px 12px rgba(0,0,0,0.08);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-  height: 140px;
-  width: 150px;          /* ← FIX */
-  box-sizing: border-box; /* ← FIX */
+  height: 160px;         /* større */
+  width: 100%;           /* vigtig – grid bestemmer bredden */
+  box-sizing: border-box;
 }
 
 .im-menu-card span {
-  white-space: nowrap; /* ← sørger for at tekst ikke laver to linjer */
+  white-space: nowrap;
+  font-size: 1.1rem;     /* større tekst */
+  padding: 0 8px;
 }
 
 /* Icon */
 .im-icon-wrapper {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 64px;           /* større ikon */
+  height: 64px;
+  border-radius: 14px;
   color: white;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
+  font-size: 32px;       /* større ikon glyph */
 }
 
-/* Mobile 1-column layout */
+/* Mobile – stadig 1 kolonne */
 @media (max-width: 400px) {
   .im-menu-grid {
     grid-template-columns: 1fr;

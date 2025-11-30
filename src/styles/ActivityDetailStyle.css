@@ -8,7 +8,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 9999;
+  overflow-y: auto;          /* scroll hvis nødvendig */
 }
 
 /* =========================================================
@@ -47,7 +48,46 @@
   text-align: center;
 }
 
-/* Instruktør tekst */
+
+/* =========================================================
+   Detail Sections
+   ========================================================= */
+/* Wrapper for sektionen */
+.detail-section {
+  margin-top: 24px;
+}
+
+/* Titel står udenfor boksen */
+.detail-section-title {
+  margin: 0 0 6px 2px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* Selve boksen med indhold */
+.detail-description-box {
+  background: rgba(255, 255, 255, 0.65);
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* Tekst */
+.detail-description {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #222;
+  white-space: pre-line;
+}
+
+
+
+
+/* =========================================================
+   Instruktør info
+   ========================================================= */
 .activity-detail-instructor {
   margin-top: 16px;
 }
