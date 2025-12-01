@@ -40,7 +40,7 @@
 
 /* "I dag" styling for dato-label */
 .day-title.today {
-  background: #ACEB6688;       /* samme farve som card-body */
+  background: #7ad51288;       /* samme farve som card-body */
   border-color: #ACEB6688;
   font-weight: 700;
 }
