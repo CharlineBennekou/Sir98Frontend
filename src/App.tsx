@@ -1,27 +1,25 @@
 import './App.css'
-import ActivityList from './components/activities/ActivityList'
-import { LoginComp } from './components/users/Login'
-import ActivityTestingData from './components/activities/ActivityTestingData'
-import {Navbar} from './components/layout/Navbar'
-import { useState } from 'react'
+import { Routes, Route } from 'react-router-dom';
+import ActivityList from './pages/ActivityList'
+import CreateActivityForm from './pages/CreateActivityForm';
+import Dashboard from './pages/Dashboard';
+import InstructorList from './pages/InstructorList';
 
 function App() {
-  const [currentTab, setCurrentTab] =  useState<string>('overview');
   return (
     <div className="app-root" style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>
-      <Navbar current={currentTab} onChange={setCurrentTab} />
-      <header style={{ textAlign: 'center', marginBottom: 8 }}>
-        <h1>Sir 98 - Aktiviteter</h1>
-      </header>
-
+      
       <main>
-        <LoginComp/>
-        <section style={{ marginBottom: 12 }}>
-          <ActivityTestingData />
-        </section>
-        <ActivityList />
+        <Routes>
+          <Route path="/" element={<Dashboard />} /> --- Nummer 1 ---
+
+          <Route path="/create" element={<CreateActivityForm />} />
+          <Route path="/aktiviteter" element={<ActivityList />} />
+          <Route path="/instructor" element={<InstructorList />} />
+        </Routes>
       </main>
     </div>
   )
 }
+
 export default App

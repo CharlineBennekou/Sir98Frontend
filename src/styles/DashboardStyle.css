@@ -1,0 +1,64 @@
+/* Wrapper */
+.im-menu-wrapper {
+  width: 100%;
+  max-width: 480px; /* lidt mere luft */
+  margin: 32px auto;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+/* Grid */
+.im-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px; /* større mellemrum */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Cards */
+.im-menu-card {
+  background: #fff;
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+
+  border: 1px solid #ddd;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  height: 160px;         /* større */
+  width: 100%;           /* vigtig – grid bestemmer bredden */
+  box-sizing: border-box;
+}
+
+.im-menu-card span {
+  white-space: nowrap;
+  font-size: 1.1rem;     /* større tekst */
+  padding: 0 8px;
+}
+
+/* Icon */
+.im-icon-wrapper {
+  width: 64px;           /* større ikon */
+  height: 64px;
+  border-radius: 14px;
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;       /* større ikon glyph */
+}
+
+/* Mobile – stadig 1 kolonne */
+@media (max-width: 400px) {
+  .im-menu-grid {
+    grid-template-columns: 1fr;
+  }
+}
