@@ -1,33 +1,104 @@
-import ActivityCard from '../components/activities/ActivityCard'
+// React hooks
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom';
 import { useFetchActivitiesQuery } from "../store/apis/activityAPI";
-import { useEffect, useState } from 'react'
+import ActivityCard from '../components/activities/ActivityCard'
 import type { Activity } from '../types/activity';
+// Styling
 import './../styles/ActivityListStyle.css';
+// Øverste header-komponent
 import AppHeader from "../components/layout/AppHeader";
 
+
+// 🔑 Nøgle til localStorage hvor brugerens abonnementer gemmes
 const STORAGE_KEY = 'sir98.subscriptions'
+
+// 🔍 Mapping af URL-typer → hvilke tags der tæller som training/events
+const TYPE_TAG_MAP: Record<string, string[]> = {
+  training: ['træning', 'træninger', 'training'],
+  events: ['begivenhed', 'begivenheder', 'event', 'events'],
+  mine: [] // håndteres via subs saved i localStorage
+}
+
 
 export default function ActivityList() {
 
-  const { data: activities = [], isLoading, isError } = useFetchActivitiesQuery()
+  /* ---------------------------------------------------------
+   * 1) LÆSER URL QUERY-PARAM (?type=training/events/mine)
+   * --------------------------------------------------------- */
+  const [params] = useSearchParams();
+  const typeParam = (params.get('type') ?? '').toLowerCase();
 
-  const [subs, setSubs] = useState<Record<string, boolean>>({})
 
-  // --- Load subscriptions from localStorage ---
+  /* ---------------------------------------------------------
+   * 2) HENTER ALLE AKTIVITETER FRA API’ET (RTK Query)
+   * --------------------------------------------------------- */
+  const { data: activities = [], isLoading, isError } = useFetchActivitiesQuery();
+
+
+  /* ---------------------------------------------------------
+   * 3) SUBSCRIPTIONS: gemte “mine aktiviteter” via localStorage
+   * --------------------------------------------------------- */
+  const [subs, setSubs] = useState<Record<number, boolean>>({})
+
+  // Indlæser saved subs fra localStorage
   useEffect(() => {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) setSubs(JSON.parse(raw))
-  }, [])
+    if (raw) {
+      try {
+        setSubs(JSON.parse(raw) as Record<number, boolean>);
+      } catch {
+        // hvis localStorage er korrupt, ignorer
+      }
+    }
+  }, []);
 
-  // --- Save subscriptions whenever changed ---
+  // Gem subs tilbage i localStorage hver gang de ændres
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(subs))
   }, [subs])
 
-  if (isLoading) return <p>Henter aktiviteter…</p>
-  if (isError) return <p>Kunne ikke hente aktiviteter.</p>
 
-  // --- Formatter dagtekst og håndter "I dag" ---
+  /* ---------------------------------------------------------
+   * 4) FILTERING — BRUG useMemo (og det SKAL ligge før return)
+   *    Hooks må ikke skifte rækkefølge → derfor er loading/error
+   *    flyttet NED under useMemo.
+   * --------------------------------------------------------- */
+  const filteredActivities = useMemo(() => {
+
+    // Hvis ingen ?type → vis alle aktiviteter
+    if (!typeParam) return activities;
+
+    // Hvis ?type=mine → returnér kun dem brugeren har “abonneret”
+    if (typeParam === 'mine') {
+      return activities.filter((a) => !!subs[a.id]);
+    }
+
+    // Find tags der matcher typeParam
+    const expectedTags = (TYPE_TAG_MAP[typeParam] ?? []).map(t => t.toLowerCase());
+
+    if (!expectedTags.length) return activities;
+
+    // Filtrér aktiviteter ud fra tags
+    return activities.filter((a: Activity) => {
+      const tags = (a.tags ?? []).map(t => String(t).toLowerCase());
+      return tags.some(tag => expectedTags.includes(tag));
+    });
+
+  }, [activities, typeParam, subs]);  // afhængigheder
+
+
+  /* ---------------------------------------------------------
+   * 5) NU må vi returnere loading / error
+   *    (ALLE HOOKS er blevet kaldt over dette punkt)
+   * --------------------------------------------------------- */
+  if (isLoading) return <p>Henter aktiviteter…</p>;
+  if (isError) return <p>Kunne ikke hente aktiviteter.</p>;
+
+
+  /* ---------------------------------------------------------
+   * 6) FORMATÉR DATO-TEKST (f.eks. “I dag”, “mandag 25 februar”)
+   * --------------------------------------------------------- */
   function formatDateHeader(dateKey: string) {
     const date = new Date(dateKey)
     const today = new Date()
@@ -46,7 +117,10 @@ export default function ActivityList() {
     })
   }
 
-  // --- Gruppér aktiviteter efter dato ---
+
+  /* ---------------------------------------------------------
+   * 7) GRUPPÉR AKTIVITETER EFTER DATO (YYYY-MM-DD)
+   * --------------------------------------------------------- */
   function groupByDate(list: Activity[]) {
     const groups: Record<string, Activity[]> = {};
 
@@ -54,7 +128,7 @@ export default function ActivityList() {
       if (!a.startUtc) return;
 
       const d = new Date(a.startUtc);
-      const key = d.toISOString().split("T")[0]; // fx "2025-02-24"
+      const key = d.toISOString().split("T")[0]; // f.eks. "2025-02-24"
 
       if (!groups[key]) groups[key] = [];
       groups[key].push(a);
@@ -63,9 +137,12 @@ export default function ActivityList() {
     return groups;
   }
 
-  const grouped = groupByDate(activities);
+  const grouped = groupByDate(filteredActivities);
 
-  // --- Sorter datoer så "I dag" eller nærmeste dato står først ---
+
+  /* ---------------------------------------------------------
+   * 8) SORTÉR DATOER EFTER HVORNÅR DE LIGGER TÆTTES PÅ I DAG
+   * --------------------------------------------------------- */
   const sortedDates = Object.keys(grouped).sort((a, b) => {
     const today = new Date();
     const dateA = new Date(a);
@@ -74,31 +151,59 @@ export default function ActivityList() {
     const diffA = Math.abs(dateA.getTime() - today.getTime());
     const diffB = Math.abs(dateB.getTime() - today.getTime());
 
-    return diffA - diffB; // mindste forskel først
+    return diffA - diffB;
   });
 
+
+  /* ---------------------------------------------------------
+   * 9) DYNAMISK SIDE-TITEL (vises i AppHeader)
+   * --------------------------------------------------------- */
+  const pageTitle =
+    typeParam === 'training'
+      ? 'Træninger'
+      : typeParam === 'events'
+        ? 'Begivenheder'
+        : typeParam === 'mine'
+          ? 'Mine aktiviteter'
+          : 'Alle aktiviteter';
+
+
+  /* ---------------------------------------------------------
+   * 10) RENDER UI
+   * --------------------------------------------------------- */
   return (
     <>
-      <AppHeader title="Alle aktiviteter" />
+      {/* Øverste sticky header */}
+      <AppHeader title={pageTitle} />
       <div style={{ marginTop: 70 }}></div>
 
-      {sortedDates.map((dateKey) => (
-        <div key={dateKey} className="day-group">
-          <h3 className={`day-title ${formatDateHeader(dateKey) === "I dag" ? "today" : ""}`}>
-            {formatDateHeader(dateKey)}
-          </h3>
+      {sortedDates.length === 0 ? (
+        // Hvis ingen aktiviteter matcher filtreringen
+        <p style={{ padding: 16 }}> Ingen aktiviteter fundet.</p>
+      ) : (
 
-          <div className="activity-grid">
-            {grouped[dateKey].map((a: Activity) => (
-              <ActivityCard 
-                key={a.id}
-                activity={a}
-                subscribed={!!subs[a.id]}
-              />
-            ))}
+        // Loop gennem hver dato-gruppe
+        sortedDates.map((dateKey) => (
+          <div key={dateKey} className="day-group">
+
+            {/* Dato overskrift */}
+            <h3 className={`day-title ${formatDateHeader(dateKey) === "I dag" ? "today" : ""}`}>
+              {formatDateHeader(dateKey)}
+            </h3>
+
+            {/* Grid med alle aktiviteter den dag */}
+            <div className="activity-grid">
+              {grouped[dateKey].map((a: Activity) => (
+                <ActivityCard
+                  key={a.id}
+                  activity={a}
+                  subscribed={!!subs[a.id]}  // true/false
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </>
-  )
+  );
 }
