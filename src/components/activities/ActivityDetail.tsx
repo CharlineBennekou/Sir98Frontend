@@ -1,5 +1,5 @@
 import '../../styles/ActivityDetailStyle.css'
-import type { Activity } from "../../types/activity";
+import type { ActivityOccurrence } from '../../types/activityOccurrence';
 import { FiBellOff, FiArrowLeft } from "react-icons/fi"
 import { useEffect } from "react";
 import BadmintonImage from '../../assets/badminton.jpg';
@@ -7,7 +7,7 @@ import FootballImage from '../../assets/football.jpg';
 import SwimmingImage from '../../assets/swimming.jpg';
 
 type Props = {
-  activity: Activity;
+  activity: ActivityOccurrence;
   open: boolean;
   onClose: () => void;
 };

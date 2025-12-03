@@ -5,13 +5,15 @@ import { useFetchActivitiesQuery } from "../store/apis/activityAPI";
 import ActivityCard from '../components/activities/ActivityCard'
 import type { Activity } from '../types/activity';
 // Styling
+import ActivityCard from '../components/activities/ActivityCard';
+import { useFetchOccurrencesQuery } from '../store/apis/activityOccurrenceAPI';
+import { useEffect, useState } from 'react';
+import type { ActivityOccurrence } from '../types/activityOccurrence';
 import './../styles/ActivityListStyle.css';
 // Øverste header-komponent
 import AppHeader from "../components/layout/AppHeader";
 
-
-// 🔑 Nøgle til localStorage hvor brugerens abonnementer gemmes
-const STORAGE_KEY = 'sir98.subscriptions'
+const STORAGE_KEY = 'sir98.subscriptions';
 
 // 🔍 Mapping af URL-typer → hvilke tags der tæller som training/events
 const TYPE_TAG_MAP: Record<string, string[]> = {
@@ -22,6 +24,9 @@ const TYPE_TAG_MAP: Record<string, string[]> = {
 
 
 export default function ActivityList() {
+  const [daysForward, setDaysForward] = useState<number>(7); // default 7 dage
+  const { data: occurrences = [], isLoading, isError } = useFetchOccurrencesQuery({ days: daysForward });
+  console.log({ isLoading, isError, occurrences, daysForward });
 
   /* ---------------------------------------------------------
    * 1) LÆSER URL QUERY-PARAM (?type=training/events/mine)
@@ -34,6 +39,7 @@ export default function ActivityList() {
    * 2) HENTER ALLE AKTIVITETER FRA API’ET (RTK Query)
    * --------------------------------------------------------- */
   const { data: activities = [], isLoading, isError } = useFetchActivitiesQuery();
+  const [subs, setSubs] = useState<Record<string, boolean>>({});
 
 
   /* ---------------------------------------------------------
@@ -55,9 +61,11 @@ export default function ActivityList() {
 
   // Gem subs tilbage i localStorage hver gang de ændres
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(subs))
-  }, [subs])
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(subs));
+  }, [subs]);
 
+  if (isLoading) return <p>Henter aktiviteter…</p>;
+  if (isError) return <p>Kunne ikke hente aktiviteter.</p>;
 
   /* ---------------------------------------------------------
    * 4) FILTERING — BRUG useMemo (og det SKAL ligge før return)
@@ -100,33 +108,28 @@ export default function ActivityList() {
    * 6) FORMATÉR DATO-TEKST (f.eks. “I dag”, “mandag 25 februar”)
    * --------------------------------------------------------- */
   function formatDateHeader(dateKey: string) {
-    const date = new Date(dateKey)
-    const today = new Date()
+    const date = new Date(dateKey);
+    const today = new Date();
 
     const isToday =
       date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
+      date.getFullYear() === today.getFullYear();
 
-    if (isToday) return "I dag"
+    if (isToday) return "I dag";
 
     return date.toLocaleDateString("da-DK", {
       weekday: "long",
       day: "numeric",
       month: "long"
-    })
+    });
   }
 
-
-  /* ---------------------------------------------------------
-   * 7) GRUPPÉR AKTIVITETER EFTER DATO (YYYY-MM-DD)
-   * --------------------------------------------------------- */
-  function groupByDate(list: Activity[]) {
-    const groups: Record<string, Activity[]> = {};
+  // --- Gruppér aktiviteter efter dato ---
+  function groupByDate(list: ActivityOccurrence[]) {
+    const groups: Record<string, ActivityOccurrence[]> = {};
 
     list.forEach(a => {
-      if (!a.startUtc) return;
-
       const d = new Date(a.startUtc);
       const key = d.toISOString().split("T")[0]; // f.eks. "2025-02-24"
 
@@ -137,22 +140,12 @@ export default function ActivityList() {
     return groups;
   }
 
-  const grouped = groupByDate(filteredActivities);
+  const grouped = groupByDate(occurrences);
 
-
-  /* ---------------------------------------------------------
-   * 8) SORTÉR DATOER EFTER HVORNÅR DE LIGGER TÆTTES PÅ I DAG
-   * --------------------------------------------------------- */
-  const sortedDates = Object.keys(grouped).sort((a, b) => {
-    const today = new Date();
-    const dateA = new Date(a);
-    const dateB = new Date(b);
-
-    const diffA = Math.abs(dateA.getTime() - today.getTime());
-    const diffB = Math.abs(dateB.getTime() - today.getTime());
-
-    return diffA - diffB;
-  });
+  // --- Sorter datoer så "I dag" eller nærmeste dato står først ---
+  const sortedDates = Object.keys(grouped).sort(
+    (a, b) => new Date(a).getTime() - new Date(b).getTime()
+  );
 
 
   /* ---------------------------------------------------------
@@ -177,30 +170,34 @@ export default function ActivityList() {
       <AppHeader title={pageTitle} />
       <div style={{ marginTop: 70 }}></div>
 
-      {sortedDates.length === 0 ? (
-        // Hvis ingen aktiviteter matcher filtreringen
-        <p style={{ padding: 16 }}> Ingen aktiviteter fundet.</p>
-      ) : (
+      {/* Dropdown til antal dage frem */}
+      <div style={{ margin: '1rem 0' }}>
+        <label htmlFor="days-forward" style={{ marginRight: 10 }}>Vis aktiviteter i de næste:</label>
+        <select
+          id="days-forward"
+          value={daysForward}
+          onChange={(e) => setDaysForward(Number(e.target.value))}
+        >
+          <option value={7}>7 dage</option>
+          <option value={14}>14 dage</option>
+          <option value={30}>30 dage</option>
+        </select>
+      </div>
 
-        // Loop gennem hver dato-gruppe
-        sortedDates.map((dateKey) => (
-          <div key={dateKey} className="day-group">
+      {sortedDates.map((dateKey) => (
+        <div key={dateKey} className="day-group">
+          <h3 className={`day-title ${formatDateHeader(dateKey) === "I dag" ? "today" : ""}`}>
+            {formatDateHeader(dateKey)}
+          </h3>
 
-            {/* Dato overskrift */}
-            <h3 className={`day-title ${formatDateHeader(dateKey) === "I dag" ? "today" : ""}`}>
-              {formatDateHeader(dateKey)}
-            </h3>
-
-            {/* Grid med alle aktiviteter den dag */}
-            <div className="activity-grid">
-              {grouped[dateKey].map((a: Activity) => (
-                <ActivityCard
-                  key={a.id}
-                  activity={a}
-                  subscribed={!!subs[a.id]}  // true/false
-                />
-              ))}
-            </div>
+          <div className="activity-grid">
+            {grouped[dateKey].map((occ: ActivityOccurrence) => (
+              <ActivityCard 
+                key={`${occ.id}-${occ.startUtc}`}
+                activity={occ}
+                subscribed={!!subs[occ.id]}
+              />
+            ))}
           </div>
         ))
       )}
