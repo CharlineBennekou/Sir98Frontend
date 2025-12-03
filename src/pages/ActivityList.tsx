@@ -160,7 +160,7 @@ export default function ActivityList() {
 
       {/* Dropdown til antal dage frem */}
       <div style={{ margin: '1rem 0' }}>
-        <label htmlFor="days-forward" style={{ marginRight: 10 }}>Vis aktiviteter i de næste:</label>
+        <label htmlFor="days-forward" style={{ marginRight: 10 }}>Vis {pageTitle.toLowerCase()} i de næste:</label>
         <select
           id="days-forward"
           value={daysForward}
