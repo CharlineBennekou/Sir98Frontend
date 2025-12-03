@@ -1,26 +1,65 @@
+// React hooks
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom';
+import { useFetchActivitiesQuery } from "../store/apis/activityAPI";
+import ActivityCard from '../components/activities/ActivityCard'
+import type { Activity } from '../types/activity';
+// Styling
 import ActivityCard from '../components/activities/ActivityCard';
 import { useFetchOccurrencesQuery } from '../store/apis/activityOccurrenceAPI';
 import { useEffect, useState } from 'react';
 import type { ActivityOccurrence } from '../types/activityOccurrence';
 import './../styles/ActivityListStyle.css';
+// Øverste header-komponent
 import AppHeader from "../components/layout/AppHeader";
 
 const STORAGE_KEY = 'sir98.subscriptions';
+
+// 🔍 Mapping af URL-typer → hvilke tags der tæller som training/events
+const TYPE_TAG_MAP: Record<string, string[]> = {
+  training: ['træning', 'træninger', 'training'],
+  events: ['begivenhed', 'begivenheder', 'event', 'events'],
+  mine: [] // håndteres via subs saved i localStorage
+}
+
 
 export default function ActivityList() {
   const [daysForward, setDaysForward] = useState<number>(7); // default 7 dage
   const { data: occurrences = [], isLoading, isError } = useFetchOccurrencesQuery({ days: daysForward });
   console.log({ isLoading, isError, occurrences, daysForward });
 
+  /* ---------------------------------------------------------
+   * 1) LÆSER URL QUERY-PARAM (?type=training/events/mine)
+   * --------------------------------------------------------- */
+  const [params] = useSearchParams();
+  const typeParam = (params.get('type') ?? '').toLowerCase();
+
+
+  /* ---------------------------------------------------------
+   * 2) HENTER ALLE AKTIVITETER FRA API’ET (RTK Query)
+   * --------------------------------------------------------- */
+  const { data: activities = [], isLoading, isError } = useFetchActivitiesQuery();
   const [subs, setSubs] = useState<Record<string, boolean>>({});
 
-  // --- Load subscriptions from localStorage ---
+
+  /* ---------------------------------------------------------
+   * 3) SUBSCRIPTIONS: gemte “mine aktiviteter” via localStorage
+   * --------------------------------------------------------- */
+  const [subs, setSubs] = useState<Record<number, boolean>>({})
+
+  // Indlæser saved subs fra localStorage
   useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) setSubs(JSON.parse(raw));
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (raw) {
+      try {
+        setSubs(JSON.parse(raw) as Record<number, boolean>);
+      } catch {
+        // hvis localStorage er korrupt, ignorer
+      }
+    }
   }, []);
 
-  // --- Save subscriptions whenever changed ---
+  // Gem subs tilbage i localStorage hver gang de ændres
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(subs));
   }, [subs]);
@@ -28,7 +67,46 @@ export default function ActivityList() {
   if (isLoading) return <p>Henter aktiviteter…</p>;
   if (isError) return <p>Kunne ikke hente aktiviteter.</p>;
 
-  // --- Formatter dagtekst og håndter "I dag" ---
+  /* ---------------------------------------------------------
+   * 4) FILTERING — BRUG useMemo (og det SKAL ligge før return)
+   *    Hooks må ikke skifte rækkefølge → derfor er loading/error
+   *    flyttet NED under useMemo.
+   * --------------------------------------------------------- */
+  const filteredActivities = useMemo(() => {
+
+    // Hvis ingen ?type → vis alle aktiviteter
+    if (!typeParam) return activities;
+
+    // Hvis ?type=mine → returnér kun dem brugeren har “abonneret”
+    if (typeParam === 'mine') {
+      return activities.filter((a) => !!subs[a.id]);
+    }
+
+    // Find tags der matcher typeParam
+    const expectedTags = (TYPE_TAG_MAP[typeParam] ?? []).map(t => t.toLowerCase());
+
+    if (!expectedTags.length) return activities;
+
+    // Filtrér aktiviteter ud fra tags
+    return activities.filter((a: Activity) => {
+      const tags = (a.tags ?? []).map(t => String(t).toLowerCase());
+      return tags.some(tag => expectedTags.includes(tag));
+    });
+
+  }, [activities, typeParam, subs]);  // afhængigheder
+
+
+  /* ---------------------------------------------------------
+   * 5) NU må vi returnere loading / error
+   *    (ALLE HOOKS er blevet kaldt over dette punkt)
+   * --------------------------------------------------------- */
+  if (isLoading) return <p>Henter aktiviteter…</p>;
+  if (isError) return <p>Kunne ikke hente aktiviteter.</p>;
+
+
+  /* ---------------------------------------------------------
+   * 6) FORMATÉR DATO-TEKST (f.eks. “I dag”, “mandag 25 februar”)
+   * --------------------------------------------------------- */
   function formatDateHeader(dateKey: string) {
     const date = new Date(dateKey);
     const today = new Date();
@@ -53,7 +131,7 @@ export default function ActivityList() {
 
     list.forEach(a => {
       const d = new Date(a.startUtc);
-      const key = d.toISOString().split("T")[0]; // fx "2025-02-24"
+      const key = d.toISOString().split("T")[0]; // f.eks. "2025-02-24"
 
       if (!groups[key]) groups[key] = [];
       groups[key].push(a);
@@ -69,9 +147,27 @@ export default function ActivityList() {
     (a, b) => new Date(a).getTime() - new Date(b).getTime()
   );
 
+
+  /* ---------------------------------------------------------
+   * 9) DYNAMISK SIDE-TITEL (vises i AppHeader)
+   * --------------------------------------------------------- */
+  const pageTitle =
+    typeParam === 'training'
+      ? 'Træninger'
+      : typeParam === 'events'
+        ? 'Begivenheder'
+        : typeParam === 'mine'
+          ? 'Mine aktiviteter'
+          : 'Alle aktiviteter';
+
+
+  /* ---------------------------------------------------------
+   * 10) RENDER UI
+   * --------------------------------------------------------- */
   return (
     <>
-      <AppHeader title="Alle aktiviteter" />
+      {/* Øverste sticky header */}
+      <AppHeader title={pageTitle} />
       <div style={{ marginTop: 70 }}></div>
 
       {/* Dropdown til antal dage frem */}
@@ -103,8 +199,8 @@ export default function ActivityList() {
               />
             ))}
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </>
   );
 }
