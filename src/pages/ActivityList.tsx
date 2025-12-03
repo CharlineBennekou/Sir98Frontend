@@ -13,7 +13,7 @@ import AppHeader from "../components/layout/AppHeader";
 
 const STORAGE_KEY = 'sir98.subscriptions';
 
-// 🔍 Mapping af URL-typer → hvilke tags der tæller som training/events
+//Mapping af URL-typer → hvilke tags der tæller som training/events
 const TYPE_TAG_MAP: Record<string, string[]> = {
   training: ['træning', 'træninger', 'training'],
   events: ['begivenhed', 'begivenheder', 'event', 'events'],
@@ -84,15 +84,11 @@ export default function ActivityList() {
   }, [occurrences, typeParam, subs]);  // afhængigheder
 
 
-  /* ---------------------------------------------------------
-   * 5) NU må vi returnere loading / error
-   *    (ALLE HOOKS er blevet kaldt over dette punkt)
-   * --------------------------------------------------------- */
   if (isLoading) return <p>Henter aktiviteter…</p>;
   if (isError) return <p>Kunne ikke hente aktiviteter.</p>;
 
 
-  /* ---------------------------------------------------------
+  /*---------------------------------------------------------
    * 6) FORMATÉR DATO-TEKST (f.eks. “I dag”, “mandag 25 februar”)
    * --------------------------------------------------------- */
   function formatDateHeader(dateKey: string) {

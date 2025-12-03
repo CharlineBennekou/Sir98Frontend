@@ -1,4 +1,4 @@
-import type { Instructor } from "./instructor";
+import type { Instructor } from "./instructors";
 
 export interface Activity {
   id: number;

@@ -43,7 +43,7 @@ export default function InstructorCard({ instructor }: Props) {
 
             <div className="instructor-info">
                 <div className = "instructor-role">
-                    {instructor.role ?? "Instruktør"}
+                    <p>Instruktør:</p>
                 </div>
 
 
