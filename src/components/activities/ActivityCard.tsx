@@ -1,5 +1,5 @@
 import '../../styles/NewActivityCardStyle.css'
-import type { Activity } from '../../types/activity'
+import type { ActivityOccurrence } from '../../types/activityOccurrence';
 import { FiUser, FiMapPin, FiClock, FiBellOff } from "react-icons/fi";
 import ActivityDetail from './ActivityDetail';
 import { useState } from "react";
@@ -9,9 +9,9 @@ import SwimmingImage from '../../assets/swimming.jpg';
 import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
 
 type Props = {
-    activity: Activity
+    activity: ActivityOccurrence
     subscribed: boolean
-    onViewDetails?: (activity: Activity) => void
+    onViewDetails?: (activity: ActivityOccurrence) => void
 }
 
 export default function ActivityCard({ activity, subscribed }: Props) {
