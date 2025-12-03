@@ -2,9 +2,9 @@ import '../../styles/ActivityDetailStyle.css'
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
 import { FiBellOff, FiArrowLeft } from "react-icons/fi"
 import { useEffect } from "react";
-import BadmintonImage from '../../assets/badminton.jpg';
-import FootballImage from '../../assets/football.jpg';
-import SwimmingImage from '../../assets/swimming.jpg';
+import BadmintonImage from '../../assets/Badminton.jpg';
+import FootballImage from '../../assets/Football.jpg';
+import SwimmingImage from '../../assets/Swimming.jpg';
 
 type Props = {
   activity: ActivityOccurrence;
