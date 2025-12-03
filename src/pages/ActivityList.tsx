@@ -1,13 +1,11 @@
 // React hooks
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
-import { useFetchActivitiesQuery } from "../store/apis/activityAPI";
+//import { useFetchActivitiesQuery } from "../store/apis/activityAPI";
 import ActivityCard from '../components/activities/ActivityCard'
-import type { Activity } from '../types/activity';
+//import type { Activity } from '../types/activity';
 // Styling
-import ActivityCard from '../components/activities/ActivityCard';
 import { useFetchOccurrencesQuery } from '../store/apis/activityOccurrenceAPI';
-import { useEffect, useState } from 'react';
 import type { ActivityOccurrence } from '../types/activityOccurrence';
 import './../styles/ActivityListStyle.css';
 // Øverste header-komponent
@@ -36,13 +34,6 @@ export default function ActivityList() {
 
 
   /* ---------------------------------------------------------
-   * 2) HENTER ALLE AKTIVITETER FRA API’ET (RTK Query)
-   * --------------------------------------------------------- */
-  const { data: activities = [], isLoading, isError } = useFetchActivitiesQuery();
-  const [subs, setSubs] = useState<Record<string, boolean>>({});
-
-
-  /* ---------------------------------------------------------
    * 3) SUBSCRIPTIONS: gemte “mine aktiviteter” via localStorage
    * --------------------------------------------------------- */
   const [subs, setSubs] = useState<Record<number, boolean>>({})
@@ -64,36 +55,33 @@ export default function ActivityList() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(subs));
   }, [subs]);
 
-  if (isLoading) return <p>Henter aktiviteter…</p>;
-  if (isError) return <p>Kunne ikke hente aktiviteter.</p>;
-
   /* ---------------------------------------------------------
    * 4) FILTERING — BRUG useMemo (og det SKAL ligge før return)
    *    Hooks må ikke skifte rækkefølge → derfor er loading/error
    *    flyttet NED under useMemo.
    * --------------------------------------------------------- */
-  const filteredActivities = useMemo(() => {
+  const filteredOccurrences = useMemo(() => {
 
     // Hvis ingen ?type → vis alle aktiviteter
-    if (!typeParam) return activities;
+    if (!typeParam) return occurrences;
 
     // Hvis ?type=mine → returnér kun dem brugeren har “abonneret”
     if (typeParam === 'mine') {
-      return activities.filter((a) => !!subs[a.id]);
+      return occurrences.filter((a) => !!subs[a.id]);
     }
 
     // Find tags der matcher typeParam
     const expectedTags = (TYPE_TAG_MAP[typeParam] ?? []).map(t => t.toLowerCase());
 
-    if (!expectedTags.length) return activities;
+    if (!expectedTags.length) return occurrences;
 
     // Filtrér aktiviteter ud fra tags
-    return activities.filter((a: Activity) => {
+    return occurrences.filter((a: ActivityOccurrence) => {
       const tags = (a.tags ?? []).map(t => String(t).toLowerCase());
       return tags.some(tag => expectedTags.includes(tag));
     });
 
-  }, [activities, typeParam, subs]);  // afhængigheder
+  }, [occurrences, typeParam, subs]);  // afhængigheder
 
 
   /* ---------------------------------------------------------
@@ -140,7 +128,7 @@ export default function ActivityList() {
     return groups;
   }
 
-  const grouped = groupByDate(occurrences);
+  const grouped = groupByDate(filteredOccurrences);
 
   // --- Sorter datoer så "I dag" eller nærmeste dato står først ---
   const sortedDates = Object.keys(grouped).sort(
@@ -184,12 +172,16 @@ export default function ActivityList() {
         </select>
       </div>
 
-      {sortedDates.map((dateKey) => (
+      {sortedDates.length === 0 ? (
+        // Hvis ingen aktiviteter matcher filtreringen
+        <p style={{ padding: 16 }}> Ingen {pageTitle.toLowerCase()} fundet.</p>
+      ) : (
+
+      sortedDates.map((dateKey) => (
         <div key={dateKey} className="day-group">
           <h3 className={`day-title ${formatDateHeader(dateKey) === "I dag" ? "today" : ""}`}>
             {formatDateHeader(dateKey)}
           </h3>
-
           <div className="activity-grid">
             {grouped[dateKey].map((occ: ActivityOccurrence) => (
               <ActivityCard 
@@ -199,8 +191,9 @@ export default function ActivityList() {
               />
             ))}
           </div>
-        ))
-      )}
+        </div>
+        )))
+      }
     </>
   );
 }
