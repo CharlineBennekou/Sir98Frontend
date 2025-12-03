@@ -1,17 +1,17 @@
 import '../../styles/NewActivityCardStyle.css'
-import type { Activity } from '../../types/activity'
+import type { ActivityOccurrence } from '../../types/activityOccurrence';
 import { FiUser, FiMapPin, FiClock, FiBellOff } from "react-icons/fi";
 import ActivityDetail from './ActivityDetail';
 import { useState } from "react";
-import BadmintonImage from '../../assets/badminton.jpg';
-import FootballImage from '../../assets/football.jpg';
-import SwimmingImage from '../../assets/swimming.jpg'; 
+import BadmintonImage from '../../assets/Badminton.jpg';
+import FootballImage from '../../assets/Football.jpg';
+import SwimmingImage from '../../assets/Swimming.jpg'; 
 import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
 
 type Props = {
-    activity: Activity
+    activity: ActivityOccurrence
     subscribed: boolean
-    onViewDetails?: (activity: Activity) => void
+    onViewDetails?: (activity: ActivityOccurrence) => void
 }
 
 export default function ActivityCard({ activity, subscribed }: Props) {
