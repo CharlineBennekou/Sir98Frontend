@@ -23,7 +23,7 @@ const TYPE_TAG_MAP: Record<string, string[]> = {
 
 export default function ActivityList() {
   const [daysForward, setDaysForward] = useState<number>(7); // default 7 dage
-  const { data: occurrences = [], isLoading, isError } = useFetchOccurrencesQuery({ days: daysForward });
+  const { data: occurrences = [], isLoading, isError } = useFetchOccurrencesQuery({ days: daysForward, filter: null, userId: "userId" });
   console.log({ isLoading, isError, occurrences, daysForward });
 
   /* ---------------------------------------------------------
@@ -187,7 +187,6 @@ export default function ActivityList() {
               <ActivityCard 
                 key={`${occ.id}-${occ.startUtc}`}
                 activity={occ}
-                subscribed={!!subs[occ.id]}
               />
             ))}
           </div>

@@ -5,13 +5,23 @@ export const activityOccurrencesApi = createApi({
   reducerPath: "activityOccurrencesApi",
   baseQuery: fetchBaseQuery({
     baseUrl:
-      "https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/",
+      //"https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/",
+        "https://localhost:7275/api/",
+
   }),
   endpoints: (builder) => ({
-    fetchOccurrences: builder.query<ActivityOccurrence[], { days?: number } | void>({
+    fetchOccurrences: builder.query<ActivityOccurrence[], { days?: number; filter?: string | null; userId?: string | null } | void>({
       query: (params) => {
         const query = new URLSearchParams();
         if (params?.days) query.append("days", params.days.toString());
+        
+        if (params?.filter != null && params.filter !== "") {
+          query.append("filter", params.filter);
+        }
+
+        if (params?.userId != null && params.userId !== "") {
+          query.append("userId", params.userId);
+        }
 
         return {
           url: `activity-occurrences?${query.toString()}`,
@@ -42,11 +52,8 @@ export const activityOccurrencesApi = createApi({
             })) ?? [],
             tags: o.tags ?? [],
             cancelled: o.cancelled,
-          }))
-          .sort(
-            (a, b) =>
-              new Date(a.startUtc).getTime() - new Date(b.startUtc).getTime()
-          );
+            isSubscribed: o.isSubscribed,
+          }));
       },
     }),
   }),
