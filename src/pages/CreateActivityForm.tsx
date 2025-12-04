@@ -3,6 +3,7 @@ import "./../styles/CreateActivityFormStyle.css";
 import AppHeader from "../components/layout/AppHeader";
 import { useCreateActivityMutation } from "../store/apis/activityAPI";
 import { useFetchInstructorsQuery } from "../store/apis/instructorAPI";
+import { FiX } from "react-icons/fi";
 
 export default function CreateActivityForm() {
   const [title, setTitle] = useState("");
@@ -10,8 +11,10 @@ export default function CreateActivityForm() {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [location, setLocation] = useState("");
-  const [instructor, setInstructor] = useState("");
   const [description, setDescription] = useState("");
+  const [link, setLink] = useState("");
+
+  const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
 
   const [createActivity, { isLoading, isSuccess, isError }] =
     useCreateActivityMutation();
@@ -19,26 +22,38 @@ export default function CreateActivityForm() {
   const { data: instructors = [], isLoading: instructorsLoading } =
     useFetchInstructorsQuery();
 
+  function updateInstructor(index: number, value: string) {
+    const newList = [...selectedInstructors];
+    newList[index] = value;
+    setSelectedInstructors(newList);
+  }
+
+  function addInstructor() {
+    setSelectedInstructors((prev) => [...prev, ""]);
+  }
+
+  function removeInstructor(index: number) {
+    setSelectedInstructors((prev) => prev.filter((_, i) => i !== index));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
-    if (!instructor) {
-      alert("Du skal vælge en instruktør!");
-      return;
-    }
 
     const startUtc = new Date(start).toISOString();
     const endUtc = new Date(end).toISOString();
 
-    // Find den valgte instruktør fra liste
-    const selectedInstructor = instructors.find(
-      (inst) => inst.id === Number(instructor)
-    );
-
-    if (!selectedInstructor) {
-      alert("Instruktør ikke fundet!");
-      return;
-    }
+    // Lav liste af instruktør-objekter
+    const instructorObjects = selectedInstructors
+      .filter((id) => id !== "") // fjern tomme valg
+      .map((id) => instructors.find((inst) => inst.id === Number(id)))
+      .filter(Boolean)
+      .map((inst) => ({
+        id: inst!.id,
+        firstName: inst!.firstName,
+        email: inst!.email ?? null,
+        number: inst!.number ?? null,
+        image: inst!.image ?? null,
+      }));
 
     const newActivity = {
       title,
@@ -46,41 +61,39 @@ export default function CreateActivityForm() {
       endUtc,
       address: location,
       description: description || "",
-      image: "",        // Backend kræver string
-      link: undefined,  // optional
+      image: "",
+      link: link || "",
       cancelled: false,
-      instructors: [
-        {
-          id: selectedInstructor.id,
-          firstName: selectedInstructor.firstName,
-          email: selectedInstructor.email ?? null,
-          number: selectedInstructor.number ?? null,
-          image: selectedInstructor.image ?? null,
-        },
-      ],
+      instructors: instructorObjects,
       tags: [type],
       isRecurring: false,
       rrule: undefined,
     };
 
-    console.log("SENDER TIL BACKEND:", newActivity);
+    console.log("SENDER:", newActivity);
 
     try {
       await createActivity(newActivity).unwrap();
       alert("Aktivitet oprettet!");
 
-      // Reset form
+      // Reset
       setTitle("");
       setType("training");
       setStart("");
       setEnd("");
       setLocation("");
-      setInstructor("");
+      setSelectedInstructors([""]);
       setDescription("");
+      setLink("");
     } catch (err) {
       console.error(err);
       alert("Fejl ved oprettelse af aktivitet!");
     }
+  }
+
+  function availableOptions(currentIndex: number) {
+    const usedIds = selectedInstructors.filter((id, i) => id !== "" && i !== currentIndex);
+    return instructors.filter((inst) => !usedIds.includes(String(inst.id)));
   }
 
   return (
@@ -92,19 +105,15 @@ export default function CreateActivityForm() {
         <h2>Opret Ny Aktivitet</h2>
 
         <form className="create-activity-form" onSubmit={handleSubmit}>
+          {/* Almindelige felter */}
           <label>
             Titel
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
           </label>
 
           <label>
             Type
-             <select value={type} onChange={(e) => setType(e.target.value)}>
+            <select value={type} onChange={(e) => setType(e.target.value)}>
               <option value="training">Træning</option>
               <option value="events">Begivenhed</option>
             </select>
@@ -112,59 +121,111 @@ export default function CreateActivityForm() {
 
           <label>
             Start tidspunkt
-            <input
-              type="datetime-local"
-              value={start}
-              onChange={(e) => setStart(e.target.value)}
-              required
-            />
+            <input type="datetime-local" value={start} onChange={(e) => setStart(e.target.value)} required />
           </label>
 
           <label>
             Slut tidspunkt
-            <input
-              type="datetime-local"
-              value={end}
-              onChange={(e) => setEnd(e.target.value)}
-              required
-            />
+            <input type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} required />
           </label>
 
           <label>
             Lokation
-            <input
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
+            <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
           </label>
 
+          {/* ⭐ Instruktør-sektion */}
           <label>
-            Instruktør
-            {instructorsLoading ? (
-              <p>Henter instruktører…</p>
-            ) : (
-              <select
-                value={instructor}
-                onChange={(e) => setInstructor(e.target.value)}
-                required
+            Instruktører
+            {selectedInstructors.map((value, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 12,
+                  marginBottom: 8,
+                  width: "100%",
+                }}
               >
-                <option value="">Vælg instruktør</option>
-                {instructors.map((inst) => (
-                  <option key={inst.id} value={inst.id}>
-                    {inst.firstName}
-                  </option>
-                ))}
-              </select>
-            )}
+
+                {instructorsLoading ? (
+                  <p>Henter...</p>
+                ) : (
+                <select
+                  value={value}
+                  onChange={(e) => updateInstructor(index, e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: "6px 8px",
+                    minWidth: "260px",
+                  }}
+                >
+                    <option value="">Vælg instruktør</option>
+                    {availableOptions(index).map((inst) => (
+                      <option key={inst.id} value={inst.id}>
+                        {inst.firstName}
+                      </option>
+                    ))}
+                  </select>
+                )}
+
+                {/* Fjern-knap (vises kun hvis mere end 1 dropdown) */}
+                {selectedInstructors.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeInstructor(index)}
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    cursor: "pointer",
+                    padding: 6,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FiX
+                    size={18}
+                    color="#777"
+                    style={{ transition: "color 0.2s ease" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#d9534f")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#777")}
+                  />
+                </button>
+
+                )}
+              </div>
+            ))}
+
+            {/* ⭐ Plus ikon */}
+            <button
+              type="button"
+              onClick={addInstructor}
+              style={{
+                marginTop: 5,
+                background: "#898c8eff",
+                color: "white",
+                padding: "4px 8px",
+                borderRadius: 5,
+                border: "none",
+                cursor: "pointer"
+              }}
+            >
+              + Tilføj instruktør
+            </button>
           </label>
 
           <label>
             Beskrivelse
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+          </label>
+
+          <label>
+            Link
+            <input type="text" value={link} onChange={(e) => setLink(e.target.value)} />
           </label>
 
           <button type="submit" className="submit-btn" disabled={isLoading}>
