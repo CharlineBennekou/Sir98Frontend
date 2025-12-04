@@ -1,17 +1,13 @@
 // React hooks
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
-//import { useFetchActivitiesQuery } from "../store/apis/activityAPI";
 import ActivityCard from '../components/activities/ActivityCard'
-//import type { Activity } from '../types/activity';
 // Styling
 import { useFetchOccurrencesQuery } from '../store/apis/activityOccurrenceAPI';
 import type { ActivityOccurrence } from '../types/activityOccurrence';
 import './../styles/ActivityListStyle.css';
 // Øverste header-komponent
 import AppHeader from "../components/layout/AppHeader";
-
-const STORAGE_KEY = 'sir98.subscriptions';
 
 // 🔍 Mapping af URL-typer → hvilke tags der tæller som training/events
 const TYPE_TAG_MAP: Record<string, string[]> = {
@@ -34,28 +30,6 @@ export default function ActivityList() {
 
 
   /* ---------------------------------------------------------
-   * 3) SUBSCRIPTIONS: gemte “mine aktiviteter” via localStorage
-   * --------------------------------------------------------- */
-  const [subs, setSubs] = useState<Record<number, boolean>>({})
-
-  // Indlæser saved subs fra localStorage
-  useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) {
-      try {
-        setSubs(JSON.parse(raw) as Record<number, boolean>);
-      } catch {
-        // hvis localStorage er korrupt, ignorer
-      }
-    }
-  }, []);
-
-  // Gem subs tilbage i localStorage hver gang de ændres
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(subs));
-  }, [subs]);
-
-  /* ---------------------------------------------------------
    * 4) FILTERING — BRUG useMemo (og det SKAL ligge før return)
    *    Hooks må ikke skifte rækkefølge → derfor er loading/error
    *    flyttet NED under useMemo.
@@ -67,7 +41,7 @@ export default function ActivityList() {
 
     // Hvis ?type=mine → returnér kun dem brugeren har “abonneret”
     if (typeParam === 'mine') {
-      return occurrences.filter((a) => !!subs[a.id]);
+      return occurrences.filter(a => a.isSubscribed);
     }
 
     // Find tags der matcher typeParam
@@ -81,7 +55,7 @@ export default function ActivityList() {
       return tags.some(tag => expectedTags.includes(tag));
     });
 
-  }, [occurrences, typeParam, subs]);  // afhængigheder
+  }, [occurrences, typeParam]);  // afhængigheder
 
 
   /* ---------------------------------------------------------

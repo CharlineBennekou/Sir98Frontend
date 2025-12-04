@@ -128,11 +128,20 @@ export default function ActivityCard({ activity }: Props) {
                     <div className="activity-time">
                         <FiClock className="icon" />
                         {startTime
-                            ? startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                            : ""}
-                        {endTime
-                            ? ` - ${endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
-                            : ""}
+  ? startTime.toLocaleTimeString('da-DK', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Europe/Copenhagen'
+    })
+  : ""}
+{endTime
+  ? ` - ${endTime.toLocaleTimeString('da-DK', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Europe/Copenhagen'
+    })}`
+  : ""}
+
                     </div>
                 </div>
             </div>
