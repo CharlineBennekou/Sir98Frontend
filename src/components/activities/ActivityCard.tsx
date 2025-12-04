@@ -7,6 +7,7 @@ import BadmintonImage from '../../assets/Badminton.jpg';
 import FootballImage from '../../assets/Football.jpg';
 import SwimmingImage from '../../assets/Swimming.jpg'; 
 import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
+import DefaultImage from '../../assets/SIR98LogoGrey.jpg';
 
 type Props = {
     activity: ActivityOccurrence
@@ -27,7 +28,7 @@ export default function ActivityCard({ activity, subscribed }: Props) {
         Cirkeltræning: CirkeltrainingImage
     };
 
-      const imageUrl = activityImages[activity.title];
+      const imageUrl = activityImages[activity.title] ?? DefaultImage;
 
 
     const instructorName =
@@ -49,28 +50,24 @@ export default function ActivityCard({ activity, subscribed }: Props) {
                 )}
 
                 {/* Billede + klokke ikon */}
-                {activityImages[activity.title] && (
                     <div className="activity-image-wrapper">
                         <div
                             className="activity-image"
                             style={{ backgroundImage: `url(${imageUrl})` }}
                         />
 
-                        {/* titel på billedet */}             
                         <h3 className="activity-title-overlay">{activity.title}</h3>
 
-                        {/* klokke ikon */}
                         <button
                             className="bell-button"
                             onClick={(e) => {
-                                e.stopPropagation();  // Stopper klik fra at åbne dialog
+                                e.stopPropagation();
                                 console.log("Bell clicked!");
                             }}
                         >
                             <FiBellOff />
                         </button>
                     </div>
-                )}
 
                 <div className="activity-body">
 

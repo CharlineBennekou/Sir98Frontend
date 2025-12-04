@@ -13,6 +13,7 @@ export default function CreateActivityForm() {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
+  const [isRecurring, setIsRecurring] = useState(false);
 
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
 
@@ -66,8 +67,8 @@ export default function CreateActivityForm() {
       cancelled: false,
       instructors: instructorObjects,
       tags: [type],
-      isRecurring: false,
-      rrule: undefined,
+      isRecurring,
+      rrule: isRecurring ? `FREQ=WEEKLY` : undefined,
     };
 
     console.log("SENDER:", newActivity);
@@ -128,6 +129,26 @@ export default function CreateActivityForm() {
             Slut tidspunkt
             <input type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} required />
           </label>
+
+          <label
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "22px",
+              marginTop: "10px",
+              cursor: "pointer"
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={isRecurring}
+              onChange={(e) => setIsRecurring(e.target.checked)}
+              style={{ transform: "scale(1.2)" }} // gør den lidt pænere & tydeligere
+            />
+
+            <span>Aktiviteten gentages hver uge</span>
+          </label>  
 
           <label>
             Lokation
