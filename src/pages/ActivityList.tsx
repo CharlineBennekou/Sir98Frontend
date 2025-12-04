@@ -1,9 +1,9 @@
 // React hooks
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import ActivityCard from '../components/activities/ActivityCard'
 // Styling
-import { useFetchOccurrencesQuery } from '../store/apis/activityOccurrenceAPI';
+import { useFetchOccurrencesQuery } from '../store/apis/api';
 import type { ActivityOccurrence } from '../types/activityOccurrence';
 import './../styles/ActivityListStyle.css';
 // Øverste header-komponent
@@ -19,7 +19,12 @@ const TYPE_TAG_MAP: Record<string, string[]> = {
 
 export default function ActivityList() {
   const [daysForward, setDaysForward] = useState<number>(7); // default 7 dage
-  const { data: occurrences = [], isLoading, isError } = useFetchOccurrencesQuery({ days: daysForward, filter: null, userId: "userId" });
+  const { data: occurrences = [], isLoading, isError } =
+  useFetchOccurrencesQuery(
+    { days: daysForward, filter: null, userId: "userId" },
+    { refetchOnMountOrArgChange: true }
+  );
+
   console.log({ isLoading, isError, occurrences, daysForward });
 
   /* ---------------------------------------------------------

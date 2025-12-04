@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { ActivitySubscription } from "../../types/activitysubscription";
-
+import type { ActivitySubscription } from "../../types/activitySubscription";
 export const activitySubscriptionApi = createApi({
   reducerPath: 'activitySubscriptionApi',
 

@@ -8,7 +8,7 @@ import BadmintonImage from '../../assets/Badminton.jpg';
 import FootballImage from '../../assets/Football.jpg';
 import SwimmingImage from '../../assets/Swimming.jpg'; 
 import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
-import { useSubscribeToOccurrence, useUnsubscribeFromOccurrence } from '../../store/apis/activitySubscriptionAPI';
+import { useSubscribeToOccurrence, useUnsubscribeFromOccurrence } from '../../store/apis/api';
 
 type Props = {
     activity: ActivityOccurrence
@@ -18,8 +18,6 @@ type Props = {
 export default function ActivityCard({ activity }: Props) {
     //Hooks
     const [dialogOpen, setDialogOpen] = useState(false);
-
-    const [isSubscribed, setIsSubscribed] = useState(activity.isSubscribed);
     const [subscribeToOccurrence, { isLoading: isSubscribing }] = useSubscribeToOccurrence();
     const [unsubscribeFromOccurrence, { isLoading: isUnsubscribing }] = useUnsubscribeFromOccurrence();
 
@@ -45,8 +43,7 @@ export default function ActivityCard({ activity }: Props) {
         };
 
         try {
-            if (isSubscribed) {
-                setIsSubscribed(false); 
+            if (activity.isSubscribed) { 
                 toast.success(`Afmeldt ${activity.title}`, {
                 iconTheme: {
                 primary: "#ff9800",     // orange circle
@@ -57,14 +54,12 @@ export default function ActivityCard({ activity }: Props) {
                 console.log("Unsubscribing from activity:", payload);
                 await unsubscribeFromOccurrence(payload); // DELETE
             } else {
-                setIsSubscribed(true);
                 toast.success(`Tilmeldt ${activity.title}`);
                 console.log("Subscribing to activity:", payload);
                 await subscribeToOccurrence(payload);     // POST
             }
         } catch (err) {
             console.error("Fejl ved subscription:", err);
-            setIsSubscribed((prev) => !prev); // revert on error
             toast.error("Noget gik galt. Prøv igen.");
         }
     }
@@ -85,7 +80,7 @@ export default function ActivityCard({ activity }: Props) {
     return (
         <>
             <div 
-                className={`activity-card ${activity.cancelled ? "cancelled-card" : ""} ${isSubscribed ? 'subscribed' : ''}`}
+                className={`activity-card ${activity.cancelled ? "cancelled-card" : ""} ${activity.isSubscribed ? 'subscribed' : ''}`}
                 onClick={() => setDialogOpen(true)}
             >
                 {activity.cancelled && (
@@ -108,7 +103,7 @@ export default function ActivityCard({ activity }: Props) {
                             onClick={handleBellClick}
                             disabled={isLoading}
                         >
-                            {isSubscribed ? <FiBellOff /> : <FiBell />}
+                            {activity.isSubscribed ? <FiBellOff /> : <FiBell />}
                         </button>
                     </div>
                 )}
@@ -152,11 +147,7 @@ export default function ActivityCard({ activity }: Props) {
                 onClose={() => setDialogOpen(false)}
             />
 
-            {toast && (
-                <div className="toast">
-                    {toast}
-                </div>
-            )}
+            
         </>
     );
 }
