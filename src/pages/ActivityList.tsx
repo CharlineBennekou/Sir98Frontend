@@ -1,19 +1,15 @@
 // React hooks
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
-//import { useFetchActivitiesQuery } from "../store/apis/activityAPI";
 import ActivityCard from '../components/activities/ActivityCard'
-//import type { Activity } from '../types/activity';
 // Styling
-import { useFetchOccurrencesQuery } from '../store/apis/activityOccurrenceAPI';
+import { useFetchOccurrencesQuery } from '../store/apis/api';
 import type { ActivityOccurrence } from '../types/activityOccurrence';
 import './../styles/ActivityListStyle.css';
 // Øverste header-komponent
 import AppHeader from "../components/layout/AppHeader";
 
-const STORAGE_KEY = 'sir98.subscriptions';
-
-//Mapping af URL-typer → hvilke tags der tæller som training/events
+// 🔍 Mapping af URL-typer → hvilke tags der tæller som training/events
 const TYPE_TAG_MAP: Record<string, string[]> = {
   training: ['træning', 'træninger', 'training'],
   events: ['begivenhed', 'begivenheder', 'event', 'events'],
@@ -23,7 +19,12 @@ const TYPE_TAG_MAP: Record<string, string[]> = {
 
 export default function ActivityList() {
   const [daysForward, setDaysForward] = useState<number>(7); // default 7 dage
-  const { data: occurrences = [], isLoading, isError } = useFetchOccurrencesQuery({ days: daysForward });
+  const { data: occurrences = [], isLoading, isError } =
+  useFetchOccurrencesQuery(
+    { days: daysForward, filter: null, userId: "userId" },
+    { refetchOnMountOrArgChange: true }
+  );
+
   console.log({ isLoading, isError, occurrences, daysForward });
 
   /* ---------------------------------------------------------
@@ -32,28 +33,6 @@ export default function ActivityList() {
   const [params] = useSearchParams();
   const typeParam = (params.get('type') ?? '').toLowerCase();
 
-
-  /* ---------------------------------------------------------
-   * 3) SUBSCRIPTIONS: gemte “mine aktiviteter” via localStorage
-   * --------------------------------------------------------- */
-  const [subs, setSubs] = useState<Record<number, boolean>>({})
-
-  // Indlæser saved subs fra localStorage
-  useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) {
-      try {
-        setSubs(JSON.parse(raw) as Record<number, boolean>);
-      } catch {
-        // hvis localStorage er korrupt, ignorer
-      }
-    }
-  }, []);
-
-  // Gem subs tilbage i localStorage hver gang de ændres
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(subs));
-  }, [subs]);
 
   /* ---------------------------------------------------------
    * 4) FILTERING — BRUG useMemo (og det SKAL ligge før return)
@@ -67,7 +46,7 @@ export default function ActivityList() {
 
     // Hvis ?type=mine → returnér kun dem brugeren har “abonneret”
     if (typeParam === 'mine') {
-      return occurrences.filter((a) => !!subs[a.id]);
+      return occurrences.filter(a => a.isSubscribed);
     }
 
     // Find tags der matcher typeParam
@@ -81,14 +60,18 @@ export default function ActivityList() {
       return tags.some(tag => expectedTags.includes(tag));
     });
 
-  }, [occurrences, typeParam, subs]);  // afhængigheder
+  }, [occurrences, typeParam]);  // afhængigheder
 
 
+  /* ---------------------------------------------------------
+   * 5) NU må vi returnere loading / error
+   *    (ALLE HOOKS er blevet kaldt over dette punkt)
+   * --------------------------------------------------------- */
   if (isLoading) return <p>Henter aktiviteter…</p>;
   if (isError) return <p>Kunne ikke hente aktiviteter.</p>;
 
 
-  /*---------------------------------------------------------
+  /* ---------------------------------------------------------
    * 6) FORMATÉR DATO-TEKST (f.eks. “I dag”, “mandag 25 februar”)
    * --------------------------------------------------------- */
   function formatDateHeader(dateKey: string) {
@@ -183,7 +166,6 @@ export default function ActivityList() {
               <ActivityCard 
                 key={`${occ.id}-${occ.startUtc}`}
                 activity={occ}
-                subscribed={!!subs[occ.id]}
               />
             ))}
           </div>

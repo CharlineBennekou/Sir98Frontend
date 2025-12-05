@@ -1,6 +1,6 @@
 import '../../styles/ActivityDetailStyle.css'
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
-import { FiBellOff, FiArrowLeft } from "react-icons/fi"
+import { FiBellOff, FiArrowLeft, FiBell } from "react-icons/fi"
 import { useEffect } from "react";
 import BadmintonImage from '../../assets/Badminton.jpg';
 import FootballImage from '../../assets/Football.jpg';
@@ -54,26 +54,36 @@ useEffect(() => {
 
           <h2 className="detail-title">{activity.title}</h2>
 
-          <div className="dialog-image-wrapper">
-            <div
-              className="dialog-image"
-              style={{ backgroundImage: `url(${imageUrl})` }}
-            />
+          {imageUrl && (
+            <div className="dialog-image-wrapper">
+              <div
+                className="dialog-image"
+                style={{ backgroundImage: `url(${imageUrl})` }}
+              />
 
-            {activity.cancelled && (
-              <div className="image-cancelled-overlay">AFLYST</div>
-            )}
+              {activity.cancelled && (
+                <div className="image-cancelled-overlay">AFLYST</div>
+                )}
 
-            <button
-              className="bell-button"
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log("Bell icon clicked in dialog for activity:", activity.id);
-              }}
-            >
-              <FiBellOff />
-            </button>
-          </div>
+              {/* 🔔 klokke ikon */}
+              <button
+                className="bell-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log("Bell icon clicked in dialog for activity:", activity.id);
+                  // Her kan du f.eks. toggles notifikation eller lign.
+                }}
+              >
+              if (activity.isSubscribed) {
+                <FiBellOff />
+              }
+              else {
+                <FiBell />
+              }
+                
+              </button>
+            </div>
+          )}
 
           {/* Resten af detaljer */}
           

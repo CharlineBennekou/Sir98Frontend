@@ -17,4 +17,5 @@ export type ActivityOccurrence = {
   }[] | null;
   tags: string[];
   cancelled: boolean;
+  isSubscribed: boolean;
 };
