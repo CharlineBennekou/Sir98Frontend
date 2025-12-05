@@ -76,15 +76,21 @@
   color: #fff;
   font-size: 32px;
   font-weight: 700;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); /* For bedre kontrast */
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
   text-align: center;
   z-index: 5;
-  pointer-events: none; /* klik går igennem */
+  pointer-events: none;
   padding: 0 8px;
-  white-space: nowrap;
-  text-overflow: ellipsis; /* afkorter lang titel med ... */
+
+  /* NYT: Tillad titlen at wrappe */
+  white-space: normal;
+
+  /* Fjern ellipsis */
+  text-overflow: unset;
+
   max-width: 90%;
 }
+
 
 /* Klokke-knap til notifikationer */
 .bell-button {
