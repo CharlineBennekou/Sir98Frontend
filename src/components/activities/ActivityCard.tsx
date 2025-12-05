@@ -8,6 +8,8 @@ import BadmintonImage from '../../assets/Badminton.jpg';
 import FootballImage from '../../assets/Football.jpg';
 import SwimmingImage from '../../assets/Swimming.jpg'; 
 import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
+import DefaultImage from '../../assets/SIR98LogoGrey.jpg';
+
 import { useSubscribeToOccurrence, useUnsubscribeFromOccurrence } from '../../store/apis/api';
 
 type Props = {
@@ -33,6 +35,7 @@ export default function ActivityCard({ activity }: Props) {
         Cirkeltræning: CirkeltrainingImage
     };
 
+      const imageUrl = activityImages[activity.title] ?? DefaultImage;
 
     async function handleBellClick(e: React.MouseEvent<HTMLButtonElement>) {
         e.stopPropagation(); // prevent opening the detail dialog
@@ -89,6 +92,7 @@ export default function ActivityCard({ activity }: Props) {
                     </div>
                 )}
 
+                {/* Billede + klokke ikon */}
                 {imageUrl && (
                     <div className="activity-image-wrapper">
                         <div
@@ -106,7 +110,6 @@ export default function ActivityCard({ activity }: Props) {
                             {activity.isSubscribed ? <FiBellOff /> : <FiBell />}
                         </button>
                     </div>
-                )}
 
                 <div className="activity-body">
                     <p className="activity-instructor">

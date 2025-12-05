@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import BadmintonImage from '../../assets/Badminton.jpg';
 import FootballImage from '../../assets/Football.jpg';
 import SwimmingImage from '../../assets/Swimming.jpg';
+import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
+import DefaultImage from '../../assets/SIR98LogoGrey.jpg';
 
 type Props = {
   activity: ActivityOccurrence;
@@ -32,10 +34,11 @@ useEffect(() => {
   const activityImages: Record<string, string> = {
     Badminton: BadmintonImage,
     Fodbold: FootballImage,
-    Svømning: SwimmingImage
+    Svømning: SwimmingImage,
+    Cirkeltræning: CirkeltrainingImage
   };
 
-  const imageUrl = activityImages[activity.title];
+  const imageUrl = activityImages[activity.title] ?? DefaultImage;
 
   return (
     <div className="dialog-overlay" onClick={onClose}>
