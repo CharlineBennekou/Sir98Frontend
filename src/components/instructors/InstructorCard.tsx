@@ -42,9 +42,7 @@ export default function InstructorCard({ instructor }: Props) {
             </div>
 
             <div className="instructor-info">
-                <div className = "instructor-role">
-                    <p>Instruktør:</p>
-                </div>
+
 
 
                 <div className = "instructor-name">

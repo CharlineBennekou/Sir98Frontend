@@ -6,7 +6,7 @@ export const api = createApi({
   reducerPath: 'api',
 
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://localhost:7275/api/',
+    baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/',
   }),
 
   // we'll use this so mutations can tell RTKQ:

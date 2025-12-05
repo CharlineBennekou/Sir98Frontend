@@ -18,13 +18,12 @@ type Props = {
 }
 
 export default function ActivityCard({ activity }: Props) {
-    //Hooks
+    // Hooks
     const [dialogOpen, setDialogOpen] = useState(false);
     const [subscribeToOccurrence, { isLoading: isSubscribing }] = useSubscribeToOccurrence();
     const [unsubscribeFromOccurrence, { isLoading: isUnsubscribing }] = useUnsubscribeFromOccurrence();
 
-
-    //Constants
+    // Constants
     const isLoading = isSubscribing || isUnsubscribing;
     const userId = "userId";
 
@@ -35,7 +34,8 @@ export default function ActivityCard({ activity }: Props) {
         Cirkeltræning: CirkeltrainingImage
     };
 
-      const imageUrl = activityImages[activity.title] ?? DefaultImage;
+    // use default if no specific image
+    const imageUrl = activityImages[activity.title] ?? DefaultImage;
 
     async function handleBellClick(e: React.MouseEvent<HTMLButtonElement>) {
         e.stopPropagation(); // prevent opening the detail dialog
@@ -48,11 +48,11 @@ export default function ActivityCard({ activity }: Props) {
         try {
             if (activity.isSubscribed) { 
                 toast.success(`Afmeldt ${activity.title}`, {
-                iconTheme: {
-                primary: "#ff9800",     // orange circle
-                secondary: "#fff",      // white background
-                },
-});
+                    iconTheme: {
+                        primary: "#ff9800",     // orange circle
+                        secondary: "#fff",      // white background
+                    },
+                });
 
                 console.log("Unsubscribing from activity:", payload);
                 await unsubscribeFromOccurrence(payload); // DELETE
@@ -67,18 +67,14 @@ export default function ActivityCard({ activity }: Props) {
         }
     }
 
-    //Derived values
-        const startTime = activity.startUtc ? new Date(activity.startUtc) : null;
-        const endTime = activity.endUtc ? new Date(activity.endUtc) : null;
+    // Derived values
+    const startTime = activity.startUtc ? new Date(activity.startUtc) : null;
+    const endTime = activity.endUtc ? new Date(activity.endUtc) : null;
 
-        const imageUrl = activityImages[activity.title];
-
-        const instructorName =
+    const instructorName =
         activity.instructors?.length
             ? activity.instructors.map((i) => i.firstName).join(" & ")
             : "Ikke angivet";
-
-
 
     return (
         <>
@@ -110,6 +106,7 @@ export default function ActivityCard({ activity }: Props) {
                             {activity.isSubscribed ? <FiBellOff /> : <FiBell />}
                         </button>
                     </div>
+                )}
 
                 <div className="activity-body">
                     <p className="activity-instructor">
@@ -126,20 +123,19 @@ export default function ActivityCard({ activity }: Props) {
                     <div className="activity-time">
                         <FiClock className="icon" />
                         {startTime
-  ? startTime.toLocaleTimeString('da-DK', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'Europe/Copenhagen'
-    })
-  : ""}
-{endTime
-  ? ` - ${endTime.toLocaleTimeString('da-DK', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'Europe/Copenhagen'
-    })}`
-  : ""}
-
+                            ? startTime.toLocaleTimeString('da-DK', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                timeZone: 'Europe/Copenhagen'
+                              })
+                            : ""}
+                        {endTime
+                            ? ` - ${endTime.toLocaleTimeString('da-DK', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                timeZone: 'Europe/Copenhagen'
+                              })}`
+                            : ""}
                     </div>
                 </div>
             </div>
@@ -149,8 +145,6 @@ export default function ActivityCard({ activity }: Props) {
                 open={dialogOpen}
                 onClose={() => setDialogOpen(false)}
             />
-
-            
         </>
     );
 }

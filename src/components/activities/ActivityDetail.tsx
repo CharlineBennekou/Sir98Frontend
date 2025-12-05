@@ -65,23 +65,8 @@ useEffect(() => {
                 <div className="image-cancelled-overlay">AFLYST</div>
                 )}
 
-              {/* 🔔 klokke ikon */}
-              <button
-                className="bell-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  console.log("Bell icon clicked in dialog for activity:", activity.id);
-                  // Her kan du f.eks. toggles notifikation eller lign.
-                }}
-              >
-              if (activity.isSubscribed) {
-                <FiBellOff />
-              }
-              else {
-                <FiBell />
-              }
-                
-              </button>
+              
+             
             </div>
           )}
 
