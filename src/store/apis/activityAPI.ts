@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { Activity } from '../../types/activity';
+import type { CreateActivityDTO } from '../../types/activityDTO';
 
 export const activitiesApi = createApi({
   reducerPath: "activitiesApi",
@@ -44,7 +45,14 @@ export const activitiesApi = createApi({
         }));
       },
     }),
+    createActivity : builder.mutation<Activity, CreateActivityDTO>({
+      query: (newActivity) => ({
+        url: "activity",
+        method: "POST",
+        body: newActivity,
+      }),
+    }),
   }),
 });
 
-export const { useFetchActivitiesQuery } = activitiesApi;
+export const { useFetchActivitiesQuery, useCreateActivityMutation } = activitiesApi;
