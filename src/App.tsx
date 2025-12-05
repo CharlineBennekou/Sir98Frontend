@@ -4,11 +4,15 @@ import ActivityList from './pages/ActivityList'
 import CreateActivityForm from './pages/CreateActivityForm';
 import Dashboard from './pages/Dashboard';
 import InstructorList from './pages/InstructorList';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
     <div className="app-root" style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>
-      
+      <Toaster
+        position="bottom-center"
+        reverseOrder={false}
+      />
       <main>
         <Routes>
           <Route path="/" element={<Dashboard />} /> --- Nummer 1 ---
