@@ -1,6 +1,10 @@
 import * as React from 'react';
+import { Navigate } from "react-router-dom";
 
 export class LoginComp extends React.Component {
+ state = {
+        submitted: false
+    };
     private async search(formData: FormData): Promise<void> {
             const email = formData.get("email");
             const password = formData.get("password")
@@ -31,8 +35,12 @@ export class LoginComp extends React.Component {
             });
         }
 
+        private onSubmit() {
+            this.setState({ submitted: true });
+        }
+
     public render(): React.ReactNode {
-        
+          
 
         return (
             <div>
@@ -50,7 +58,9 @@ export class LoginComp extends React.Component {
                     <a>Glemt adgangskode</a>
                     <br/>
                     <br/>
-                    <input type="submit" value="Fortryd"/>
+                    <input type="submit" onClick={() => this.onSubmit()} value="Fortryd"/>
+                    {this.state.submitted && <Navigate to="/" />}
+                    
                     <input type="submit" value="Log ind"/>
                     <br/>
                     <br/>
@@ -61,3 +71,5 @@ export class LoginComp extends React.Component {
     }
 }
 
+//<input onClick={() => this.navigate("/")} value="Fortryd"/>
+//<button onClick={() => this.navigate("/")}>Fortryd</button>

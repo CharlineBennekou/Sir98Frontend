@@ -4,6 +4,7 @@ import ActivityList from './pages/ActivityList'
 import CreateActivityForm from './pages/CreateActivityForm';
 import Dashboard from './pages/Dashboard';
 import InstructorList from './pages/InstructorList';
+import LoginPage from './pages/LoginPage';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/create" element={<CreateActivityForm />} />
           <Route path="/aktiviteter" element={<ActivityList />} />
           <Route path="/instructor" element={<InstructorList />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </main>
     </div>
