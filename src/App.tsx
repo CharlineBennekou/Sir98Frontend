@@ -1,11 +1,10 @@
 import './App.css'
-import ActivityList from './components/activities/ActivityList'
-import { LoginComp } from './components/users/Login'
-import { RegisterComp } from './components/users/Register'
-import { CodeActivationComp } from './components/users/CodeActivated'
-import ActivityTestingData from './components/activities/ActivityTestingData'
-import {Navbar} from './components/layout/Navbar'
-import { useState } from 'react'
+import { Routes, Route } from 'react-router-dom';
+import ActivityList from './pages/ActivityList'
+import CreateActivityForm from './pages/CreateActivityForm';
+import Dashboard from './pages/Dashboard';
+import InstructorList from './pages/InstructorList';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
@@ -15,13 +14,12 @@ function App() {
         reverseOrder={false}
       />
       <main>
-        <LoginComp/>
-        <RegisterComp/>
-        <CodeActivationComp/>
-        <section style={{ marginBottom: 12 }}>
-          <ActivityTestingData />
-        </section>
-        <ActivityList />
+          <Routes>
+          <Route path="/" element={<Dashboard />} /> --- Nummer 1 ---
+          <Route path="/create" element={<CreateActivityForm />} />
+          <Route path="/aktiviteter" element={<ActivityList />} />
+          <Route path="/instructor" element={<InstructorList />} />
+        </Routes>
       </main>
     </div>
   )
