@@ -18,7 +18,7 @@ export default function AppHeader({ title, backTo = "/" }: Props) {
       <div className="header-inner">
         {!isHome && (
           <button className="back-btn" onClick={() => navigate(backTo)}>
-            <FiArrowLeft size={26} />
+            <FiArrowLeft size={46} />
           </button>
         )}
 
