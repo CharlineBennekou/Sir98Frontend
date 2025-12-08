@@ -41,12 +41,12 @@ export default function Dashboard() {
       onClick: () => navigate("/instructor"),
       color: "#E91E63",
     },
-    // {
-    //   label: "Kontoindstillinger",
-    //   icon: <FiUser />,
-    //   onClick: () => navigate("/konto"),
-    //   color: "#607D8B",
-    // }
+    {
+      label: "Kontoindstillinger",
+      icon: <FiUser />,
+      onClick: () => navigate("/konto"),
+      color: "#607D8B",
+    }
   ];
 
   return (

@@ -1,6 +1,6 @@
 import '../../styles/ActivityDetailStyle.css'
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
-import { FiBellOff, FiArrowLeft, FiBell } from "react-icons/fi"
+import { FiArrowLeft } from "react-icons/fi"
 import { useEffect } from "react";
 import BadmintonImage from '../../assets/Badminton.jpg';
 import FootballImage from '../../assets/Football.jpg';
