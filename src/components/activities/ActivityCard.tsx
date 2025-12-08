@@ -2,7 +2,7 @@ import '../../styles/NewActivityCardStyle.css'
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
 import { FiUser, FiMapPin, FiClock, FiBellOff, FiBell } from "react-icons/fi";
 import ActivityDetail from './ActivityDetail';
-import React, { useState } from "react"; // 👈 add React if you use React.MouseEvent
+import React, { useState } from "react";
 import { toast } from 'react-hot-toast';
 import BadmintonImage from '../../assets/Badminton.jpg';
 import FootballImage from '../../assets/Football.jpg';
