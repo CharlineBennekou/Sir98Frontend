@@ -44,7 +44,7 @@ export default function Dashboard() {
     {
       label: "Kontoindstillinger",
       icon: <FiUser />,
-      onClick: () => navigate("/konto"),
+      onClick: () => navigate("/login"),
       color: "#607D8B",
     }
   ];
