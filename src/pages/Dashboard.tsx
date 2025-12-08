@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FiList, FiActivity, FiCalendar, FiUser, FiBell } from "react-icons/fi";
+import {FiActivity, FiCalendar, FiUser, FiBell } from "react-icons/fi";
 import { LiaUserTieSolid } from "react-icons/lia";
 import "./../styles/DashboardStyle.css";
 
@@ -9,12 +9,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const menuItems = [
-    {
-      label: "Alle aktiviteter",
-      icon: <FiList />,
-      onClick: () => navigate("/aktiviteter"),
-      color: "#4CAF50",
-    },
+   
     {
       label: "Træninger",
       icon: <FiActivity />,
@@ -46,7 +41,12 @@ export default function Dashboard() {
       icon: <FiUser />,
       onClick: () => navigate("/login"),
       color: "#607D8B",
+    },
+    {
+
     }
+
+
   ];
 
   return (

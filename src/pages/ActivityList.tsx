@@ -27,18 +27,11 @@ export default function ActivityList() {
 
   console.log({ isLoading, isError, occurrences, daysForward });
 
-  /* ---------------------------------------------------------
-   * 1) LÆSER URL QUERY-PARAM (?type=training/events/mine)
-   * --------------------------------------------------------- */
   const [params] = useSearchParams();
   const typeParam = (params.get('type') ?? '').toLowerCase();
 
 
-  /* ---------------------------------------------------------
-   * 4) FILTERING — BRUG useMemo (og det SKAL ligge før return)
-   *    Hooks må ikke skifte rækkefølge → derfor er loading/error
-   *    flyttet NED under useMemo.
-   * --------------------------------------------------------- */
+ 
   const filteredOccurrences = useMemo(() => {
 
     // Hvis ingen ?type → vis alle aktiviteter
@@ -63,17 +56,11 @@ export default function ActivityList() {
   }, [occurrences, typeParam]);  // afhængigheder
 
 
-  /* ---------------------------------------------------------
-   * 5) NU må vi returnere loading / error
-   *    (ALLE HOOKS er blevet kaldt over dette punkt)
-   * --------------------------------------------------------- */
+  
   if (isLoading) return <p>Henter aktiviteter…</p>;
   if (isError) return <p>Kunne ikke hente aktiviteter.</p>;
 
 
-  /* ---------------------------------------------------------
-   * 6) FORMATÉR DATO-TEKST (f.eks. “I dag”, “mandag 25 februar”)
-   * --------------------------------------------------------- */
   function formatDateHeader(dateKey: string) {
     const date = new Date(dateKey);
     const today = new Date();
@@ -115,9 +102,7 @@ export default function ActivityList() {
   );
 
 
-  /* ---------------------------------------------------------
-   * 9) DYNAMISK SIDE-TITEL (vises i AppHeader)
-   * --------------------------------------------------------- */
+
   const pageTitle =
     typeParam === 'training'
       ? 'Træninger'
@@ -128,9 +113,7 @@ export default function ActivityList() {
           : 'Alle aktiviteter';
 
 
-  /* ---------------------------------------------------------
-   * 10) RENDER UI
-   * --------------------------------------------------------- */
+ 
   return (
     <>
       {/* Øverste sticky header */}
