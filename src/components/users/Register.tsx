@@ -1,16 +1,25 @@
 import * as React from 'react';
 
-export class LoginComp extends React.Component {
+export class RegisterComp extends React.Component {
     private async search(formData: FormData): Promise<void> {
             const email = formData.get("email");
             const password = formData.get("password")
+            const passwordRepeat = formData.get("passwordRepeat")
+
+            if(password?.toString() != passwordRepeat?.toString()) {
+                alert("Indtastet adgangskode matcher ikke")
+                console.log(password);
+                console.log(passwordRepeat)
+                return;
+            }
+
             const body = {
                 email: email,
                 password: password,
-                
+                PasswordRepeated: passwordRepeat
             };
 
-            fetch('https://localhost:7275/api/User/Login', {
+            fetch('https://localhost:7275/api/User/Register', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
@@ -22,11 +31,11 @@ export class LoginComp extends React.Component {
                         alert(text);
                     });
                 }
+                if(response.status === 429) {
+                    alert("Registrerings forsøg opbrugt, prøv igen om 5 minutter.")
+                }
                 if(response.ok) {
-                    response.text().then(text => {
-                        localStorage.setItem("JWToken", text);
-                        alert("Du er nu logget ind")
-                    });   
+                    alert(`Link til aktivering af konto er sendt til ${email}.`)
                 }
             });
         }
@@ -47,14 +56,13 @@ export class LoginComp extends React.Component {
                     <input type="text" id="password" name="password"/>
                     <br/>
                     <br/>
-                    <a>Glemt adgangskode</a>
+                    <label htmlFor="passwordRepeat">Gentag adgangskode</label>
+                    <br/>
+                    <input type="text" id="passwordRepeat" name="passwordRepeat"/>
                     <br/>
                     <br/>
                     <input type="submit" value="Fortryd"/>
-                    <input type="submit" value="Log ind"/>
-                    <br/>
-                    <br/>
-                    <a>Registrer her</a>
+                    <input type="submit" value="Registrer"/>
                 </form> 
             </div>
         );
