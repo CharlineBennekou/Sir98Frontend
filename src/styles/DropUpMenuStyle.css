@@ -1,0 +1,65 @@
+/* ======================================
+   Drop-up Overlay
+   ====================================== */
+.dropup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 1000;
+}
+
+/* ======================================
+   Drop-up Menu container
+   ====================================== */
+.dropup-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.2);
+  padding: 12px 0;
+  z-index: 1001;
+  animation: slideUp 0.25s ease-out;
+}
+
+/* ======================================
+   Slide-up animation
+   ====================================== */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ======================================
+   Buttons
+   ====================================== */
+.dropup-item {
+  width: 100%;
+  padding: 18px;
+  font-size: 18px;
+  background: white;
+  border: none;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  cursor: pointer;
+  color: #0a84ff;
+}
+
+.dropup-item:hover {
+  background: #f5f5f5;
+}
+
+.dropup-item:last-child {
+  border-bottom: none;
+}
+
+.dropup-item.danger {
+  color: #c00;
+  font-weight: 600;
+}

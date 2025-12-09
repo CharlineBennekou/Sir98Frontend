@@ -9,6 +9,8 @@ import FootballImage from '../../assets/Football.jpg';
 import SwimmingImage from '../../assets/Swimming.jpg'; 
 import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
 import DefaultImage from '../../assets/SIR98LogoGrey.jpg';
+import DropUpMenu from './DropUpMenu';
+
 
 import { useSubscribeToOccurrence, useUnsubscribeFromOccurrence } from '../../store/apis/api';
 
@@ -19,6 +21,7 @@ type Props = {
 
 export default function ActivityCard({ activity }: Props) {
     // Hooks
+    const [menuOpen, setMenuOpen] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [subscribeToOccurrence, { isLoading: isSubscribing }] = useSubscribeToOccurrence();
     const [unsubscribeFromOccurrence, { isLoading: isUnsubscribing }] = useUnsubscribeFromOccurrence();
@@ -80,7 +83,6 @@ export default function ActivityCard({ activity }: Props) {
         <>
             <div 
                 className={`activity-card ${activity.cancelled ? "cancelled-card" : ""} ${activity.isSubscribed ? 'subscribed' : ''}`}
-                onClick={() => setDialogOpen(true)}
             >
                 {activity.cancelled && (
                     <div className="cancelled-banner">
@@ -88,7 +90,7 @@ export default function ActivityCard({ activity }: Props) {
                     </div>
                 )}
 
-                {/* Billede + klokke ikon */}
+                {/* Billede */}
                 {imageUrl && (
                     <div className="activity-image-wrapper">
                         <div
@@ -97,14 +99,6 @@ export default function ActivityCard({ activity }: Props) {
                         />
 
                         <h3 className="activity-title-overlay">{activity.title}</h3>
-
-                        <button
-                            className="bell-button"
-                            onClick={handleBellClick}
-                            disabled={isLoading}
-                        >
-                            {activity.isSubscribed ? <FiBellOff /> : <FiBell />}
-                        </button>
                     </div>
                 )}
 
@@ -137,6 +131,23 @@ export default function ActivityCard({ activity }: Props) {
                               })}`
                             : ""}
                     </div>
+                        <div className="activity-actions">
+                            <button 
+                                className="details-btn"
+                                onClick={() => setDialogOpen(true)}
+                            >
+                                Se detaljer
+                            </button>
+                            <button 
+                                className="follow-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setMenuOpen(true);
+                                }}
+                            >
+                                Følg
+                            </button>
+                        </div>
                 </div>
             </div>
 
@@ -144,6 +155,29 @@ export default function ActivityCard({ activity }: Props) {
                 activity={activity}
                 open={dialogOpen}
                 onClose={() => setDialogOpen(false)}
+            />
+
+            <DropUpMenu
+                open={menuOpen}
+                onClose={() => setMenuOpen(false)}
+                onFollowSingle={async () => {
+                    // Genbrug af bell-button funktionalitet
+                    await handleBellClick({
+                        stopPropagation: () => {}
+                    } as any);
+                }}
+                onFollowAll={() => {
+                    console.log("Følg alle aktiviteter — funktion kommer senere");
+                }}
+                onUnfollow={async () => {
+                    if (activity.isSubscribed) {
+                        await unsubscribeFromOccurrence({
+                            userId,
+                            activityId: activity.id,
+                            originalStartUtc: activity.originalStartUtc
+                        });
+                    }
+                }}
             />
         </>
     );
