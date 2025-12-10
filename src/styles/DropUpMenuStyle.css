@@ -63,3 +63,22 @@
   color: #c00;
   font-weight: 600;
 }
+
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+
+
+  width: 34px;
+  height: 34px;
+
+  margin-right: 16px;
+
+  background: #e7e7e7;
+  border-radius: 50%; /* gør den rund */
+
+  color: inherit; /* ikonet arver farve fra knappen */
+  font-size: 22px; /* ikonet bliver centreret og passende */
+}

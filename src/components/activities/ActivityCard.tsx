@@ -139,13 +139,13 @@ export default function ActivityCard({ activity }: Props) {
                                 Se detaljer
                             </button>
                             <button 
-                                className="follow-btn"
+                                className={`follow-btn ${activity.isSubscribed ? "subscribed" : ""}`}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setMenuOpen(true);
                                 }}
                             >
-                                Følg
+                                {activity.isSubscribed ? "Følger" : "Følg"}
                             </button>
                         </div>
                 </div>

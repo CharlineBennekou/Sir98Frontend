@@ -1,4 +1,5 @@
 import '../../styles/DropUpMenuStyle.css'
+import { LuCopyPlus, LuSquarePlus, LuX, LuSquareX } from "react-icons/lu";
 
 
 type DropUpMenuProps = {
@@ -32,21 +33,25 @@ export default function DropUpMenu({
                 {!isSubscribed && (
                     <>
                         <button className="dropup-item" onClick={() => { onFollowSingle(); onClose(); }}>
+                            <span className="icon-wrapper"><LuSquarePlus /></span>
                             Følg enkelte aktivitet
                         </button>
 
                         <button className="dropup-item" onClick={() => { onFollowAll(); onClose(); }}>
+                            <span className="icon-wrapper"><LuCopyPlus /></span>
                             Følg alle aktiviteterne
                         </button>
 
-                        <button className="dropup-item danger" onClick= { onClose }>
+                        <button className="dropup-item danger" onClick={onClose}>
+                            <span className="icon-wrapper"><LuX /></span>
                             Fortryd
                         </button>
                    </>
                 )}
                 {isSubscribed && (
                     <>
-                        <button className="dropup-item" onClick={() => { onUnfollow(); onClose(); }}>
+                        <button className="dropup-item danger" onClick={() => { onUnfollow(); onClose(); }}>
+                            <span className="icon-wrapper"><LuSquareX /></span>
                             Følg ikke længere
                         </button>
                     </>
