@@ -157,11 +157,10 @@ export default function ActivityCard({ activity }: Props) {
                 onClose={() => setDialogOpen(false)}
             />
 
-            <DropUpMenu
+           <DropUpMenu
                 open={menuOpen}
                 onClose={() => setMenuOpen(false)}
                 onFollowSingle={async () => {
-                    // Genbrug af bell-button funktionalitet
                     await handleBellClick({
                         stopPropagation: () => {}
                     } as any);
@@ -171,13 +170,25 @@ export default function ActivityCard({ activity }: Props) {
                 }}
                 onUnfollow={async () => {
                     if (activity.isSubscribed) {
-                        await unsubscribeFromOccurrence({
-                            userId,
-                            activityId: activity.id,
-                            originalStartUtc: activity.originalStartUtc
-                        });
+                        try {
+                            await unsubscribeFromOccurrence({
+                                userId,
+                                activityId: activity.id,
+                                originalStartUtc: activity.originalStartUtc
+                            });
+                            toast.success(`Afmeldt ${activity.title}`, {
+                                iconTheme: {
+                                    primary: "#ff9800",
+                                    secondary: "#fff",
+                                },
+                            });
+                        } catch (err) {
+                            console.error("Fejl ved unsubscribe:", err);
+                            toast.error("Noget gik galt. Prøv igen.");
+                        }
                     }
                 }}
+                isSubscribed={activity.isSubscribed}
             />
         </>
     );

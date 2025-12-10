@@ -1,4 +1,6 @@
 import * as React from 'react';
+import AppHeader from "../../components/layout/AppHeader";
+
 
 export class RegisterComp extends React.Component {
     private async search(formData: FormData): Promise<void> {
@@ -46,6 +48,9 @@ export class RegisterComp extends React.Component {
         return (
             <div>
                 <form action={this.search}>
+                    <AppHeader title={"Register"} />
+                    <div style={{ marginTop: 70 }}></div>
+                    
                     <label htmlFor="email">Email</label>
                     <br/>
                     <input type="text" id="email" name="email"/>

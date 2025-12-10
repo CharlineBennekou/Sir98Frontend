@@ -7,6 +7,8 @@ type DropUpMenuProps = {
     onFollowSingle: () => void;
     onFollowAll: () => void;
     onUnfollow: () => void;
+    isSubscribed: boolean;
+
 };
 
 export default function DropUpMenu({
@@ -14,7 +16,8 @@ export default function DropUpMenu({
     onClose,
     onFollowSingle,
     onFollowAll,
-    onUnfollow
+    onUnfollow,
+    isSubscribed
 }: DropUpMenuProps) {
 
     if (!open) return null;
@@ -26,17 +29,28 @@ export default function DropUpMenu({
 
             {/* Menu */}
             <div className="dropup-menu">
-                <button className="dropup-item" onClick={() => { onFollowSingle(); onClose(); }}>
-                    Følg enkelte aktivitet
-                </button>
+                {!isSubscribed && (
+                    <>
+                        <button className="dropup-item" onClick={() => { onFollowSingle(); onClose(); }}>
+                            Følg enkelte aktivitet
+                        </button>
 
-                <button className="dropup-item" onClick={() => { onFollowAll(); onClose(); }}>
-                    Følg alle aktiviteterne
-                </button>
+                        <button className="dropup-item" onClick={() => { onFollowAll(); onClose(); }}>
+                            Følg alle aktiviteterne
+                        </button>
 
-                <button className="dropup-item danger" onClick={() => { onUnfollow(); onClose(); }}>
-                    Følg ikke længere
-                </button>
+                        <button className="dropup-item danger" onClick= { onClose }>
+                            Fortryd
+                        </button>
+                   </>
+                )}
+                {isSubscribed && (
+                    <>
+                        <button className="dropup-item" onClick={() => { onUnfollow(); onClose(); }}>
+                            Følg ikke længere
+                        </button>
+                    </>
+                )}
             </div>
         </>
     );
