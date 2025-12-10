@@ -1,6 +1,6 @@
 import '../../styles/NewActivityCardStyle.css'
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
-import { FiUser, FiMapPin, FiClock, FiBellOff, FiBell } from "react-icons/fi";
+import { FiUser, FiMapPin, FiClock, FiChevronDown } from "react-icons/fi";
 import ActivityDetail from './ActivityDetail';
 import React, { useState } from "react";
 import { toast } from 'react-hot-toast';
@@ -8,7 +8,7 @@ import BadmintonImage from '../../assets/Badminton.jpg';
 import FootballImage from '../../assets/Football.jpg';
 import SwimmingImage from '../../assets/Swimming.jpg'; 
 import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
-import DefaultImage from '../../assets/SIR98LogoGrey.jpg';
+import DefaultImage from '../../assets/placeHolderGreyPic.jpg';
 import DropUpMenu from './DropUpMenu';
 
 
@@ -145,7 +145,7 @@ export default function ActivityCard({ activity }: Props) {
                                     setMenuOpen(true);
                                 }}
                             >
-                                {activity.isSubscribed ? "Følger" : "Følg"}
+                                {activity.isSubscribed ? "Følger" : "Følg" } <FiChevronDown />
                             </button>
                         </div>
                 </div>
