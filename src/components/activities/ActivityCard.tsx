@@ -189,6 +189,7 @@ export default function ActivityCard({ activity }: Props) {
                     }
                 }}
                 isSubscribed={activity.isSubscribed}
+                activityTitle={activity.title}
             />
         </>
     );

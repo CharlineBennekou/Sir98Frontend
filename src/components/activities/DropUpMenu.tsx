@@ -9,8 +9,9 @@ type DropUpMenuProps = {
     onFollowAll: () => void;
     onUnfollow: () => void;
     isSubscribed: boolean;
-
+    activityTitle: string;
 };
+
 
 export default function DropUpMenu({
     open,
@@ -18,7 +19,8 @@ export default function DropUpMenu({
     onFollowSingle,
     onFollowAll,
     onUnfollow,
-    isSubscribed
+    isSubscribed,
+    activityTitle
 }: DropUpMenuProps) {
 
     if (!open) return null;
@@ -34,12 +36,12 @@ export default function DropUpMenu({
                     <>
                         <button className="dropup-item" onClick={() => { onFollowSingle(); onClose(); }}>
                             <span className="icon-wrapper"><LuSquarePlus /></span>
-                            Følg enkelte aktivitet
+                             Følg denne {activityTitle} aktivitet
                         </button>
 
                         <button className="dropup-item" onClick={() => { onFollowAll(); onClose(); }}>
                             <span className="icon-wrapper"><LuCopyPlus /></span>
-                            Følg alle aktiviteterne
+                            Følg alle {activityTitle} aktiviteter
                         </button>
 
                         <button className="dropup-item danger" onClick={onClose}>
