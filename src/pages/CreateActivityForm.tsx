@@ -6,10 +6,12 @@ import { useFetchInstructorsQuery } from "../store/apis/instructorAPI";
 import { FiX } from "react-icons/fi";
 
 export default function CreateActivityForm() {
+  var postingImage: boolean = false;
   const [title, setTitle] = useState("");
   const [type, setType] = useState("training");
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
+  const [image, setImage] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
@@ -37,8 +39,57 @@ export default function CreateActivityForm() {
     setSelectedInstructors((prev) => prev.filter((_, i) => i !== index));
   }
 
+
+  //https://stackoverflow.com/questions/60782060/cannot-post-a-multipart-form-data-using-fetch-typescript
+  async function postImage(images: FileList | null): Promise<void> {
+    if(!images) {
+      alert("Intet billede");
+      return;
+    }
+    if(!images[0]) {
+      alert("Intet billede");
+      return;
+    }
+    const form = new FormData();
+    form.set("images", images[0])
+    const URL = 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/Image';
+    //const URL = "https://localhost:7275/api/Image";
+    fetch(URL, {
+        method: 'POST',
+        body: form
+    }).then((response: Response) => {
+      switch(response.status){
+        case 415:
+          alert("Fil type er ikke understøttet")
+          break;
+        case 400: 
+          alert("Billede upload fejlede")
+          break;
+        case 500:
+          alert("Server fejl")
+          break;
+        case 200:
+          response.text().then(text => {
+            setImage(`${URL}/${text}`)
+          });
+          alert("Billede uploadet")
+          break;
+        default:
+          response.text().then(text => {
+            alert(text)
+          });
+      }
+      postingImage = false;
+    });
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    if(postingImage) {
+      alert("Billede bliver uploadet");
+      return;
+    }
 
     const startUtc = new Date(start).toISOString();
     const endUtc = new Date(end).toISOString();
@@ -62,7 +113,7 @@ export default function CreateActivityForm() {
       endUtc,
       address: location,
       description: description || "",
-      image: "",
+      image: image,
       link: link || "",
       cancelled: false,
       instructors: instructorObjects,
@@ -119,6 +170,12 @@ export default function CreateActivityForm() {
               <option value="events">Begivenhed</option>
             </select>
           </label>
+
+          <label>
+            Billede
+            <input type="file" accept="image/png, image/jpeg, image/svg+xml, image/tiff, image/avif" onChange={(e) => postImage(e.target.files)} />
+          </label>
+
 
           <label>
             Start tidspunkt
