@@ -30,6 +30,8 @@ export default function ActivityCard({ activity }: Props) {
     const isLoading = isSubscribing || isUnsubscribing;
     const userId = "userId";
 
+
+
     const activityImages: Record<string, string> = {
         Badminton: BadmintonImage,
         Fodbold: FootballImage,
@@ -144,8 +146,9 @@ export default function ActivityCard({ activity }: Props) {
                                     e.stopPropagation();
                                     setMenuOpen(true);
                                 }}
-                            >
-                                {activity.isSubscribed ? "Følger" : "Følg" } <FiChevronDown />
+                                    disabled={isLoading}   //gør knappen inaktiv under loading
+                                >
+                                    {isLoading ? "Opdaterer..." : activity.isSubscribed ? "Følger" : "Følg"} <FiChevronDown />
                             </button>
                         </div>
                 </div>
