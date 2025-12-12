@@ -64,7 +64,7 @@ export class LoginComp extends React.Component {
                     <input type="submit" value="Log ind"/>
                     <br/>
                     <br/>
-                    <a>Registrer her</a>
+                    <a href="/register">Registrer her</a>
                 </form> 
             </div>
         );

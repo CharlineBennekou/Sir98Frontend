@@ -1,6 +1,6 @@
 import '../../styles/NewActivityCardStyle.css'
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
-import { FiUser, FiMapPin, FiClock, FiBellOff, FiBell } from "react-icons/fi";
+import { FiUser, FiMapPin, FiClock, FiChevronDown } from "react-icons/fi";
 import ActivityDetail from './ActivityDetail';
 import React, { useState } from "react";
 import { toast } from 'react-hot-toast';
@@ -8,7 +8,9 @@ import BadmintonImage from '../../assets/Badminton.jpg';
 import FootballImage from '../../assets/Football.jpg';
 import SwimmingImage from '../../assets/Swimming.jpg'; 
 import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
-import DefaultImage from '../../assets/SIR98LogoGrey.jpg';
+import DefaultImage from '../../assets/placeHolderGreyPic.jpg';
+import DropUpMenu from './DropUpMenu';
+
 
 import { useSubscribeToOccurrence, useUnsubscribeFromOccurrence } from '../../store/apis/api';
 
@@ -19,6 +21,7 @@ type Props = {
 
 export default function ActivityCard({ activity }: Props) {
     // Hooks
+    const [menuOpen, setMenuOpen] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [subscribeToOccurrence, { isLoading: isSubscribing }] = useSubscribeToOccurrence();
     const [unsubscribeFromOccurrence, { isLoading: isUnsubscribing }] = useUnsubscribeFromOccurrence();
@@ -26,6 +29,8 @@ export default function ActivityCard({ activity }: Props) {
     // Constants
     const isLoading = isSubscribing || isUnsubscribing;
     const userId = "userId";
+
+
 
     const activityImages: Record<string, string> = {
         Badminton: BadmintonImage,
@@ -80,7 +85,6 @@ export default function ActivityCard({ activity }: Props) {
         <>
             <div 
                 className={`activity-card ${activity.cancelled ? "cancelled-card" : ""} ${activity.isSubscribed ? 'subscribed' : ''}`}
-                onClick={() => setDialogOpen(true)}
             >
                 {activity.cancelled && (
                     <div className="cancelled-banner">
@@ -88,7 +92,7 @@ export default function ActivityCard({ activity }: Props) {
                     </div>
                 )}
 
-                {/* Billede + klokke ikon */}
+                {/* Billede */}
                 {imageUrl && (
                     <div className="activity-image-wrapper">
                         <div
@@ -97,14 +101,6 @@ export default function ActivityCard({ activity }: Props) {
                         />
 
                         <h3 className="activity-title-overlay">{activity.title}</h3>
-
-                        <button
-                            className="bell-button"
-                            onClick={handleBellClick}
-                            disabled={isLoading}
-                        >
-                            {activity.isSubscribed ? <FiBellOff /> : <FiBell />}
-                        </button>
                     </div>
                 )}
 
@@ -137,6 +133,24 @@ export default function ActivityCard({ activity }: Props) {
                               })}`
                             : ""}
                     </div>
+                        <div className="activity-actions">
+                            <button 
+                                className="details-btn"
+                                onClick={() => setDialogOpen(true)}
+                            >
+                                Se detaljer
+                            </button>
+                            <button 
+                                className={`follow-btn ${activity.isSubscribed ? "subscribed" : ""}`}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setMenuOpen(true);
+                                }}
+                                    disabled={isLoading}   //gør knappen inaktiv under loading
+                                >
+                                    {isLoading ? "Opdaterer..." : activity.isSubscribed ? "Følger" : "Følg"} <FiChevronDown />
+                            </button>
+                        </div>
                 </div>
             </div>
 
@@ -144,6 +158,41 @@ export default function ActivityCard({ activity }: Props) {
                 activity={activity}
                 open={dialogOpen}
                 onClose={() => setDialogOpen(false)}
+            />
+
+           <DropUpMenu
+                open={menuOpen}
+                onClose={() => setMenuOpen(false)}
+                onFollowSingle={async () => {
+                    await handleBellClick({
+                        stopPropagation: () => {}
+                    } as any);
+                }}
+                onFollowAll={() => {
+                    console.log("Følg alle aktiviteter — funktion kommer senere");
+                }}
+                onUnfollow={async () => {
+                    if (activity.isSubscribed) {
+                        try {
+                            await unsubscribeFromOccurrence({
+                                userId,
+                                activityId: activity.id,
+                                originalStartUtc: activity.originalStartUtc
+                            });
+                            toast.success(`Afmeldt ${activity.title}`, {
+                                iconTheme: {
+                                    primary: "#ff9800",
+                                    secondary: "#fff",
+                                },
+                            });
+                        } catch (err) {
+                            console.error("Fejl ved unsubscribe:", err);
+                            toast.error("Noget gik galt. Prøv igen.");
+                        }
+                    }
+                }}
+                isSubscribed={activity.isSubscribed}
+                activityTitle={activity.title}
             />
         </>
     );

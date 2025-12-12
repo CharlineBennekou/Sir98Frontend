@@ -23,6 +23,7 @@
 }
 /* Dato-label */
 .day-title {
+  position: relative;
   display: inline-block;
   background: #e6e6e6;
   padding: 6px 16px;
@@ -117,4 +118,6 @@
   font-weight: 700;
   margin-bottom: 20px;
 }
+
+
 

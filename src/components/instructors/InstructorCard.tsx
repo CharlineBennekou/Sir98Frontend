@@ -56,17 +56,37 @@ export default function InstructorCard({ instructor }: Props) {
                      </div>
 
 
-                <div className = "instructor-contact">
-                    <div className = "contact-line">
-                        <span className="contact-label">Telefon:</span>
-                        <span>{instructor.number ?? ""}</span>
-                      </div>
+                    <div className = "instructor-contact">
+                        <div className="contact-line">
+                            <span className="contact-label">Telefon:</span>
+
+                            {instructor.number ? (
+                                <a 
+                                href={`tel:${instructor.number}`}
+                                className="contact-phone"
+                                >
+                                {instructor.number}
+                                </a>
+                            ) : (
+                                <span style={{ flexBasis: "100%" }}></span>
+                            )}
+                        </div>
+
 
                         <div className = "contact-line">
-                        <span className="contact-label">Mail:</span>
-                        <span>{instructor.email ?? ""}</span>
+                            <span className="contact-label">Mail:</span>
+                            {instructor.email ? (
+                                <a 
+                                href={`mailto:${instructor.email}`} 
+                                className="contact-email"
+                                >
+                                {instructor.email}
+                                </a>
+                            ) : (
+                                <span></span>
+                            )}
                         </div>
-                </div>
+                    </div>
 
 
             </div>
