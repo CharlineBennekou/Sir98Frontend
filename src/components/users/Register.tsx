@@ -10,8 +10,6 @@ export class RegisterComp extends React.Component {
 
             if(password?.toString() != passwordRepeat?.toString()) {
                 alert("Indtastet adgangskode matcher ikke")
-                console.log(password);
-                console.log(passwordRepeat)
                 return;
             }
 
@@ -21,7 +19,8 @@ export class RegisterComp extends React.Component {
                 PasswordRepeated: passwordRepeat
             };
 
-            fetch('https://localhost:7275/api/User/Register', {
+//Todo: Move this to redux api slice
+            fetch('https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/User/Register', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
