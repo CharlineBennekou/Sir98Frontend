@@ -20,9 +20,19 @@ endpoints: (builder) => ({
           firstName: instructor.firstName,
           image: instructor.image
         })) as Instructor[];
-      }
+      },
+    }),
+    createInstructor: builder.mutation<
+      Instructor,
+      Omit<Instructor, "id">
+    >({
+      query: (instructor) => ({
+        url: "instructor",
+        method: "POST",
+        body: instructor,
+      }),
     }),
   }),
 })
 
-export const { useFetchInstructorsQuery } = instructorsApi;
+export const { useFetchInstructorsQuery, useCreateInstructorMutation } = instructorsApi;
