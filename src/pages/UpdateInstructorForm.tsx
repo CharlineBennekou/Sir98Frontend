@@ -1,18 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "./../styles/CreateActivityFormStyle.css";
 import AppHeader from "../components/layout/AppHeader";
-import { useCreateInstructorMutation } from "../store/apis/instructorAPI";
+import {
+  useFetchInstructorByIdQuery,
+  useUpdateInstructorMutation,
+} from "../store/apis/instructorAPI";
 
-export default function CreateInstructorForm() {
-  let postingImage: boolean = false;
+export default function UpdateInstructorForm() {
+  const { id } = useParams<{ id: string }>();
+  const instructorId = Number(id);
+  const navigate = useNavigate();
+
+  const { data: instructor, isLoading, isError } = useFetchInstructorByIdQuery(instructorId);
+  const [updateInstructor, { isLoading: isUpdating, isSuccess, isError: updateError }] =
+    useUpdateInstructorMutation();
 
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [image, setImage] = useState("");
+  let postingImage: boolean = false;
 
-  const [createInstructor, { isLoading, isSuccess, isError }] =
-    useCreateInstructorMutation();
+  // ---------- Prefill form ----------
+  useEffect(() => {
+    if (instructor) {
+      setFirstName(instructor.firstName);
+      setEmail(instructor.email);
+      setNumber(instructor.number);
+      setImage(instructor.image);
+    }
+  }, [instructor]);
 
   // ---------- Image upload ----------
   async function postImage(images: FileList | null): Promise<void> {
@@ -65,36 +83,31 @@ export default function CreateInstructorForm() {
       return;
     }
 
-    const newInstructor = {
+    const updatedInstructor = {
+      id: instructorId,
       firstName,
       email,
       number,
       image,
     };
 
-    console.log("SENDER:", newInstructor);
-
     try {
-      await createInstructor(newInstructor).unwrap();
-      alert("Instruktør oprettet!");
-
-      // Reset
-      setFirstName("");
-      setEmail("");
-      setNumber("");
-      setImage("");
+      await updateInstructor(updatedInstructor).unwrap();
+      alert("Instruktør opdateret!");
+      navigate("/instructors"); // Naviger evt. tilbage til liste
     } catch (err) {
       console.error(err);
-      alert("Fejl ved oprettelse af instruktør");
+      alert("Fejl ved opdatering af instruktør");
     }
   }
 
+  if (isLoading) return <p>Indlæser instruktør...</p>;
+  if (isError) return <p>Kunne ikke hente instruktør.</p>;
+
   return (
     <>
-      <AppHeader title="Opret Instruktør" />
-
+      <AppHeader title="Opdater Instruktør" />
       <div className="create-activity-container">
-
         <form className="create-activity-form" onSubmit={handleSubmit}>
           <label>
             Navn
@@ -133,12 +146,19 @@ export default function CreateInstructorForm() {
             />
           </label>
 
-          <button type="submit" className="submit-btn" disabled={isLoading}>
-            {isLoading ? "Opretter..." : "Opret Instruktør"}
+          {image && (
+            <div>
+              <p>Nuvarande billede:</p>
+              <img src={image} alt="Instruktør" style={{ width: "150px", borderRadius: "8px" }} />
+            </div>
+          )}
+
+          <button type="submit" className="submit-btn" disabled={isUpdating}>
+            {isUpdating ? "Opdaterer..." : "Opdater Instruktør"}
           </button>
 
-          {isSuccess && <p style={{ color: "green" }}>Instruktør oprettet!</p>}
-          {isError && <p style={{ color: "red" }}>Der opstod en fejl.</p>}
+          {isSuccess && <p style={{ color: "green" }}>Instruktør opdateret!</p>}
+          {updateError && <p style={{ color: "red" }}>Der opstod en fejl.</p>}
         </form>
       </div>
     </>

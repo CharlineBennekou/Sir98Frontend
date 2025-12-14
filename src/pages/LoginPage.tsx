@@ -5,7 +5,6 @@ export default function LoginPage() {
     return (
         <>
             <AppHeader title="Login" backTo="/"/>
-            <div style={{ marginTop: 70 }}></div>
             <LoginComp />
         </>
     );

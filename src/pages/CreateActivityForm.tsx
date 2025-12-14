@@ -154,7 +154,7 @@ export default function CreateActivityForm() {
       <div style={{ marginTop: 70 }}></div>
 
       <div className="create-activity-container">
-        <h2>Opret Ny Aktivitet</h2>
+
 
         <form className="create-activity-form" onSubmit={handleSubmit}>
           {/* Almindelige felter */}

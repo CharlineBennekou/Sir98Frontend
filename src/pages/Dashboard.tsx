@@ -53,7 +53,7 @@ export default function Dashboard() {
     <>
         <AppHeader title="Forside" />
     <div className="im-menu-wrapper">
-    <div style={{ marginTop: 70 }}></div>
+    
 
       <div className="im-menu-grid">
         {menuItems.map((item, idx) => (

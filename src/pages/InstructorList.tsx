@@ -3,6 +3,9 @@ import { useFetchInstructorsQuery } from "../store/apis/instructorAPI";
 import type { Instructor } from '../types/instructors';
 import "./../styles/InstructorListStyle.css";
 import AppHeader from "../components/layout/AppHeader";
+import { Link } from 'react-router-dom';
+import { LuSquarePlus } from "react-icons/lu";
+
 
 
 export default function InstructorList() {
@@ -16,9 +19,17 @@ export default function InstructorList() {
     return (
         <>
         <AppHeader title="Instruktører" />
-            <div style={{ marginTop: 70 }}></div>
+        
 
         <div className="instructor-list-page">
+
+            <div className="instructor-list-header">
+                <Link to="/create-instructor" className="create-instructor-btn">
+                    <span className="icon-wrapper-add"><LuSquarePlus /></span>
+                    Opret instruktør
+                </Link>
+            </div>
+        
             <div className="instructor-list">
                 {instructors.map((ins: Instructor) => (
                     <div className = "instructor-list-item" key={ins.id}>

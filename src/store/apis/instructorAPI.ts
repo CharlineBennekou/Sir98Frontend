@@ -32,7 +32,29 @@ endpoints: (builder) => ({
         body: instructor,
       }),
     }),
+    fetchInstructorById: builder.query<Instructor, number>({
+      query: (id: number) => ({
+        url: `instructor/${id}`,
+        method: "GET",
+      }),
+    }),
+    updateInstructor: builder.mutation<
+      Instructor,
+      Instructor
+    >({
+      query: (instructor) => ({
+        url: `instructor/${instructor.id}`,
+        method: "PUT",
+        body: instructor,
+      }),
+    }),
+    deleteInstructor: builder.mutation<void, number>({
+  query: (id) => ({
+    url: `instructor/${id}`,
+    method: "DELETE",
+    }),
+    }),
   }),
 })
 
-export const { useFetchInstructorsQuery, useCreateInstructorMutation } = instructorsApi;
+export const { useFetchInstructorsQuery, useCreateInstructorMutation, useFetchInstructorByIdQuery, useUpdateInstructorMutation, useDeleteInstructorMutation } = instructorsApi;
