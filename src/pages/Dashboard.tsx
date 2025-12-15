@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {FiActivity, FiCalendar, FiUser, FiBell } from "react-icons/fi";
+import {FiActivity, FiCalendar, FiUser, FiBell, FiInfo } from "react-icons/fi";
 import { LiaUserTieSolid } from "react-icons/lia";
 import "./../styles/DashboardStyle.css";
 
@@ -43,7 +43,10 @@ export default function Dashboard() {
       color: "#607D8B",
     },
     {
-
+      label: "Om SIR98",
+      icon: <FiInfo />,
+      onClick: () => navigate("/aboutus"),
+      color: "#4d7b26ff",
     }
 
 
@@ -52,9 +55,11 @@ export default function Dashboard() {
   return (
     <>
         <AppHeader title="Forside" />
-    <div className="im-menu-wrapper">
     <div style={{ marginTop: 70 }}></div>
 
+    <h2 className="im-Welcome-title">Velkommen til SIR98 Appen!</h2>
+
+    <div className="im-menu-wrapper">
       <div className="im-menu-grid">
         {menuItems.map((item, idx) => (
           <div
