@@ -55,8 +55,7 @@ export default function Dashboard() {
   return (
     <>
         <AppHeader title="Forside" />
-      <div className="im-menu-wrapper">
-    
+    <div style={{ marginTop: 70 }}></div>
 
     <h2 className="im-Welcome-title">Velkommen til SIR98 Appen!</h2>
 
