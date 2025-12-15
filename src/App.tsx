@@ -7,6 +7,7 @@ import InstructorList from './pages/InstructorList';
 import LoginPage from './pages/LoginPage';
 import { Toaster } from 'react-hot-toast';
 import { RegisterComp } from "./components/users/Register";
+import AboutUs from './pages/AboutUs';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/instructor" element={<InstructorList />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterComp />} />
+          <Route path="/aboutus" element={<AboutUs />} />
         </Routes>
       </main>
     </div>
