@@ -40,7 +40,8 @@ export default function ActivityCard({ activity }: Props) {
     };
 
     // use default if no specific image
-    const imageUrl = activityImages[activity.title] ?? DefaultImage;
+    const imageUrl = activity.image ?? DefaultImage;
+    console.log("Activity image URL:", imageUrl);
 
     async function handleBellClick(e: React.MouseEvent<HTMLButtonElement>) {
         e.stopPropagation(); // prevent opening the detail dialog

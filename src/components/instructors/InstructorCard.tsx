@@ -33,9 +33,7 @@ export default function InstructorCard({ instructor }: Props) {
         }
     };
 
-    const imageUrl = instructor.image && instructorImages[instructor.image]
-        ? instructorImages[instructor.image]
-        : "/assets/instructors/placeholder.png";
+    const imageUrl = instructor.image ?? "/assets/instructors/placeholder.png";
 
     return (
         <div className="instructor-card">

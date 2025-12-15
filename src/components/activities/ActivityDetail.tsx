@@ -6,7 +6,7 @@ import BadmintonImage from '../../assets/Badminton.jpg';
 import FootballImage from '../../assets/Football.jpg';
 import SwimmingImage from '../../assets/Swimming.jpg';
 import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
-import DefaultImage from '../../assets/SIR98LogoGrey.jpg';
+import DefaultImage from '../../assets/placeHolderGreyPic.jpg';
 
 type Props = {
   activity: ActivityOccurrence;
@@ -38,7 +38,7 @@ useEffect(() => {
     Cirkeltræning: CirkeltrainingImage
   };
 
-  const imageUrl = activityImages[activity.title] ?? DefaultImage;
+  const imageUrl = activity.image ?? DefaultImage;
 
   return (
     <div className="dialog-overlay" onClick={onClose}>
