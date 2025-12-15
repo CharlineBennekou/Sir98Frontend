@@ -9,16 +9,28 @@ export default function AboutUs() {
 
       <div className="about-container">
 
-        {/* Eksternt link */}
-        <div className="about-link">
-          <a
-            href="https://if-sir98.dk/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Se mere på SIR98's hjemmeside
-          </a>
+
+            {/* 🔹 Boks: Om foreningen */}
+        <div className="about-box-3">
+          <h3>Om foreningen</h3>
+          <p>
+            SIR98 er en forening med fokus på fællesskab, bevægelse og engagement.
+            Foreningen tilbyder forskellige aktiviteter og arrangementer for
+            sine medlemmer.
+          </p>
+                  {/* Eksternt link */}
+            <div className="about-link" >
+            <a
+                href="https://if-sir98.dk/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Se mere på SIR98's hjemmeside
+            </a>
+            </div>
         </div>
+
+
 
         {/* 🔹 Boks: Om applikationen */}
         <div className="about-box-1">
@@ -44,15 +56,9 @@ export default function AboutUs() {
           </p>
         </div>
 
-        {/* 🔹 Boks: Om foreningen */}
-        <div className="about-box-3">
-          <h3>Om foreningen</h3>
-          <p>
-            SIR98 er en forening med fokus på fællesskab, bevægelse og engagement.
-            Foreningen tilbyder forskellige aktiviteter og arrangementer for
-            sine medlemmer.
-          </p>
-        </div>
+    
+
+
 
         
       </div>
