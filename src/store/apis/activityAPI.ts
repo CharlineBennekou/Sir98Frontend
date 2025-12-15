@@ -72,7 +72,16 @@ export const activitiesApi = createApi({
         { type: 'Activity', id: arg.id },
       ],
     }),
+    deleteActivity: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `activity/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, id) => [
+        { type: 'Activity', id },
+      ],
+    }),
   }),
 });
 
-export const { useFetchActivitiesQuery, useCreateActivityMutation, useFetchActivityByIdQuery, useUpdateActivityMutation } = activitiesApi;
+export const { useFetchActivitiesQuery, useCreateActivityMutation, useFetchActivityByIdQuery, useUpdateActivityMutation, useDeleteActivityMutation } = activitiesApi;

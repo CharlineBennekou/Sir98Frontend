@@ -9,6 +9,7 @@ import { Toaster } from 'react-hot-toast';
 import { RegisterComp } from "./components/users/Register";
 import CreateInstructorForm from './pages/CreateInstructorForm';
 import UpdateInstructorForm from './pages/UpdateInstructorForm';
+import UpdateActivityForm from './pages/UpdateActivityForm';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/register" element={<RegisterComp />} />
           <Route path="/create-instructor" element={<CreateInstructorForm />} />
           <Route path="/update-instructor/:id" element={<UpdateInstructorForm />} />
+          <Route path="/update-activity/:id" element={<UpdateActivityForm />} />
         </Routes>
       </main>
     </div>

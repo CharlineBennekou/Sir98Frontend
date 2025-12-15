@@ -48,7 +48,7 @@ export default function UpdateActivityForm() {
     setIsRecurring(activity.isRecurring);
 
     setSelectedInstructors(
-      activity.instructors.length > 0
+    Array.isArray(activity.instructors) && activity.instructors.length > 0
         ? activity.instructors.map((i) => String(i.id))
         : [""]
     );
