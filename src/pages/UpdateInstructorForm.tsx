@@ -7,6 +7,7 @@ import {
   useUpdateInstructorMutation,
 } from "../store/apis/instructorAPI";
 
+
 export default function UpdateInstructorForm() {
   const { id } = useParams<{ id: string }>();
   const instructorId = Number(id);
@@ -94,7 +95,7 @@ export default function UpdateInstructorForm() {
     try {
       await updateInstructor(updatedInstructor).unwrap();
       alert("Instruktør opdateret!");
-      navigate("/instructors"); // Naviger evt. tilbage til liste
+      navigate("/instructor"); // Naviger tilbage til liste
     } catch (err) {
       console.error(err);
       alert("Fejl ved opdatering af instruktør");
