@@ -55,9 +55,6 @@ export class LoginComp extends React.Component {
                     <input type="text" id="password" name="password"/>
                     <br/>
                     <br/>
-                    <a>Glemt adgangskode</a>
-                    <br/>
-                    <br/>
                     <input type="submit" onClick={() => this.onSubmit()} value="Fortryd"/>
                     {this.state.submitted && <Navigate to="/" />}
                     
