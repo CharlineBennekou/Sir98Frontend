@@ -2,10 +2,6 @@ import "../../styles/ActivityDetailStyle.css";
 import type { ActivityOccurrence } from "../../types/activityOccurrence";
 import { FiArrowLeft } from "react-icons/fi";
 import { useEffect } from "react";
-import BadmintonImage from "../../assets/Badminton.jpg";
-import FootballImage from "../../assets/Football.jpg";
-import SwimmingImage from "../../assets/Swimming.jpg";
-import CirkeltrainingImage from "../../assets/Cirkeltræning.jpg";
 import DefaultImage from "../../assets/placeHolderGreyPic.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDeleteActivityMutation } from "../../store/apis/activityAPI";
@@ -39,14 +35,7 @@ export default function DialogBox({ activity, open, onClose }: Props) {
   const start = activity.startUtc ? new Date(activity.startUtc) : null;
   const end = activity.endUtc ? new Date(activity.endUtc) : null;
 
-  const activityImages: Record<string, string> = {
-    Badminton: BadmintonImage,
-    Fodbold: FootballImage,
-    Svømning: SwimmingImage,
-    Cirkeltræning: CirkeltrainingImage,
-  };
-
-  const imageUrl = activity.image ?? DefaultImage;
+  const imageUrl = activity.image?.trim() ? activity.image : DefaultImage;
 
   /* ---------- Delete handler ---------- */
   async function handleDelete() {

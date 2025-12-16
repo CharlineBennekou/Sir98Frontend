@@ -4,10 +4,6 @@ import { FiUser, FiMapPin, FiClock, FiChevronDown } from "react-icons/fi";
 import ActivityDetail from './ActivityDetail';
 import React, { useState } from "react";
 import { toast } from 'react-hot-toast';
-import BadmintonImage from '../../assets/Badminton.jpg';
-import FootballImage from '../../assets/Football.jpg';
-import SwimmingImage from '../../assets/Swimming.jpg'; 
-import CirkeltrainingImage from '../../assets/Cirkeltræning.jpg';
 import DefaultImage from '../../assets/placeHolderGreyPic.jpg';
 import DropUpMenu from './DropUpMenu';
 
@@ -30,17 +26,8 @@ export default function ActivityCard({ activity }: Props) {
     const isLoading = isSubscribing || isUnsubscribing;
     const userId = "userId";
 
-
-
-    const activityImages: Record<string, string> = {
-        Badminton: BadmintonImage,
-        Fodbold: FootballImage,
-        Svømning: SwimmingImage,
-        Cirkeltræning: CirkeltrainingImage
-    };
-
     // use default if no specific image
-    const imageUrl = activity.image ?? DefaultImage;
+    const imageUrl = activity.image?.trim() ? activity.image : DefaultImage;
     console.log("Activity image URL:", imageUrl);
 
     async function handleBellClick(e: React.MouseEvent<HTMLButtonElement>) {
