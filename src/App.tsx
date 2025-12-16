@@ -7,6 +7,9 @@ import InstructorList from './pages/InstructorList';
 import LoginPage from './pages/LoginPage';
 import { Toaster } from 'react-hot-toast';
 import { RegisterComp } from "./components/users/Register";
+import CreateInstructorForm from './pages/CreateInstructorForm';
+import UpdateInstructorForm from './pages/UpdateInstructorForm';
+import UpdateActivityForm from './pages/UpdateActivityForm';
 import AboutUs from './pages/AboutUs';
 
 
@@ -25,6 +28,9 @@ function App() {
           <Route path="/instructor" element={<InstructorList />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterComp />} />
+          <Route path="/create-instructor" element={<CreateInstructorForm />} />
+          <Route path="/update-instructor/:id" element={<UpdateInstructorForm />} />
+          <Route path="/update-activity/:id" element={<UpdateActivityForm />} />
           <Route path="/aboutus" element={<AboutUs />} />
         </Routes>
       </main>

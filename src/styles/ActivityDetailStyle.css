@@ -286,3 +286,29 @@
   font-size: 18px;
 }
 
+.activity-detail-actions {
+  margin-bottom: 16px;
+  display: flex;
+}
+
+.activity-detail-actions .submit-btn {
+  text-decoration: none;
+  text-align: center;
+  padding: 12px 20px;
+}
+
+.activity-detail-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.delete-btn {
+  background: #f77;
+}
+
+.delete-btn:hover {
+  background: #e55;
+}
+

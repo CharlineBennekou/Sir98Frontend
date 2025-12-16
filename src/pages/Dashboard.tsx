@@ -55,7 +55,8 @@ export default function Dashboard() {
   return (
     <>
         <AppHeader title="Forside" />
-    <div style={{ marginTop: 70 }}></div>
+      <div className="im-menu-wrapper">
+    
 
     <h2 className="im-Welcome-title">Velkommen til SIR98 Appen!</h2>
 
@@ -75,6 +76,7 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
+    </div>
     </div>
     </>
   );

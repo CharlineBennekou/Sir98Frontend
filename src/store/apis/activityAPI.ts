@@ -8,6 +8,7 @@ export const activitiesApi = createApi({
     baseUrl:
       "https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/",
   }),
+  tagTypes: ['Activity'],
   endpoints: (builder) => ({
     fetchActivities: builder.query<Activity[], void>({
       query: () => ({
@@ -52,7 +53,35 @@ export const activitiesApi = createApi({
         body: newActivity,
       }),
     }),
+    fetchActivityById: builder.query<Activity, number>({
+      query: (id) => ({
+        url: `activity/${id}`,
+        method: 'GET',
+      }),
+      providesTags: (_result, _error, id) => [
+        { type: 'Activity', id },
+      ],
+    }),
+    updateActivity: builder.mutation<Activity, Activity>({
+      query: (activity) => ({
+        url: `activity/${activity.id}`,
+        method: 'PUT',
+        body: activity,
+      }),
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Activity', id: arg.id },
+      ],
+    }),
+    deleteActivity: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `activity/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, id) => [
+        { type: 'Activity', id },
+      ],
+    }),
   }),
 });
 
-export const { useFetchActivitiesQuery, useCreateActivityMutation } = activitiesApi;
+export const { useFetchActivitiesQuery, useCreateActivityMutation, useFetchActivityByIdQuery, useUpdateActivityMutation, useDeleteActivityMutation } = activitiesApi;
