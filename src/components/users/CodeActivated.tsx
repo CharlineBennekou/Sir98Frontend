@@ -2,40 +2,37 @@ import * as React from 'react';
 
 
 
-export class CodeActivationComp extends React.Component {
-    private success: boolean = true;
-    private loading: boolean = true;
+export class CodeActivationComp extends React.Component<{}, { progress: string}> {
 
     constructor(props: {}) {
         super(props);
+        this.state = {
+            progress: "load"
+        }
         const parameters = new URLSearchParams(location.search)
         const code: string | null = parameters.get("code");
         console.log(code)
         if(!code) {
-            this.success = false;
-            alert(code);
-            this.forceUpdate();
+            this.state.progress
         }
-
-        fetch(`https://localhost:7275/api/User/Activate/code=${code}`, {
+        fetch(`https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/User/Activate/code=${code}`, {
             method: 'GET',
         }).then((response) => {
             if(response.ok) {
-                this.success = true;
+                this.setState({ progress: "ok" })
             } else {
-                this.success = false;
+                this.setState({ progress: "fail" })
             }
             console.log(response)
-            this.forceUpdate();
         });
     }
 
     public render(): React.ReactNode {
         
-        if(this.loading) {
+        if(this.state.progress === "load" ) {
             return (<h1>Aktiverer konto</h1>);
         }
-        if(this.success) {
+        if(this.state.progress === "ok") {
             return (<h1>Konto er nu aktiveret</h1>);
         }
         return (
