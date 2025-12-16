@@ -38,7 +38,7 @@ export default function UpdateActivityForm() {
     if (!activity) return;
 
     setTitle(activity.title);
-    setType(activity.tags?.[0] ?? "training");
+    setType(activity.tag ?? "training");
     setStart(activity.startUtc.slice(0, 16));
     setEnd(activity.endUtc.slice(0, 16));
     setImage(activity.image ?? "");
@@ -106,7 +106,7 @@ export default function UpdateActivityForm() {
         link,
         cancelled: false,
         instructors: instructorObjects,
-        tags: [type],
+        tag: type,
         isRecurring,
         ...(isRecurring && { rrule: "FREQ=WEEKLY" }),
     };

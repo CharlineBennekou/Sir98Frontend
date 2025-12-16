@@ -13,7 +13,7 @@ export type CreateActivityDTO = {
   link?: string;
   cancelled: boolean;
   instructors: CreateActivityInstructorDTO[];
-  tags: string[];
+  tag: string;
   isRecurring: boolean;
   rrule?: string;
 };

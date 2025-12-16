@@ -50,7 +50,7 @@ export const activityOccurrencesApi = createApi({
               firstName: inst.firstName,
               image: inst.image,
             })) ?? [],
-            tags: o.tags ?? [],
+            tag: o.tag ?? [],
             cancelled: o.cancelled,
             isSubscribed: o.isSubscribed,
           }));

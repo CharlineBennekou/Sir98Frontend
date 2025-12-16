@@ -49,8 +49,8 @@ export default function ActivityList() {
 
     // Filtrér aktiviteter ud fra tags
     return occurrences.filter((a: ActivityOccurrence) => {
-      const tags = (a.tags ?? []).map(t => String(t).toLowerCase());
-      return tags.some(tag => expectedTags.includes(tag));
+      const tag = (a.tag ?? "").toLowerCase();
+      return expectedTags.includes(tag);
     });
 
   }, [occurrences, typeParam]);  // afhængigheder

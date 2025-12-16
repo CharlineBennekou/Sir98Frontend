@@ -1,5 +1,7 @@
 import * as React from 'react';
 import AppHeader from "../../components/layout/AppHeader";
+import { Link } from "react-router-dom";
+
 
 
 export class RegisterComp extends React.Component {
@@ -47,7 +49,7 @@ export class RegisterComp extends React.Component {
         return (
             <div>
                 <form action={this.search}>
-                    <AppHeader title={"Register"} />
+                    <AppHeader title={"Register"} backTo='/Login'/>
                     <div style={{ marginTop: 70 }}></div>
                     
                     <label htmlFor="email">Email</label>
@@ -65,7 +67,9 @@ export class RegisterComp extends React.Component {
                     <input type="text" id="passwordRepeat" name="passwordRepeat"/>
                     <br/>
                     <br/>
-                    <input type="submit" value="Fortryd"/>
+                    <Link to="/login">
+                        <input type="submit" value="Fortryd"/>
+                    </Link>            
                     <input type="submit" value="Registrer"/>
                 </form> 
             </div>

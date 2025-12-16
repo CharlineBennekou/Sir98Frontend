@@ -20,6 +20,8 @@ export default function CreateActivityForm() {
 
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
 
+  const [recurrenceInterval, setRecurrenceInterval] = useState<1 | 2>(1);
+
   const navigate = useNavigate();
 
   const [createActivity, { isLoading, isSuccess, isError }] =
@@ -120,7 +122,7 @@ export default function CreateActivityForm() {
       link: link || "",
       cancelled: false,
       instructors: instructorObjects,
-      tags: [type],
+      tag: type,
       isRecurring,
       rrule: isRecurring ? `FREQ=WEEKLY` : undefined,
     };

@@ -170,7 +170,7 @@ export default function DialogBox({ activity, open, onClose }: Props) {
               ))}
             </div>
           ) : (
-            <p className="detail-instructor-none">Ikke angivet</p>
+            <p className="detail-instructor-none">Ingen</p>
           )}
 
           {activity.link && (
