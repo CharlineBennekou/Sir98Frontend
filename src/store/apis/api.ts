@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
 import type { ActivitySubscription } from '../../types/activitySubscription';
+import type { PushSubscriptionDto, DeletePushSubscriptionArgs } from '../../types/PushSubscriptionDto';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -9,12 +10,9 @@ export const api = createApi({
     baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/',
   }),
 
-  // we'll use this so mutations can tell RTKQ:
-  // "the occurrences list is stale, please refetch it"
   tagTypes: ['Occurrences'],
 
   endpoints: (builder) => ({
-
     // GET /activity-occurrences?.days= &filter= &userId=
     fetchOccurrences: builder.query<
       ActivityOccurrence[],
@@ -67,7 +65,6 @@ export const api = createApi({
         }));
       },
 
-      // let RTK Query know this query provides the "Occurrences" list
       providesTags: (result) =>
         result
           ? [
@@ -87,8 +84,6 @@ export const api = createApi({
         method: 'POST',
         body,
       }),
-
-      // tell RTKQ: "the occurrences list is stale → refetch it"
       invalidatesTags: [{ type: 'Occurrences', id: 'LIST' }],
     }),
 
@@ -99,9 +94,24 @@ export const api = createApi({
         method: 'DELETE',
         body,
       }),
-
-      // tell RTKQ: "the occurrences list is stale → refetch it"
       invalidatesTags: [{ type: 'Occurrences', id: 'LIST' }],
+    }),
+
+    // POST /PushSubscription
+    upsertPushSubscription: builder.mutation<void, PushSubscriptionDto>({
+      query: (body) => ({
+        url: 'PushSubscription',
+        method: 'POST',
+        body,
+      }),
+    }),
+
+    // DELETE /PushSubscription?userId=&endpoint=
+    deletePushSubscription: builder.mutation<void, DeletePushSubscriptionArgs>({
+      query: ({ userId, endpoint }) => ({
+        url: `PushSubscription?userId=${encodeURIComponent(userId)}&endpoint=${encodeURIComponent(endpoint)}`,
+        method: 'DELETE',
+      }),
     }),
   }),
 });
@@ -110,4 +120,6 @@ export const {
   useFetchOccurrencesQuery,
   useSubscribeToOccurrenceMutation: useSubscribeToOccurrence,
   useUnsubscribeFromOccurrenceMutation: useUnsubscribeFromOccurrence,
+  useUpsertPushSubscriptionMutation,
+  useDeletePushSubscriptionMutation,
 } = api;
