@@ -4,6 +4,7 @@ import AppHeader from "../components/layout/AppHeader";
 import { useCreateActivityMutation } from "../store/apis/activityAPI";
 import { useFetchInstructorsQuery } from "../store/apis/instructorAPI";
 import { FiX } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateActivityForm() {
   var postingImage: boolean = false;
@@ -18,6 +19,8 @@ export default function CreateActivityForm() {
   const [isRecurring, setIsRecurring] = useState(false);
 
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
+
+  const navigate = useNavigate();
 
   const [createActivity, { isLoading, isSuccess, isError }] =
     useCreateActivityMutation();
@@ -127,6 +130,7 @@ export default function CreateActivityForm() {
     try {
       await createActivity(newActivity).unwrap();
       alert("Aktivitet oprettet!");
+      navigate("/"); // Naviger tilbage til liste
 
       // Reset
       setTitle("");
@@ -154,7 +158,7 @@ export default function CreateActivityForm() {
       <div style={{ marginTop: 70 }}></div>
 
       <div className="create-activity-container">
-        <h2>Opret Ny Aktivitet</h2>
+
 
         <form className="create-activity-form" onSubmit={handleSubmit}>
           {/* Almindelige felter */}

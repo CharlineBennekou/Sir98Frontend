@@ -118,3 +118,98 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+/* ============================================
+   Header + Create button
+============================================ */
+.instructor-list-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+  vertical-align: middle;
+  margin-top: 60px;
+
+}
+
+.create-instructor-btn {
+  background: #e7e7e7;
+  color: #000;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 16px;
+  transition: background 0.2s ease;
+  text-align: center;
+}
+
+.create-instructor-btn:hover {
+  background: #d0d0d0;
+}
+
+.icon-wrapper-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+
+
+  width: 34px;
+  height: 34px;
+
+
+  background: #e7e7e7;
+  border-radius: 50%; /* gør den rund */
+
+
+  color: inherit; /* ikonet arver farve fra knappen */
+  font-size: 18px; /* ikonet bliver centreret og passende */
+}
+
+.icon-wrapper-add:hover {
+  background: #d0d0d0;
+}
+
+
+/* Container for knapperne */
+.instructor-card-buttons {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+/* Generel knap-styling */
+.instructor-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+  transition: background 0.2s ease;
+}
+
+/* Opdater-knap */
+.update-btn {
+  background-color: #bee690;
+}
+
+.update-btn:hover {
+  background-color: #9ad656;
+}
+
+/* Slet-knap */
+.delete-btn {
+  background-color: rgb(243, 152, 152);
+}
+
+.delete-btn:hover {
+  background-color: #e55;
+}
+
+/* *{
+  outline: 1px solid red;
+} */
