@@ -20,8 +20,6 @@ export default function CreateActivityForm() {
 
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
 
-  
-
   const navigate = useNavigate();
 
   const [createActivity, { isLoading, isSuccess, isError }] =

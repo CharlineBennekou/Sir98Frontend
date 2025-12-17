@@ -111,15 +111,8 @@ export default function DialogBox({ activity, open, onClose }: Props) {
 
           <p>
             <strong>Tidspunkt:</strong>{" "}
-            {start?.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-            {end &&
-              ` - ${end.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}`}
+            {start ? start.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Copenhagen' }) : ""}
+            {end ? ` - ${end.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Copenhagen' })}` : ""}
           </p>
 
           {activity.description && (
