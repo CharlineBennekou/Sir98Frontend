@@ -20,7 +20,7 @@ export default function CreateActivityForm() {
 
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
 
-  const [recurrenceInterval, setRecurrenceInterval] = useState<1 | 2>(1);
+  
 
   const navigate = useNavigate();
 

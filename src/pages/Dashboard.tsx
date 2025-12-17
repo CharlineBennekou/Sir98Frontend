@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {FiActivity, FiCalendar, FiUser, FiBell, FiInfo, FiLogOut, FiLogIn} from "react-icons/fi";
+import {FiActivity, FiCalendar, FiBell, FiInfo, FiLogOut, FiLogIn} from "react-icons/fi";
 import { LiaUserTieSolid } from "react-icons/lia";
 import "./../styles/DashboardStyle.css";
 
