@@ -12,6 +12,7 @@ import UpdateInstructorForm from './pages/UpdateInstructorForm';
 import UpdateActivityForm from './pages/UpdateActivityForm';
 import AboutUs from './pages/AboutUs';
 import ActivateCodePage from './pages/ActivateCode';
+import Logout from './pages/Logout';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <Route path="/update-activity/:id" element={<UpdateActivityForm />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/activate" element={<ActivateCodePage />} />
+          <Route path="/logout" element={<Logout />} />
         </Routes>
       </main>
     </div>
