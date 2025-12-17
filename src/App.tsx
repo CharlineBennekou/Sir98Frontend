@@ -11,6 +11,7 @@ import CreateInstructorForm from './pages/CreateInstructorForm';
 import UpdateInstructorForm from './pages/UpdateInstructorForm';
 import UpdateActivityForm from './pages/UpdateActivityForm';
 import AboutUs from './pages/AboutUs';
+import AccountSettings from './pages/AccountSettings';
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
           <Route path="/update-instructor/:id" element={<UpdateInstructorForm />} />
           <Route path="/update-activity/:id" element={<UpdateActivityForm />} />
           <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/account-settings" element={<AccountSettings />} />
         </Routes>
       </main>
     </div>
