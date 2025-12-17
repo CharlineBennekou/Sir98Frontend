@@ -39,7 +39,7 @@ export const activitiesApi = createApi({
 
           cancelled: a.cancelled,
 
-          tags: a.tags ?? [],
+          tag: a.tag ?? [],
 
           isRecurring: a.isRecurring,
           rrule: a.rrule ?? null,

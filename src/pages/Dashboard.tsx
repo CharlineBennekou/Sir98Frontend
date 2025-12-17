@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {FiActivity, FiCalendar, FiUser, FiBell, FiInfo } from "react-icons/fi";
+import {FiActivity, FiCalendar, FiBell, FiInfo, FiLogOut, FiLogIn} from "react-icons/fi";
 import { LiaUserTieSolid } from "react-icons/lia";
 import "./../styles/DashboardStyle.css";
 
@@ -36,9 +36,14 @@ export default function Dashboard() {
       onClick: () => navigate("/instructor"),
       color: "#E91E63",
     },
-    {
-      label: "Kontoindstillinger",
-      icon: <FiUser />,
+    !!localStorage.getItem("JWToken") ? {
+      label: "Log ud",
+      icon: <FiLogOut />,
+      onClick: () => navigate("/logout"),
+      color: "#607D8B",
+    }:{
+      label: "Log ind",
+      icon: <FiLogIn />,
       onClick: () => navigate("/login"),
       color: "#607D8B",
     },

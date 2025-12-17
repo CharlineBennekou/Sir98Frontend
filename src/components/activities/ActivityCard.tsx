@@ -9,6 +9,7 @@ import DropUpMenu from './DropUpMenu';
 
 
 import { useSubscribeToOccurrence, useUnsubscribeFromOccurrence } from '../../store/apis/api';
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     activity: ActivityOccurrence
@@ -25,6 +26,12 @@ export default function ActivityCard({ activity }: Props) {
     // Constants
     const isLoading = isSubscribing || isUnsubscribing;
     const userId = "userId";
+
+    const navigate = useNavigate();
+
+    const isAuthenticated = () => {
+        return !!localStorage.getItem("token");
+    };
 
     // use default if no specific image
     const imageUrl = activity.image?.trim() ? activity.image : DefaultImage;
@@ -67,7 +74,7 @@ export default function ActivityCard({ activity }: Props) {
     const instructorName =
         activity.instructors?.length
             ? activity.instructors.map((i) => i.firstName).join(" & ")
-            : "Ikke angivet";
+            : "Ingen instruktør";
 
     return (
         <>
@@ -132,6 +139,14 @@ export default function ActivityCard({ activity }: Props) {
                                 className={`follow-btn ${activity.isSubscribed ? "subscribed" : ""}`}
                                 onClick={(e) => {
                                     e.stopPropagation();
+
+                                    if (!isAuthenticated()) { //if no token go to login page
+                                        alert("Du skal være logget ind for at følge aktiviteter.");
+                                        navigate("/login");
+                                        
+                                        return;
+                                }
+
                                     setMenuOpen(true);
                                 }}
                                     disabled={isLoading}   //gør knappen inaktiv under loading

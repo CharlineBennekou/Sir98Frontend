@@ -120,7 +120,7 @@ export default function CreateActivityForm() {
       link: link || "",
       cancelled: false,
       instructors: instructorObjects,
-      tags: [type],
+      tag: type,
       isRecurring,
       rrule: isRecurring ? `FREQ=WEEKLY` : undefined,
     };

@@ -12,7 +12,7 @@ export interface Activity {
   description?: string;
   instructors: Instructor[];
   cancelled: boolean;
-  tags?: string[];
+  tag?: string;
   isRecurring: boolean;
   rrule?: string;
 }
