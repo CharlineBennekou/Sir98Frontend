@@ -5,7 +5,7 @@ import "./../styles/AboutUsStyle.css";
 
 export default function AccountSettings() {
   // TEMP until authentication exists
-  const userId = "userId";
+  const userId = "chokodanika@gmail.com";
 
   return (
     <>

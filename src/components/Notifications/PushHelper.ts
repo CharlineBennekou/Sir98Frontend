@@ -1,70 +1,58 @@
 // src/components/Notifications/PushHelper.ts
+import type { PushSubscriptionDto } from "../../types/PushSubscriptionDto";
 export const VAPID_PUBLIC_KEY =
   "BDVzVxg_Qd8OqCOHLmA4EAxxF_FQ8qAAv-jYmWSfxofkIWe69EZgJFl2lk-U18kbE6s-Jp9j7v-VrT8eEQDTarQ";
 
-// Convert base64 URL-safe string to Uint8Array (needed by pushManager.subscribe)
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
+function urlBase64ToUint8Array(base64String: string): Uint8Array<ArrayBuffer> {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
 
   const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
 
-  for (let i = 0; i < rawData.length; ++i) {
+  const buffer = new ArrayBuffer(rawData.length);
+  const outputArray = new Uint8Array(buffer); // -> Uint8Array<ArrayBuffer>
+
+  for (let i = 0; i < rawData.length; i++) {
     outputArray[i] = rawData.charCodeAt(i);
   }
+
   return outputArray;
 }
 
-export type PushSubscriptionDto = {
-  userId: string;
-  endpoint: string;
-  p256dh: string;
-  auth: string;
-};
+
 
 /**
- * Ensures permission is granted (optionally), ensures a push subscription exists,
- * and POSTs it to your backend endpoint (addtotest).
+ * Ensures permission is granted (optionally) and ensures a push subscription exists,
+ * then returns the DTO you can send via RTK Query.
  */
-export async function subscribeAndSendToBackend(options: {
+export async function subscribeAndBuildDto(options: {
   userId: string;
-  apiUrl: string; 
   requestPermission?: boolean; // default true
-}): Promise<void> {
-  const { userId, apiUrl, requestPermission = true } = options;
+}): Promise<PushSubscriptionDto> {
+  const { userId, requestPermission = true } = options;
 
   if (!("serviceWorker" in navigator)) {
-    alert("Service workers are not supported in this browser.");
-    return;
+    throw new Error("Service workers are not supported in this browser.");
   }
 
   if (!("PushManager" in window)) {
-    alert("Push notifications are not supported in this browser.");
-    return;
+    throw new Error("Push notifications are not supported in this browser.");
   }
 
   if (!userId || userId.trim().length === 0) {
-    alert("UserId (email) is required (temporary until auth is implemented).");
-    return;
+    throw new Error("UserId is required (temporary until auth is implemented).");
   }
 
-  // 1) Permission (only if requested)
   if (requestPermission) {
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
-      alert("Notification permission was not granted.");
-      return;
+      throw new Error("Notification permission was not granted.");
     }
   }
 
-  // 2) Wait for the service worker that vite-plugin-pwa registered
   const registration = await navigator.serviceWorker.ready;
-  console.log("SW ready for push:", registration);
 
-  // 3) Reuse existing subscription if present, otherwise subscribe
   let subscription = await registration.pushManager.getSubscription();
-
   if (!subscription) {
     subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
@@ -72,42 +60,29 @@ export async function subscribeAndSendToBackend(options: {
     });
   }
 
-  console.log("Push subscription:", subscription);
-
-  // 4) Build payload expected by your C# backend (PushSubscriptionDto)
-  // Use subscription.toJSON() so we get keys in the standard string form.
   const json = subscription.toJSON();
   const p256dh = json.keys?.p256dh;
   const auth = json.keys?.auth;
 
   if (!p256dh || !auth) {
-    console.error("Failed to get keys from subscription JSON", json);
-    alert("Failed to get push subscription keys.");
-    return;
+    throw new Error("Failed to get push subscription keys.");
   }
 
-  const body: PushSubscriptionDto = {
+  return {
     userId,
     endpoint: subscription.endpoint,
     p256dh,
     auth,
   };
+}
 
-  console.log("Payload to send to backend:", body);
+/**
+ * Helper for disabling: gets the current subscription (if any).
+ * Useful so the component can call the RTKQ delete endpoint.
+ */
+export async function getCurrentPushSubscription(): Promise<PushSubscription | null> {
+  if (!("serviceWorker" in navigator)) return null;
 
-  // 5) Send to your API
-  const response = await fetch(apiUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    console.error("Failed to send subscription", text);
-    alert("Failed to send subscription to server.");
-    return;
-  }
-
-  alert("Subscription registered on server!");
+  const registration = await navigator.serviceWorker.ready;
+  return await registration.pushManager.getSubscription();
 }

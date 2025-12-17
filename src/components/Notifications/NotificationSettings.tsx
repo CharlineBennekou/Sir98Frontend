@@ -1,32 +1,22 @@
-// src/components/AccountSettings/NotificationSettings.tsx
 import React from "react";
-import { subscribeAndSendToBackend } from "../Notifications/PushHelper";
+import { subscribeAndBuildDto, getCurrentPushSubscription } from "../Notifications/PushHelper";
+import {useUpsertPushSubscriptionMutation,useDeletePushSubscriptionMutation} from "../../store/apis/api"; // adjust path
 
-type NotificationSettingsProps = {
-  userId: string;
-  apiUrl?: string;
-};
+type NotificationSettingsProps = { userId: string };
+type NotificationStatus = "unsupported" | "default" | "granted" | "denied";
 
-type NotificationStatus =
-  | "unsupported"
-  | "default"
-  | "granted"
-  | "denied";
-
-export default function NotificationSettings({
-  userId, //Given by parent component
-  apiUrl = "https://localhost:7275/api/PushSubscription/addtotest",
-}: NotificationSettingsProps) {
+export default function NotificationSettings({ userId }: NotificationSettingsProps) {
   const [isWorking, setIsWorking] = React.useState(false);
   const [status, setStatus] = React.useState<NotificationStatus>("default");
 
-  // Determine current notification status on mount
+  const [upsertPushSubscription] = useUpsertPushSubscriptionMutation();
+  const [deletePushSubscription] = useDeletePushSubscriptionMutation();
+
   React.useEffect(() => {
     if (!("Notification" in window)) {
       setStatus("unsupported");
       return;
     }
-
     setStatus(Notification.permission as NotificationStatus);
   }, []);
 
@@ -39,13 +29,13 @@ export default function NotificationSettings({
         return;
       }
 
-      await subscribeAndSendToBackend({
-        userId,
-        apiUrl,
-        requestPermission: true,
-      });
+      const dto = await subscribeAndBuildDto({ userId, requestPermission: true });
+      await upsertPushSubscription(dto).unwrap();
 
       setStatus("granted");
+      alert("Subscription registered on server!");
+    } catch (e: any) {
+      alert(e?.message ?? "Failed to enable notifications.");
     } finally {
       setIsWorking(false);
     }
@@ -55,12 +45,11 @@ export default function NotificationSettings({
     try {
       setIsWorking(true);
 
-      if (!("serviceWorker" in navigator)) return;
-
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.getSubscription();
-
+      const subscription = await getCurrentPushSubscription();
       if (subscription) {
+        // remove in backend
+        await deletePushSubscription({ userId, endpoint: subscription.endpoint }).unwrap();
+        // remove locally
         await subscription.unsubscribe();
       }
 
