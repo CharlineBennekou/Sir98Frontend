@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Navigate } from "react-router-dom";
 import "./../../styles/spinner.css";
 import "./../../styles/login.css";
-import toast, { ToastBar } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export class LoginComp extends React.Component {
     state = {
