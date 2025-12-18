@@ -5,6 +5,7 @@ import { useFetchActivityByIdQuery, useUpdateActivityMutation } from "../store/a
 import { useFetchInstructorsQuery } from "../store/apis/api";
 import { FiX } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
+import type { UpdateActivityDTO } from "../types/activityDTO";
 
 export default function UpdateActivityForm() {
   const { id } = useParams();
@@ -83,33 +84,29 @@ export default function UpdateActivityForm() {
     const startUtc = new Date(start).toISOString();
     const endUtc = new Date(end).toISOString();
 
-    const instructorObjects = selectedInstructors
-      .filter((id) => id !== "")
-      .map((id) => instructors.find((i) => i.id === Number(id)))
-      .filter(Boolean)
-      .map((inst) => ({
-        id: inst!.id,
-        firstName: inst!.firstName,
-        email: inst!.email ?? null,
-        number: inst!.number ?? null,
-        image: inst!.image ?? null,
-      }));
-
-    const updatedActivity = {
-        id: activityId,
-        title,
-        startUtc,
-        endUtc,
-        address: location,
-        description,
-        image,
-        link,
-        cancelled: false,
-        instructors: instructorObjects,
-        tag: type,
-        isRecurring,
-        ...(isRecurring && { rrule: "FREQ=WEEKLY" }),
+    const instructorsIDs: number[] = [];
+    selectedInstructors.forEach((id) => {
+      if (id !== "") {
+        instructorsIDs.push(Number(id));
+      }
+    });
+    const updatedActivity: UpdateActivityDTO = {
+      id: activityId,
+      title,
+      startUtc,
+      endUtc,
+      address: location,
+      description: description || "",
+      image: image,
+      link: link || "",
+      cancelled: false,
+      instructorids: instructorsIDs,
+      tag: type,
+      isRecurring,
+      ...(isRecurring && { rrule: "FREQ=WEEKLY" }),
     };
+    console.log("SENDER: " + updatedActivity);
+
     try {
       await updateActivity(updatedActivity).unwrap();
       alert("Aktivitet opdateret!");

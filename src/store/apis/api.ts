@@ -3,15 +3,16 @@ import type { ActivityOccurrence } from '../../types/activityOccurrence';
 import type { ActivitySubscription } from '../../types/activitySubscription';
 import type { PushSubscriptionDto, DeletePushSubscriptionArgs } from '../../types/PushSubscriptionDto';
 import type { Activity } from '../../types/activity';
-import type { CreateActivityDTO } from '../../types/activityDTO';
+import type { CreateActivityDTO, UpdateActivityDTO } from '../../types/activityDTO';
 import type { Instructor } from '../../types/instructors';
 
 export const api = createApi({
   reducerPath: 'api',
 
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/',
-   // baseUrl:'https://localhost:7275/api/',
+    //baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/',
+    baseUrl:'https://localhost:7275/api/',
+ 
   }),
 
   tagTypes: ['Occurrences', 'Activity', 'Instructor'],
@@ -164,7 +165,7 @@ export const api = createApi({
       invalidatesTags: [{ type: 'Activity', id: 'LIST' }],
     }),
 
-    updateActivity: builder.mutation<Activity, Activity>({
+    updateActivity: builder.mutation<Activity, UpdateActivityDTO>({
       query: (activity) => ({
         url: `activity/${activity.id}`,
         method: 'PUT',

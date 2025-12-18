@@ -5,6 +5,7 @@ import { useCreateActivityMutation } from "../store/apis/api";
 import { useFetchInstructorsQuery } from "../store/apis/api";
 import { FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import type { CreateActivityDTO } from "../types/activityDTO";
 
 export default function CreateActivityForm() {
   var postingImage: boolean = false;
@@ -97,20 +98,14 @@ export default function CreateActivityForm() {
     const startUtc = new Date(start).toISOString();
     const endUtc = new Date(end).toISOString();
 
-    // Lav liste af instruktør-objekter
-    const instructorObjects = selectedInstructors
-      .filter((id) => id !== "") // fjern tomme valg
-      .map((id) => instructors.find((inst) => inst.id === Number(id)))
-      .filter(Boolean)
-      .map((inst) => ({
-        id: inst!.id,
-        firstName: inst!.firstName,
-        email: inst!.email ?? null,
-        number: inst!.number ?? null,
-        image: inst!.image ?? null,
-      }));
+    const instructorsIDs: number[] = [];
+    selectedInstructors.forEach((id) => {
+      if (id !== "") {
+        instructorsIDs.push(Number(id));
+      }
+    });
 
-    const newActivity = {
+    const newActivity: CreateActivityDTO = {
       title,
       startUtc,
       endUtc,
@@ -119,7 +114,7 @@ export default function CreateActivityForm() {
       image: image,
       link: link || "",
       cancelled: false,
-      instructors: instructorObjects,
+      instructorids: instructorsIDs,
       tag: type,
       isRecurring,
       rrule: isRecurring ? `FREQ=WEEKLY` : undefined,
