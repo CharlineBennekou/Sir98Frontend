@@ -5,7 +5,7 @@ import AppHeader from "../components/layout/AppHeader";
 import {
   useFetchInstructorByIdQuery,
   useUpdateInstructorMutation,
-} from "../store/apis/instructorAPI";
+} from "../store/apis/api";
 
 
 export default function UpdateInstructorForm() {

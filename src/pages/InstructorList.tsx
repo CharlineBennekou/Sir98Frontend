@@ -1,5 +1,5 @@
 import InstructorCard from '../components/instructors/InstructorCard';
-import { useFetchInstructorsQuery } from "../store/apis/instructorAPI";
+import { useFetchInstructorsQuery } from "../store/apis/api";
 import type { Instructor } from '../types/instructors';
 import "./../styles/InstructorListStyle.css";
 import AppHeader from "../components/layout/AppHeader";
