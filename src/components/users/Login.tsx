@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Navigate } from "react-router-dom";
 import "./../../styles/spinner.css";
 import "./../../styles/login.css";
+import toast, { ToastBar } from 'react-hot-toast';
 
 export class LoginComp extends React.Component {
     state = {
@@ -37,6 +38,14 @@ export class LoginComp extends React.Component {
                 const token = await response.text();
                 localStorage.setItem("JWToken", token);
                 this.setState({ submitted: true });
+                toast.success(`Logget ind`, {
+                    iconTheme: {
+                        primary: "#00aa00",     // orange circle
+                        secondary: "#fff",      // white background
+                        
+                    },
+                    duration: 5000,
+                });
             }
 
 
