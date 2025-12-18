@@ -1,68 +1,116 @@
 import * as React from 'react';
 import { Navigate } from "react-router-dom";
+import "./../../styles/spinner.css";
+import "./../../styles/login.css";
+import toast from 'react-hot-toast';
 
 export class LoginComp extends React.Component {
- state = {
+    state = {
+        loading: false,
         submitted: false
+
     };
-    private async search(formData: FormData): Promise<void> {
-            const email = formData.get("email");
-            const password = formData.get("password")
-            const body = {
-                email: email,
-                password: password,
-                
-            };
-//Todo: Move this to Redux api slice
-            fetch('https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/User/Login', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(body),
-            }).then((response: Response) => {
-                if(response.status === 401) {
-                    response.text().then(text => {
-                        alert(text);
-                    });
+    private search = async (formData: FormData): Promise<void> => {
+        this.setState({ loading: true });
+
+        const body = {
+            email: formData.get("email"),
+            password: formData.get("password"),
+        };
+
+        try {
+            const response = await fetch(
+                'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/User/Login',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
                 }
-                if(response.ok) {
-                    response.text().then(text => {
-                        localStorage.setItem("JWToken", text);
-                        alert("Du er nu logget ind")
-                    });   
-                }
-            });
+            );
+
+            if (response.status === 401) {
+                alert(await response.text());
+                this.setState({ loading: false });
+                return;
+            }
+
+            if (response.ok) {
+                const token = await response.text();
+                localStorage.setItem("JWToken", token);
+                this.setState({ submitted: true });
+                toast.success(`Logget ind`, {
+                    iconTheme: {
+                        primary: "#00aa00",     // orange circle
+                        secondary: "#fff",      // white background
+                        
+                    },
+                    duration: 5000,
+                });
+            }
+
+
+        } catch {
+            alert("Noget gik galt");
+            this.setState({ loading: false });
         }
 
-        private onSubmit() {
-            this.setState({ submitted: true });
-        }
+
+
+    }
+
 
     public render(): React.ReactNode {
-          
+        if (this.state.submitted) {
+            return <Navigate to="/" />
+        }
+
 
         return (
-            <div>
-                <form action={this.search}>
-                    <label htmlFor="email">Email</label>
-                    <br/>
-                    <input type="text" id="email" name="email"/>
-                    <br/>
-                    <br/>
-                    <label htmlFor="password">Adgangskode</label>
-                    <br/>
-                    <input type="text" id="password" name="password"/>
-                    <br/>
-                    <br/>
-                    <input type="submit" onClick={() => this.onSubmit()} value="Fortryd"/>
-                    {this.state.submitted && <Navigate to="/" />}
-                    
-                    <input type="submit" value="Log ind"/>
-                    <br/>
-                    <br/>
-                    <a href="/register">Registrer her</a>
-                </form> 
+            <div className="login-page">
+                <div className="login-card">
+
+                    <form action={this.search}>
+                        <div className="field">
+                            <label htmlFor="email">Email</label>
+
+                            <input type="text" id="email" name="email" />
+                        </div>
+
+                        <br />
+                        <div className="field">
+                            <label htmlFor="password">Adgangskode</label>
+
+                            <input type="text" id="password" name="password" />
+                        </div>
+
+
+
+                        {this.state.loading && <div className="spinner"></div>}
+
+
+
+
+                        <div className="buttons">
+                            <button
+                                type="button"
+                                onClick={() => window.location.href = "/"}
+                            >
+                                Fortryd
+                            </button>
+
+
+
+                            <button type="submit" disabled={this.state.loading}>
+                                {this.state.loading ? "Logger ind..." : "Log ind"}
+                            </button>
+                        </div>
+
+                        <br /><br />
+
+                        <a href="/register">Registrer her</a>
+
+                    </form>
+                </div>
             </div>
         );
     }

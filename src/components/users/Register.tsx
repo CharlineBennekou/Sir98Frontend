@@ -1,11 +1,17 @@
 import * as React from 'react';
 import AppHeader from "../../components/layout/AppHeader";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import "../../styles/register.css";
 
 
 
 export class RegisterComp extends React.Component {
-    private async search(formData: FormData): Promise<void> {
+    state = {
+        goToLogin: false
+    };
+
+
+    private search = async(formData: FormData): Promise<void> => {
             const email = formData.get("email");
             const password = formData.get("password")
             const passwordRepeat = formData.get("passwordRepeat")
@@ -44,35 +50,47 @@ export class RegisterComp extends React.Component {
         }
 
     public render(): React.ReactNode {
+        if (this.state.goToLogin) {
+            return <Navigate to="/login" />;
+        }
         
 
         return (
-            <div>
+            <div className="register-page">
+            <div className="register-card">
                 <form action={this.search}>
                     <AppHeader title={"Register"} backTo='/Login'/>
                     <div style={{ marginTop: 70 }}></div>
                     
-                    <label htmlFor="email">Email</label>
-                    <br/>
-                    <input type="text" id="email" name="email"/>
-                    <br/>
-                    <br/>
+                    <div className="fieldReg">
+                      <label htmlFor="email">Email</label>
+                     <input type="text" id="email" name="email"/>
+                    </div>
+                    
+                    <div className="fieldReg">
                     <label htmlFor="password">Adgangskode</label>
-                    <br/>
-                    <input type="text" id="password" name="password"/>
-                    <br/>
-                    <br/>
+                    <input type="password" id="password" name="password"/>
+                    </div>
+                    <div className="fieldReg">
                     <label htmlFor="passwordRepeat">Gentag adgangskode</label>
+                    <input type="password" id="passwordRepeat" name="passwordRepeat"/>
+                    </div>
+                     <br/>
+                  
+
+
+                    <div className="buttons">
+                        <button type="submit" className="primary">
+                            Registrer</button>  
+                    </div>
                     <br/>
-                    <input type="text" id="passwordRepeat" name="passwordRepeat"/>
-                    <br/>
-                    <br/>
-                    <Link to="/login">
-                        <input type="submit" value="Fortryd"/>
-                    </Link>            
-                    <input type="submit" value="Registrer"/>
+
+                     <Link to="/login" className="button secondary">
+                             Fortryd
+                    </Link>
                 </form> 
             </div>
+         </div>
         );
     }
 }
