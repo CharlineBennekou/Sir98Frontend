@@ -74,6 +74,8 @@ export default function CreateInstructorForm() {
       email,
       number,
       image,
+    "activities": [],
+    "changedActivities": []
     };
 
     console.log("SENDER:", newInstructor);
