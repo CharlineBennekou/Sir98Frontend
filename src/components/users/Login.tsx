@@ -4,140 +4,105 @@ import "./../../styles/spinner.css";
 import "./../../styles/login.css";
 
 export class LoginComp extends React.Component {
- state = {
-      loading: false,
-      submitted: false
+    state = {
+        loading: false,
+        submitted: false
 
     };
-private search = async(formData: FormData): Promise<void> => {
+    private search = async (formData: FormData): Promise<void> => {
         this.setState({ loading: true });
 
-  const body = {
-    email: formData.get("email"),
-    password: formData.get("password"),
-  };
+        const body = {
+            email: formData.get("email"),
+            password: formData.get("password"),
+        };
 
-  try {
-    const response = await fetch(
-      'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/User/Login',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      }
-    );
+        try {
+            const response = await fetch(
+                'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/User/Login',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                }
+            );
 
-    if (response.status === 401) {
-      alert(await response.text());
-      this.setState({ loading: false });
-      return;
+            if (response.status === 401) {
+                alert(await response.text());
+                this.setState({ loading: false });
+                return;
+            }
+
+            if (response.ok) {
+                const token = await response.text();
+                localStorage.setItem("JWToken", token);
+                this.setState({ submitted: true });
+            }
+
+
+        } catch {
+            alert("Noget gik galt");
+            this.setState({ loading: false });
+        }
+
+
+
     }
 
-    if (response.ok) {
-      const token = await response.text();
-      localStorage.setItem("JWToken", token);
-      this.setState({ submitted: true });
-    }
-
-
-  } catch {
-    alert("Noget gik galt");
-    this.setState({ loading: false });
-  }
-
-
-
-
-
-            /* const email = formData.get("email");
-            const password = formData.get("password")
-            const body = {
-                email: email,
-                password: password,
-                
-            };
-//Todo: Move this to Redux api slice
-            fetch('https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/User/Login', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(body),
-            }).then((response: Response) => {
-                if(response.status === 401) {
-                    response.text().then(text => {
-                        alert(text);
-                    });
-                }
-                if(response.ok) {
-                    response.text().then(text => {
-                        localStorage.setItem("JWToken", text);
-                        alert("Du er nu logget ind")
-                    });   
-                }
-            }); */
-}
-
-        // private onSubmit() {
-        //     this.setState({ submitted: true });
-        // }
 
     public render(): React.ReactNode {
         if (this.state.submitted) {
             return <Navigate to="/" />
         }
-          
+
 
         return (
             <div className="login-page">
                 <div className="login-card">
-            
-                <form action={this.search}>
-                    <div className="field">
-                        <label htmlFor="email">Email</label>
-                    
-                     <input type="text" id="email" name="email"/>
-                    </div>
-                  
-                    <br/>
-                    <div className="field">
-                        <label htmlFor="password">Adgangskode</label>
-                       
-                        <input type="text" id="password" name="password"/>
-                    </div>
-                  
-                 
 
-                    {this.state.loading && <div className="spinner"></div>}
-                    
+                    <form action={this.search}>
+                        <div className="field">
+                            <label htmlFor="email">Email</label>
+
+                            <input type="text" id="email" name="email" />
+                        </div>
+
+                        <br />
+                        <div className="field">
+                            <label htmlFor="password">Adgangskode</label>
+
+                            <input type="text" id="password" name="password" />
+                        </div>
 
 
-                   {/*  <input type="submit" onClick={() => this.onSubmit()} value="Fortryd"/>
-                    {this.state.submitted && <Navigate to="/" />} */}
 
-                    <div className="buttons">
-                    <button 
-                        type="button"
-                        onClick={() => window.location.href = "/"}
-                        >
-                        Fortryd
-                    </button>
-                    
-                    {/* <input type="submit" value="Log ind"/> */}
-                    
+                        {this.state.loading && <div className="spinner"></div>}
 
-                    <button type="submit" disabled={this.state.loading}>
-                        {this.state.loading ? "Logger ind..." : "Log ind"}
-                    </button>
-                    </div>
 
-                    <br/><br/>
 
-                    <a href="/register">Registrer her</a>
 
-                 </form> 
+                        <div className="buttons">
+                            <button
+                                type="button"
+                                onClick={() => window.location.href = "/"}
+                            >
+                                Fortryd
+                            </button>
+
+
+
+                            <button type="submit" disabled={this.state.loading}>
+                                {this.state.loading ? "Logger ind..." : "Log ind"}
+                            </button>
+                        </div>
+
+                        <br /><br />
+
+                        <a href="/register">Registrer her</a>
+
+                    </form>
+                </div>
             </div>
-        </div>
         );
     }
 }
