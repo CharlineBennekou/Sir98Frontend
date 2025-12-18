@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./../styles/CreateActivityFormStyle.css";
 import AppHeader from "../components/layout/AppHeader";
-import { useCreateActivityMutation } from "../store/apis/activityAPI";
-import { useFetchInstructorsQuery } from "../store/apis/instructorAPI";
+import { useCreateActivityMutation } from "../store/apis/api";
+import { useFetchInstructorsQuery } from "../store/apis/api";
 import { FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 

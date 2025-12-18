@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./../styles/CreateActivityFormStyle.css";
 import AppHeader from "../components/layout/AppHeader";
-import { useCreateInstructorMutation } from "../store/apis/instructorAPI";
+import { useCreateInstructorMutation } from "../store/apis/api";
 import { useNavigate } from "react-router-dom";
 
 
@@ -83,7 +83,7 @@ export default function CreateInstructorForm() {
       alert("Instruktør oprettet!");
 
       navigate("/instructor"); // Naviger tilbage til liste
-      
+
       // Reset
       setFirstName("");
       setEmail("");

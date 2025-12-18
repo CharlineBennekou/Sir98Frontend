@@ -1,35 +1,35 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { ActivitySubscription } from "../../types/activitySubscription";
-export const activitySubscriptionApi = createApi({
-  reducerPath: 'activitySubscriptionApi',
+// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+// import type { ActivitySubscription } from "../../types/activitySubscription";
+// export const activitySubscriptionApi = createApi({
+//   reducerPath: 'activitySubscriptionApi',
 
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'https://localhost:7275/api',
-  }),
+//   baseQuery: fetchBaseQuery({
+//     baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/',
+//   }),
 
-  endpoints: (build) => ({
+//   endpoints: (build) => ({
 
-    // POST https://localhost:7275/api/ActivitySubscription
-    subscribeToOccurrence: build.mutation<void, ActivitySubscription>({ //Expects ActivitySubscription object as body
-      query: (body) => ({
-        url: 'ActivitySubscription',
-        method: 'POST',
-        body,
-      }),
-    }),
+//     // POST https://localhost:7275/api/ActivitySubscription
+//     subscribeToOccurrence: build.mutation<void, ActivitySubscription>({ //Expects ActivitySubscription object as body
+//       query: (body) => ({
+//         url: 'ActivitySubscription',
+//         method: 'POST',
+//         body,
+//       }),
+//     }),
 
-    // DELETE https://localhost:7275/api/ActivitySubscription
-    unsubscribeFromOccurrence: build.mutation<void, ActivitySubscription>({ //Expects ActivitySubscription object as body
-      query: (body) => ({
-        url: 'ActivitySubscription',
-        method: 'DELETE',
-        body,
-      }),
-    }),
-  }),
-});
+//     // DELETE https://localhost:7275/api/ActivitySubscription
+//     unsubscribeFromOccurrence: build.mutation<void, ActivitySubscription>({ //Expects ActivitySubscription object as body
+//       query: (body) => ({
+//         url: 'ActivitySubscription',
+//         method: 'DELETE',
+//         body,
+//       }),
+//     }),
+//   }),
+// });
 
-export const {
-  useSubscribeToOccurrenceMutation: useSubscribeToOccurrence,
-  useUnsubscribeFromOccurrenceMutation: useUnsubscribeFromOccurrence,
-} = activitySubscriptionApi;
+// export const {
+//   useSubscribeToOccurrenceMutation: useSubscribeToOccurrence,
+//   useUnsubscribeFromOccurrenceMutation: useUnsubscribeFromOccurrence,
+// } = activitySubscriptionApi;

@@ -1,6 +1,6 @@
 import type { Instructor } from '../../types/instructors';
 import { Link } from "react-router-dom";
-import { useDeleteInstructorMutation } from "../../store/apis/instructorAPI";
+import { useDeleteInstructorMutation } from "../../store/apis/api";
 import "../../styles/InstructorListStyle.css";
 import hans from "../../assets/instructors/hansBillede.png";
 import liselotte from "../../assets/instructors/LiselotteBillede.png";
