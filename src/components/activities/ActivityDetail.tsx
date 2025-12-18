@@ -4,7 +4,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import { useEffect } from "react";
 import DefaultImage from "../../assets/placeHolderGreyPic.jpg";
 import { Link, useNavigate } from "react-router-dom";
-import { useDeleteActivityMutation } from "../../store/apis/activityAPI";
+import { useDeleteActivityMutation } from "../../store/apis/api";
 
 type Props = {
   activity: ActivityOccurrence;

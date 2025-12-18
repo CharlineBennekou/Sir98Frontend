@@ -2,16 +2,20 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
 import type { ActivitySubscription } from '../../types/activitySubscription';
 import type { PushSubscriptionDto, DeletePushSubscriptionArgs } from '../../types/PushSubscriptionDto';
+import type { Activity } from '../../types/activity';
+import type { CreateActivityDTO, UpdateActivityDTO } from '../../types/activityDTO';
+import type { Instructor } from '../../types/instructors';
 
 export const api = createApi({
   reducerPath: 'api',
 
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/',
-   // baseUrl:'https://localhost:7275/api/',
+    //baseUrl:'https://localhost:7275/api/',
+ 
   }),
 
-  tagTypes: ['Occurrences'],
+  tagTypes: ['Occurrences', 'Activity', 'Instructor'],
 
   endpoints: (builder) => ({
     // GET /activity-occurrences?.days= &filter= &userId=
@@ -60,7 +64,7 @@ export const api = createApi({
               firstName: inst.firstName,
               image: inst.image,
             })) ?? [],
-          tag: o.tag ?? [],
+          tag: o.tag ?? null,
           cancelled: o.cancelled,
           isSubscribed: o.isSubscribed,
         }));
@@ -114,13 +118,147 @@ export const api = createApi({
         method: 'DELETE',
       }),
     }),
+
+    // ---------- ACTIVITY ----------
+    fetchActivities: builder.query<Activity[], void>({
+      query: () => ({
+        url: 'activity',
+        method: 'GET',
+      }),
+      transformResponse: (response: any[]) =>
+        response.map((a) => ({
+          id: a.id,
+          title: a.title,
+          startUtc: a.startUtc,
+          endUtc: a.endUtc,
+          address: a.address,
+          image: a.image,
+          link: a.link ?? null,
+          description: a.description ?? null,
+          instructors:
+            a.instructors?.map((inst: any) => ({
+              id: inst.id,
+              email: inst.email,
+              number: inst.number,
+              firstName: inst.firstName,
+              image: inst.image,
+            })) ?? [],
+          cancelled: a.cancelled,
+          tag: a.tag ?? null,
+          isRecurring: a.isRecurring,
+          rrule: a.rrule ?? null,
+        })),
+      providesTags: [{ type: 'Activity', id: 'LIST' }],
+    }),
+
+    fetchActivityById: builder.query<Activity, number>({
+      query: (id) => `activity/${id}`,
+      providesTags: (_r, _e, id) => [{ type: 'Activity', id }],
+    }),
+
+    createActivity: builder.mutation<Activity, CreateActivityDTO>({
+      query: (body) => ({
+        url: 'activity',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [{ type: 'Activity', id: 'LIST' }],
+    }),
+
+    updateActivity: builder.mutation<Activity, UpdateActivityDTO>({
+      query: (activity) => ({
+        url: `activity/${activity.id}`,
+        method: 'PUT',
+        body: activity,
+      }),
+      invalidatesTags: (_r, _e, a) => [{ type: 'Activity', id: a.id }],
+    }),
+
+    deleteActivity: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `activity/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_r, _e, id) => [{ type: 'Activity', id }],
+    }),
+
+    // ---------- INSTRUCTOR ----------
+    fetchInstructors: builder.query<Instructor[], void>({
+      query: () => 'instructor',
+      transformResponse: (response: any[]) =>
+        response.map((i) => ({
+          id: i.id,
+          firstName: i.firstName,
+          email: i.email,
+          number: i.number,
+          image: i.image,
+        })),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({
+                type: 'Instructor' as const,
+                id,
+              })),
+              { type: 'Instructor', id: 'LIST' },
+            ]
+          : [{ type: 'Instructor', id: 'LIST' }],
+    }),
+
+    fetchInstructorById: builder.query<Instructor, number>({
+      query: (id) => `instructor/${id}`,
+      providesTags: (_r, _e, id) => [{ type: 'Instructor', id }],
+    }),
+
+    createInstructor: builder.mutation<Instructor, Omit<Instructor, 'id'>>({
+      query: (body) => ({
+        url: 'instructor',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [{ type: 'Instructor', id: 'LIST' }],
+    }),
+
+    updateInstructor: builder.mutation<Instructor, Instructor>({
+      query: (i) => ({
+        url: `instructor/${i.id}`,
+        method: 'PUT',
+        body: i,
+      }),
+      invalidatesTags: (_r, _e, i) => [{ type: 'Instructor', id: i.id }],
+    }),
+
+    deleteInstructor: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `instructor/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_r, _e, id) => [{ type: 'Instructor', id }],
+    }),
+
   }),
 });
 
 export const {
+  // Occurrences
   useFetchOccurrencesQuery,
   useSubscribeToOccurrenceMutation: useSubscribeToOccurrence,
   useUnsubscribeFromOccurrenceMutation: useUnsubscribeFromOccurrence,
+  // Push
   useUpsertPushSubscriptionMutation,
   useDeletePushSubscriptionMutation,
+
+  // Activity
+  useFetchActivitiesQuery,
+  useFetchActivityByIdQuery,
+  useCreateActivityMutation,
+  useUpdateActivityMutation,
+  useDeleteActivityMutation,
+
+  // Instructor
+  useFetchInstructorsQuery,
+  useFetchInstructorByIdQuery,
+  useCreateInstructorMutation,
+  useUpdateInstructorMutation,
+  useDeleteInstructorMutation,
 } = api;
