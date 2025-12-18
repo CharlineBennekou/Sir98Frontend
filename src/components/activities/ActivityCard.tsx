@@ -30,7 +30,7 @@ export default function ActivityCard({ activity }: Props) {
     const navigate = useNavigate();
 
     const isAuthenticated = () => {
-        return !!localStorage.getItem("token");
+        return !!localStorage.getItem("JWToken");
     };
 
     // use default if no specific image

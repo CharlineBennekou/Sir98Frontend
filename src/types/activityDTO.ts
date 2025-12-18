@@ -12,7 +12,23 @@ export type CreateActivityDTO = {
   image: string;
   link?: string;
   cancelled: boolean;
-  instructors: CreateActivityInstructorDTO[];
+  instructorids: number[];
+  tag: string;
+  isRecurring: boolean;
+  rrule?: string;
+};
+
+export type UpdateActivityDTO = {
+  id: number;
+  title: string;
+  startUtc: string;
+  endUtc: string;
+  address: string;
+  description?: string;
+  image: string;
+  link?: string;
+  cancelled: boolean;
+  instructorids: number[];
   tag: string;
   isRecurring: boolean;
   rrule?: string;
