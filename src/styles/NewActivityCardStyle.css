@@ -89,6 +89,7 @@
 
 .activity-instructor,
 .activity-location,
+.activity-date,
 .activity-time {
   display: flex;
   align-items: flex-start;

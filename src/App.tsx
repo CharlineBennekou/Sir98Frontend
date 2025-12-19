@@ -14,7 +14,6 @@ import AboutUs from './pages/AboutUs';
 import ActivateCodePage from './pages/ActivateCode';
 import Logout from './pages/Logout';
 
-
 function App() {
   return (
     <div className="app-root" style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>

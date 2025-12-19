@@ -79,21 +79,27 @@ export default function InstructorCard({ instructor }: Props) {
                 </div>
 
                 {/* ---------- Opdater og Slet knapper ---------- */}
-                <div className="instructor-card-buttons">
-                    <Link
-                        to={`/update-instructor/${instructor.id}`}
-                        className="instructor-btn update-btn"
-                    >
-                        Opdater
-                    </Link>
-                    <button
-                        onClick={handleDelete}
-                        className="instructor-btn delete-btn"
-                        disabled={isDeleting}
-                    >
-                        {isDeleting ? "Sletter..." : "Slet"}
-                    </button>
-                </div>
+                {
+                    (localStorage.getItem("Role") === "Instructor") ? 
+                    <div className="instructor-card-buttons">
+                        <Link
+                            to={`/update-instructor/${instructor.id}`}
+                            className="instructor-btn update-btn"
+                        >
+                            Opdater
+                        </Link>
+                        <button
+                            onClick={handleDelete}
+                            className="instructor-btn delete-btn"
+                            disabled={isDeleting}
+                        >
+                            {isDeleting ? "Sletter..." : "Slet"}
+                        </button>
+                    </div>
+                    :
+                    null
+                }
+                
             </div>
         </div>
     );

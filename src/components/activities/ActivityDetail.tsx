@@ -85,23 +85,29 @@ export default function DialogBox({ activity, open, onClose }: Props) {
           )}
 
           {/* ---------- Handlinger ---------- */}
-          <div className="activity-detail-actions">
-            <Link
-              to={`/update-activity/${activity.id}`}
-              className="submit-btn"
-              onClick={onClose}
-            >
-              Opdater aktivitet
-            </Link>
+          {
+            (localStorage.getItem("Role") === "Instructor") ? 
+            <div className="activity-detail-actions">
+              <Link
+                to={`/update-activity/${activity.id}`}
+                className="submit-btn"
+                onClick={onClose}
+              >
+                Opdater aktivitet
+              </Link>
 
-            <button
-              onClick={handleDelete}
-              className="submit-btn delete-btn"
-              disabled={isDeleting}
-            >
-              {isDeleting ? "Sletter..." : "Slet aktivitet"}
-            </button>
-          </div>
+              <button
+                onClick={handleDelete}
+                className="submit-btn delete-btn"
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Sletter..." : "Slet aktivitet"}
+              </button>
+            </div>
+            :
+            null
+          }
+          
 
           {activity.address && (
             <p>
@@ -111,9 +117,26 @@ export default function DialogBox({ activity, open, onClose }: Props) {
 
           <p>
             <strong>Tidspunkt:</strong>{" "}
-            {start ? start.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Copenhagen' }) : ""}
-            {end ? ` - ${end.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Copenhagen' })}` : ""}
+            {start
+              ? `${start.toLocaleDateString('da-DK', {
+                  day: 'numeric',
+                  month: 'long',
+                  timeZone: 'Europe/Copenhagen'
+                })} kl. ${start.toLocaleTimeString('da-DK', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  timeZone: 'Europe/Copenhagen'
+                })}`
+              : ""}
+            {end
+              ? ` - ${end.toLocaleTimeString('da-DK', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  timeZone: 'Europe/Copenhagen'
+                })}`
+              : ""}
           </p>
+
 
           {activity.description && (
             <div className="detail-section">

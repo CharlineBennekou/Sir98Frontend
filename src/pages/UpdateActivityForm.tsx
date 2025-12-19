@@ -22,6 +22,8 @@ export default function UpdateActivityForm() {
   const { data: instructors = [], isLoading: instructorsLoading } =
     useFetchInstructorsQuery();
 
+  let postingImage: boolean = false;
+
   /* ---------- State ---------- */
   const [title, setTitle] = useState("");
   const [type, setType] = useState("training");
@@ -34,14 +36,27 @@ export default function UpdateActivityForm() {
   const [isRecurring, setIsRecurring] = useState(false);
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
 
+  function dateToTimezone(date: Date, timezone: string) {
+    const year = date.toLocaleTimeString('da-DK', { year:"numeric", timeZone:  timezone }).slice(0,4).padStart(2,"0")
+    const month = date.toLocaleTimeString('da-DK', { month:"2-digit", timeZone:  timezone }).slice(0,2).padStart(2,"0")
+    const day = date.toLocaleTimeString('da-DK', { day:"2-digit", timeZone:  timezone }).slice(0,2).padStart(2,"0")
+    const hour = date.toLocaleTimeString('da-DK', { hour:"2-digit",timeZone:  timezone }).padStart(2,"0")
+    const minute = date.toLocaleTimeString('da-DK', { minute:"2-digit", timeZone:  timezone }).padStart(2,"0")
+    console.log(`${year}-${month.padStart(2,"0")}-${day.padStart(2,"0")}T${hour.padStart(2,"0")}:${minute.padStart(2,"0")}`)
+    return`${year}-${month}-${day}T${hour}:${minute}`;
+  }
+
   /* ---------- Prefill når activity hentes ---------- */
   useEffect(() => {
     if (!activity) return;
 
+    const startDate = dateToTimezone(new Date(activity.startUtc), 'Europe/Copenhagen')
+    const endDate = dateToTimezone(new Date(activity.endUtc), 'Europe/Copenhagen')
+    
     setTitle(activity.title);
     setType(activity.tag ?? "training");
-    setStart(activity.startUtc.slice(0, 16));
-    setEnd(activity.endUtc.slice(0, 16));
+    setStart(startDate);
+    setEnd(endDate);
     setImage(activity.image ?? "");
     setLocation(activity.address ?? "");
     setDescription(activity.description ?? "");
@@ -54,6 +69,50 @@ export default function UpdateActivityForm() {
         : [""]
     );
   }, [activity]);
+
+
+    // ---------- Image upload ----------
+  async function postImage(images: FileList | null): Promise<void> {
+    if (!images || !images[0]) {
+      alert("Intet billede valgt");
+      return;
+    }
+
+    postingImage = true;
+
+    const form = new FormData();
+    form.set("images", images[0]);
+
+    const URL =
+      "https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/Image";
+
+    fetch(URL, {
+      method: "POST",
+      body: form,
+    }).then((response: Response) => {
+      switch (response.status) {
+        case 415:
+          alert("Filtype ikke understøttet");
+          break;
+        case 400:
+          alert("Billede upload fejlede");
+          break;
+        case 500:
+          alert("Serverfejl");
+          break;
+        case 200:
+          response.text().then((text) => {
+            setImage(`${URL}/${text}`);
+          });
+          alert("Billede uploadet");
+          break;
+        default:
+          response.text().then((text) => alert(text));
+      }
+      postingImage = false;
+    });
+  }
+
 
   /* ---------- Instruktør helpers ---------- */
   function updateInstructor(index: number, value: string) {
@@ -81,6 +140,11 @@ export default function UpdateActivityForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+     if (postingImage) {
+      alert("Billede bliver uploadet");
+      return;
+    }
+
     const startUtc = new Date(start).toISOString();
     const endUtc = new Date(end).toISOString();
 
@@ -105,7 +169,7 @@ export default function UpdateActivityForm() {
       isRecurring,
       ...(isRecurring && { rrule: "FREQ=WEEKLY" }),
     };
-    console.log("SENDER: " + updatedActivity);
+    console.log("SENDER: ", updatedActivity);
 
     try {
       await updateActivity(updatedActivity).unwrap();
@@ -138,6 +202,23 @@ export default function UpdateActivityForm() {
               <option value="events">Begivenhed</option>
             </select>
           </label>
+
+
+          <label>
+            Billede
+            <input
+              type="file"
+              accept="image/png, image/jpeg, image/svg+xml, image/tiff, image/avif"
+              onChange={(e) => postImage(e.target.files)}
+            />
+          </label>
+
+          {image && (
+            <div>
+              <p>Nuvarande billede:</p>
+              <img src={image} alt="Instruktør" style={{ width: "150px", borderRadius: "8px" }} />
+            </div>
+          )}
 
           <label>
             Start tidspunkt

@@ -1,6 +1,6 @@
 // React hooks
 import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import ActivityCard from '../components/activities/ActivityCard'
 // Styling
 import { useFetchOccurrencesQuery } from '../store/apis/api';
@@ -9,6 +9,7 @@ import './../styles/ActivityListStyle.css';
 // Øverste header-komponent
 import AppHeader from "../components/layout/AppHeader";
 import { isAuthenticated } from '../components/users/IsAuthenticated';
+import { LuSquarePlus } from 'react-icons/lu';
 
 // 🔍 Mapping af URL-typer → hvilke tags der tæller som training/events
 const TYPE_TAG_MAP: Record<string, string[]> = {
@@ -121,6 +122,18 @@ export default function ActivityList() {
       {/* Øverste sticky header */}
       <AppHeader title={pageTitle} />
       <div style={{ marginTop: 70 }}></div>
+
+      
+
+      {
+        (localStorage.getItem("Role") === "Instructor") ? 
+          <Link to="/create" className="create-activity-btn">
+              <span className="icon-wrapper-add"><LuSquarePlus /></span>
+              Opret aktivitet
+          </Link>
+        :
+        null
+    }
 
       {/* Dropdown til antal dage frem */}
       <div style={{ margin: '1rem 0' }}>
