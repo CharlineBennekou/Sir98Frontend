@@ -37,11 +37,12 @@ export default function UpdateActivityForm() {
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
 
   function dateToTimezone(date: Date, timezone: string) {
-    const year = date.toLocaleTimeString('da-DK', { year:"numeric", timeZone:  timezone }).slice(0,4)
-    const month = date.toLocaleTimeString('da-DK', { month:"2-digit", timeZone:  timezone }).slice(0,2)
-    const day = date.toLocaleTimeString('da-DK', { day:"2-digit", timeZone:  timezone }).slice(0,2)
-    const hour = date.toLocaleTimeString('da-DK', { hour:"2-digit",timeZone:  timezone })
-    const minute = date.toLocaleTimeString('da-DK', { minute:"2-digit", timeZone:  timezone })
+    const year = date.toLocaleTimeString('da-DK', { year:"numeric", timeZone:  timezone }).slice(0,4).padStart(2,"0")
+    const month = date.toLocaleTimeString('da-DK', { month:"2-digit", timeZone:  timezone }).slice(0,2).padStart(2,"0")
+    const day = date.toLocaleTimeString('da-DK', { day:"2-digit", timeZone:  timezone }).slice(0,2).padStart(2,"0")
+    const hour = date.toLocaleTimeString('da-DK', { hour:"2-digit",timeZone:  timezone }).padStart(2,"0")
+    const minute = date.toLocaleTimeString('da-DK', { minute:"2-digit", timeZone:  timezone }).padStart(2,"0")
+    console.log(`${year}-${month.padStart(2,"0")}-${day.padStart(2,"0")}T${hour.padStart(2,"0")}:${minute.padStart(2,"0")}`)
     return`${year}-${month}-${day}T${hour}:${minute}`;
   }
 
