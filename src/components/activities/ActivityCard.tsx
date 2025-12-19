@@ -2,12 +2,12 @@ import '../../styles/NewActivityCardStyle.css'
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
 import { FiUser, FiMapPin, FiClock, FiChevronDown } from "react-icons/fi";
 import ActivityDetail from './ActivityDetail';
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from 'react-hot-toast';
 import DefaultImage from '../../assets/placeHolderGreyPic.jpg';
 import DropUpMenu from './DropUpMenu';
 
-
+import { isAuthenticated } from '../users/IsAuthenticated';
 import { useSubscribeToOccurrence, useUnsubscribeFromOccurrence } from '../../store/apis/api';
 import { useNavigate } from "react-router-dom";
 
@@ -25,41 +25,52 @@ export default function ActivityCard({ activity }: Props) {
 
     // Constants
     const isLoading = isSubscribing || isUnsubscribing;
-    const userId = "userId";
-
     const navigate = useNavigate();
+    const userId = String(localStorage.getItem("Email"));
 
-    const isAuthenticated = () => {
-        return !!localStorage.getItem("JWToken");
-    };
+    
 
     // use default if no specific image
     const imageUrl = activity.image?.trim() ? activity.image : DefaultImage;
     console.log("Activity image URL:", imageUrl);
 
-    async function handleBellClick(e: React.MouseEvent<HTMLButtonElement>) {
-        e.stopPropagation(); // prevent opening the detail dialog
-        const payload = { //types/activitysubscription.ts
-            userId,
-            activityId: activity.id,             
-            originalStartUtc: activity.originalStartUtc,
-        };
+    async function SingleOccurrencePayload(){
+       await  PostSubscription(false);
+    }
+    async function AllOccurrencesPayload(){
+       await  PostSubscription(true);
+    }
 
+
+    async function PostSubscription(all: boolean)
+    {
         try {
             if (activity.isSubscribed) { 
-                toast.success(`Afmeldt ${activity.title}`, {
+                toast.success(`Afmeldt ${activity.title}`,
+                    {
                     iconTheme: {
                         primary: "#ff9800",     // orange circle
                         secondary: "#fff",      // white background
                     },
                 });
-
-                console.log("Unsubscribing from activity:", payload);
-                await unsubscribeFromOccurrence(payload); // DELETE
-            } else {
+                const Deletepayload = { //types/activitysubscription.ts // ActivitySubscriptionDeleteDTO
+                   userId: String(userId),
+                    activityId: activity.id,
+                    originalStartUtc: activity.originalStartUtc,
+                };
+                console.log("Unsubscribing from activity:", Deletepayload);
+                await unsubscribeFromOccurrence(Deletepayload); // DELETE
+            } 
+            else {
+                const Postpayload = { //types/activitysubscription.ts // ActivitySubscriptionPostDTO
+                    userId: String(userId),
+                    activityId: activity.id,
+                    originalStartUtc: activity.originalStartUtc,
+                    AllOccurrences: all,
+                };
                 toast.success(`Tilmeldt ${activity.title}`);
-                console.log("Subscribing to activity:", payload);
-                await subscribeToOccurrence(payload);     // POST
+                console.log("Subscribing to activity:", Postpayload);
+                await subscribeToOccurrence(Postpayload);     // POST
             }
         } catch (err) {
             console.error("Fejl ved subscription:", err);
@@ -75,7 +86,7 @@ export default function ActivityCard({ activity }: Props) {
         activity.instructors?.length
             ? activity.instructors.map((i) => i.firstName).join(" & ")
             : "Ingen instruktør";
-
+    
     return (
         <>
             <div 
@@ -167,12 +178,10 @@ export default function ActivityCard({ activity }: Props) {
                 open={menuOpen}
                 onClose={() => setMenuOpen(false)}
                 onFollowSingle={async () => {
-                    await handleBellClick({
-                        stopPropagation: () => {}
-                    } as any);
+                    await SingleOccurrencePayload();
                 }}
-                onFollowAll={() => {
-                    console.log("Følg alle aktiviteter — funktion kommer senere");
+                onFollowAll={async () => {
+                    await AllOccurrencesPayload();
                 }}
                 onUnfollow={async () => {
                     if (activity.isSubscribed) {
