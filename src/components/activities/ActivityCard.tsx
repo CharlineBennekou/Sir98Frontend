@@ -1,6 +1,7 @@
 import '../../styles/NewActivityCardStyle.css'
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
 import { FiUser, FiMapPin, FiClock, FiChevronDown } from "react-icons/fi";
+import { LuCalendarDays } from "react-icons/lu";
 import ActivityDetail from './ActivityDetail';
 import React, { useState } from "react";
 import { toast } from 'react-hot-toast';
@@ -126,6 +127,16 @@ export default function ActivityCard({ activity }: Props) {
                                 minute: '2-digit',
                                 timeZone: 'Europe/Copenhagen'
                               })}`
+                            : ""}
+                    </div>
+                    <div className="activity-date">
+                        <LuCalendarDays className="icon" />
+                        {startTime
+                            ? startTime.toLocaleDateString('da-DK', {
+                                day: 'numeric',
+                                month: 'long',
+                                timeZone: 'Europe/Copenhagen'
+                            })
                             : ""}
                     </div>
                         <div className="activity-actions">
