@@ -1,7 +1,9 @@
-import { precacheAndRoute } from 'workbox-precaching';
+import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
+
+cleanupOutdatedCaches();
 
 // This array is injected by vite-plugin-pwa / workbox at build time
-precacheAndRoute(self.__WB_MANIFEST || []);
+precacheAndRoute(self.__WB_MANIFEST.filter(() =>false));
 
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing...');

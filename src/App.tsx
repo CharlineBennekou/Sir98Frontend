@@ -13,7 +13,7 @@ import UpdateActivityForm from './pages/UpdateActivityForm';
 import AboutUs from './pages/AboutUs';
 import ActivateCodePage from './pages/ActivateCode';
 import Logout from './pages/Logout';
-import {Accountsettings} from './pages/Accountsettings';
+import AccountSettings from './pages/AccountSettings';
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
           <Route path="/update-activity/:id" element={<UpdateActivityForm />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/code" element={<ActivateCodePage />} />
-          <Route path="/accountsettings" element={<Accountsettings />} />
+          <Route path="/account-settings" element={<AccountSettings />} />
           <Route path="/logout" element={<Logout />} />
         </Routes>
       </main>
