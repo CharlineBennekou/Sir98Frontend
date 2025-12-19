@@ -17,7 +17,7 @@ export default function AboutUs() {
           <p>
             SIR98 er en forening med fokus på fællesskab, bevægelse og engagement.
             Foreningen tilbyder forskellige aktiviteter og arrangementer for
-            sine medlemmer. 
+            sine medlemmer. :)
           </p>
                   {/* Eksternt link */}
             <div className="about-link" >
