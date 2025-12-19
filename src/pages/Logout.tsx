@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 export default function Logout() {
     localStorage.removeItem("JWToken")
     localStorage.removeItem("Role")
+    localStorage.removeItem("Email")
     toast.success(`Logget ud`, {
         iconTheme: {
             primary: "#ff0000",     // orange circle
