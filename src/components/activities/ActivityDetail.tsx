@@ -117,9 +117,26 @@ export default function DialogBox({ activity, open, onClose }: Props) {
 
           <p>
             <strong>Tidspunkt:</strong>{" "}
-            {start ? start.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Copenhagen' }) : ""}
-            {end ? ` - ${end.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Copenhagen' })}` : ""}
+            {start
+              ? `${start.toLocaleDateString('da-DK', {
+                  day: 'numeric',
+                  month: 'long',
+                  timeZone: 'Europe/Copenhagen'
+                })} kl. ${start.toLocaleTimeString('da-DK', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  timeZone: 'Europe/Copenhagen'
+                })}`
+              : ""}
+            {end
+              ? ` - ${end.toLocaleTimeString('da-DK', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  timeZone: 'Europe/Copenhagen'
+                })}`
+              : ""}
           </p>
+
 
           {activity.description && (
             <div className="detail-section">

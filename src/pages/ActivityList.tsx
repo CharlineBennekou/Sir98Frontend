@@ -121,6 +121,8 @@ export default function ActivityList() {
       <AppHeader title={pageTitle} />
       <div style={{ marginTop: 70 }}></div>
 
+      
+
       {
         (localStorage.getItem("Role") === "Instructor") ? 
           <Link to="/create" className="create-activity-btn">
