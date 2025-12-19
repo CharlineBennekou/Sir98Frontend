@@ -85,23 +85,29 @@ export default function DialogBox({ activity, open, onClose }: Props) {
           )}
 
           {/* ---------- Handlinger ---------- */}
-          <div className="activity-detail-actions">
-            <Link
-              to={`/update-activity/${activity.id}`}
-              className="submit-btn"
-              onClick={onClose}
-            >
-              Opdater aktivitet
-            </Link>
+          {
+            (localStorage.getItem("Role") === "Instructor") ? 
+            <div className="activity-detail-actions">
+              <Link
+                to={`/update-activity/${activity.id}`}
+                className="submit-btn"
+                onClick={onClose}
+              >
+                Opdater aktivitet
+              </Link>
 
-            <button
-              onClick={handleDelete}
-              className="submit-btn delete-btn"
-              disabled={isDeleting}
-            >
-              {isDeleting ? "Sletter..." : "Slet aktivitet"}
-            </button>
-          </div>
+              <button
+                onClick={handleDelete}
+                className="submit-btn delete-btn"
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Sletter..." : "Slet aktivitet"}
+              </button>
+            </div>
+            :
+            null
+          }
+          
 
           {activity.address && (
             <p>

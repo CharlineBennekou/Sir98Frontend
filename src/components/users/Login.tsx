@@ -35,8 +35,13 @@ export class LoginComp extends React.Component {
             }
 
             if (response.ok) {
-                const token = await response.text();
+                const responseContent = await response.text();
+                const lines: string[] = responseContent.split("\n");
+
+                const token = lines[0];
                 localStorage.setItem("JWToken", token);
+                const role = lines[1]
+                localStorage.setItem("Role",role);
                 this.setState({ submitted: true });
                 toast.success(`Logget ind`, {
                     iconTheme: {

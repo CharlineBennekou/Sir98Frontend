@@ -22,13 +22,20 @@ export default function InstructorList() {
         
 
         <div className="instructor-list-page">
-
             <div className="instructor-list-header">
-                <Link to="/create-instructor" className="create-instructor-btn">
-                    <span className="icon-wrapper-add"><LuSquarePlus /></span>
-                    Opret instruktør
-                </Link>
+            {
+                (localStorage.getItem("Role") === "Instructor") ? 
+                
+                    <Link to="/create-instructor" className="create-instructor-btn">
+                        <span className="icon-wrapper-add"><LuSquarePlus /></span>
+                        Opret instruktør
+                    </Link>
+                
+                :
+                null
+            }
             </div>
+            
         
             <div className="instructor-list">
                 {instructors.map((ins: Instructor) => (
