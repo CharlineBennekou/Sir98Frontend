@@ -22,6 +22,8 @@ export default function UpdateActivityForm() {
   const { data: instructors = [], isLoading: instructorsLoading } =
     useFetchInstructorsQuery();
 
+  let postingImage: boolean = false;
+
   /* ---------- State ---------- */
   const [title, setTitle] = useState("");
   const [type, setType] = useState("training");
@@ -68,7 +70,6 @@ export default function UpdateActivityForm() {
   }, [activity]);
 
 
-    let postingImage: boolean = false;
     // ---------- Image upload ----------
   async function postImage(images: FileList | null): Promise<void> {
     if (!images || !images[0]) {
@@ -137,6 +138,11 @@ export default function UpdateActivityForm() {
   /* ---------- Submit ---------- */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+     if (postingImage) {
+      alert("Billede bliver uploadet");
+      return;
+    }
 
     const startUtc = new Date(start).toISOString();
     const endUtc = new Date(end).toISOString();
