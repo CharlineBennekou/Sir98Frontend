@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { ActivityOccurrence } from '../../types/activityOccurrence';
-import type { ActivitySubscription } from '../../types/activitySubscription';
+import type { ActivitySubscriptionDeleteDTO, ActivitySubscriptionPostDTO } from '../../types/activitySubscription';
 import type { PushSubscriptionDto, DeletePushSubscriptionArgs } from '../../types/PushSubscriptionDto';
 import type { Activity } from '../../types/activity';
 import type { CreateActivityDTO, UpdateActivityDTO } from '../../types/activityDTO';
@@ -83,7 +83,7 @@ export const api = createApi({
     }),
 
     // POST /ActivitySubscription
-    subscribeToOccurrence: builder.mutation<void, ActivitySubscription>({
+    subscribeToOccurrence: builder.mutation<void, ActivitySubscriptionPostDTO>({
       query: (body) => ({
         url: 'ActivitySubscription',
         method: 'POST',
@@ -93,7 +93,7 @@ export const api = createApi({
     }),
 
     // DELETE /ActivitySubscription
-    unsubscribeFromOccurrence: builder.mutation<void, ActivitySubscription>({
+    unsubscribeFromOccurrence: builder.mutation<void, ActivitySubscriptionDeleteDTO>({
       query: (body) => ({
         url: 'ActivitySubscription',
         method: 'DELETE',
@@ -167,7 +167,7 @@ export const api = createApi({
 
     updateActivity: builder.mutation<Activity, UpdateActivityDTO>({
       query: (activity) => ({
-        url: `activity/${activity.id}`,
+        url: `activity/${activity.id}/PutAndNotify`,
         method: 'PUT',
         body: activity,
       }),

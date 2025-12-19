@@ -8,21 +8,23 @@ import type { ActivityOccurrence } from '../types/activityOccurrence';
 import './../styles/ActivityListStyle.css';
 // Øverste header-komponent
 import AppHeader from "../components/layout/AppHeader";
+import { isAuthenticated } from '../components/users/IsAuthenticated';
 import { LuSquarePlus } from 'react-icons/lu';
 
 // 🔍 Mapping af URL-typer → hvilke tags der tæller som training/events
 const TYPE_TAG_MAP: Record<string, string[]> = {
   training: ['træning', 'træninger', 'training'],
   events: ['begivenhed', 'begivenheder', 'event', 'events'],
-  mine: [] // håndteres via subs saved i localStorage
+  mine: [] // "mine" is handled specially in the code. Checks isSubscribed flag.
 }
 
 
 export default function ActivityList() {
   const [daysForward, setDaysForward] = useState<number>(14); // default 7 dage
+  //const userId = localStorage.getItem("Email");
   const { data: occurrences = [], isLoading, isError } =
   useFetchOccurrencesQuery(
-    { days: daysForward, filter: null, userId: "userId" },
+    { days: daysForward, filter: null,  userId: isAuthenticated() ? String(localStorage.getItem("Email")) : "userId" },
     { refetchOnMountOrArgChange: true }
   );
 
@@ -110,7 +112,7 @@ export default function ActivityList() {
       : typeParam === 'events'
         ? 'Begivenheder'
         : typeParam === 'mine'
-          ? 'Mine aktiviteter'
+          ? 'Fulgte aktiviteter'
           : 'Alle aktiviteter';
 
 
@@ -149,7 +151,11 @@ export default function ActivityList() {
 
       {sortedDates.length === 0 ? (
         // Hvis ingen aktiviteter matcher filtreringen
-        <p style={{ padding: 16 }}> Ingen {pageTitle.toLowerCase()} fundet.</p>
+        <p style={{ padding: 16 }}>
+          {typeParam === 'mine'
+            ? 'Der er ingen fulgte aktiviteter i de næste dagse. Prøv at følge nogle aktiviteter for at få notifikationer om ændringer.'
+            : `Ingen ${pageTitle.toLowerCase()} fundet.`}
+        </p>
       ) : (
 
       sortedDates.map((dateKey) => (
