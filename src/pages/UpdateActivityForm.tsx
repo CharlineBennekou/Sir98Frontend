@@ -67,6 +67,51 @@ export default function UpdateActivityForm() {
     );
   }, [activity]);
 
+
+    let postingImage: boolean = false;
+    // ---------- Image upload ----------
+  async function postImage(images: FileList | null): Promise<void> {
+    if (!images || !images[0]) {
+      alert("Intet billede valgt");
+      return;
+    }
+
+    postingImage = true;
+
+    const form = new FormData();
+    form.set("images", images[0]);
+
+    const URL =
+      "https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/Image";
+
+    fetch(URL, {
+      method: "POST",
+      body: form,
+    }).then((response: Response) => {
+      switch (response.status) {
+        case 415:
+          alert("Filtype ikke understøttet");
+          break;
+        case 400:
+          alert("Billede upload fejlede");
+          break;
+        case 500:
+          alert("Serverfejl");
+          break;
+        case 200:
+          response.text().then((text) => {
+            setImage(`${URL}/${text}`);
+          });
+          alert("Billede uploadet");
+          break;
+        default:
+          response.text().then((text) => alert(text));
+      }
+      postingImage = false;
+    });
+  }
+
+
   /* ---------- Instruktør helpers ---------- */
   function updateInstructor(index: number, value: string) {
     const list = [...selectedInstructors];
@@ -150,6 +195,23 @@ export default function UpdateActivityForm() {
               <option value="events">Begivenhed</option>
             </select>
           </label>
+
+
+          <label>
+            Billede
+            <input
+              type="file"
+              accept="image/png, image/jpeg, image/svg+xml, image/tiff, image/avif"
+              onChange={(e) => postImage(e.target.files)}
+            />
+          </label>
+
+          {image && (
+            <div>
+              <p>Nuvarande billede:</p>
+              <img src={image} alt="Instruktør" style={{ width: "150px", borderRadius: "8px" }} />
+            </div>
+          )}
 
           <label>
             Start tidspunkt
