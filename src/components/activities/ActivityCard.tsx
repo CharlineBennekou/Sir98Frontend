@@ -112,6 +112,17 @@ export default function ActivityCard({ activity }: Props) {
                         </p>
                     )}
 
+                    <div className="activity-date">
+                        <LuCalendarDays className="icon" />
+                        {startTime
+                            ? startTime.toLocaleDateString('da-DK', {
+                                day: 'numeric',
+                                month: 'long',
+                                timeZone: 'Europe/Copenhagen'
+                            })
+                            : ""}
+                    </div>
+
                     <div className="activity-time">
                         <FiClock className="icon" />
                         {startTime
@@ -129,16 +140,7 @@ export default function ActivityCard({ activity }: Props) {
                               })}`
                             : ""}
                     </div>
-                    <div className="activity-date">
-                        <LuCalendarDays className="icon" />
-                        {startTime
-                            ? startTime.toLocaleDateString('da-DK', {
-                                day: 'numeric',
-                                month: 'long',
-                                timeZone: 'Europe/Copenhagen'
-                            })
-                            : ""}
-                    </div>
+            
                         <div className="activity-actions">
                             <button 
                                 className="details-btn"
