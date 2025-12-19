@@ -23,7 +23,7 @@ export default function Dashboard() {
       color: "#FF9800",
     },
     {
-      label: "Mine aktiviteter",
+      label: "Fulgte aktiviteter",
       icon: <FiBell />,
       onClick: () => navigate("/aktiviteter?type=mine"),
       color: "#9C27B0",
