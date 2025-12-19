@@ -20,8 +20,7 @@ export class LoginComp extends React.Component {
 
         try {
             const response = await fetch(
-                //'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/User/Login',
-                'https://localhost:7275/api/User/Login',
+                'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/User/Login',
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

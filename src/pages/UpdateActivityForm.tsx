@@ -34,14 +34,26 @@ export default function UpdateActivityForm() {
   const [isRecurring, setIsRecurring] = useState(false);
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
 
+  function dateToTimezone(date: Date, timezone: string) {
+    const year = date.toLocaleTimeString('da-DK', { year:"numeric", timeZone:  timezone }).slice(0,4)
+    const month = date.toLocaleTimeString('da-DK', { month:"2-digit", timeZone:  timezone }).slice(0,2)
+    const day = date.toLocaleTimeString('da-DK', { day:"2-digit", timeZone:  timezone }).slice(0,2)
+    const hour = date.toLocaleTimeString('da-DK', { hour:"2-digit",timeZone:  timezone })
+    const minute = date.toLocaleTimeString('da-DK', { minute:"2-digit", timeZone:  timezone })
+    return`${year}-${month}-${day}T${hour}:${minute}`;
+  }
+
   /* ---------- Prefill når activity hentes ---------- */
   useEffect(() => {
     if (!activity) return;
 
+    const startDate = dateToTimezone(new Date(activity.startUtc), 'Europe/Copenhagen')
+    const endDate = dateToTimezone(new Date(activity.endUtc), 'Europe/Copenhagen')
+    
     setTitle(activity.title);
     setType(activity.tag ?? "training");
-    setStart(activity.startUtc.slice(0, 16));
-    setEnd(activity.endUtc.slice(0, 16));
+    setStart(startDate);
+    setEnd(endDate);
     setImage(activity.image ?? "");
     setLocation(activity.address ?? "");
     setDescription(activity.description ?? "");
@@ -105,7 +117,7 @@ export default function UpdateActivityForm() {
       isRecurring,
       ...(isRecurring && { rrule: "FREQ=WEEKLY" }),
     };
-    console.log("SENDER: " + updatedActivity);
+    console.log("SENDER: ", updatedActivity);
 
     try {
       await updateActivity(updatedActivity).unwrap();
