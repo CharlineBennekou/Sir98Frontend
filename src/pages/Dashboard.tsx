@@ -79,8 +79,16 @@ export default function Dashboard() {
 
             <span className="im-menu-label">{item.label}</span>
           </div>
+          
+          
         ))}
       </div>
+      <button
+            type="button"
+            onClick={() => window.location.href = "/account-settings"}
+        >
+            administer notifikationer
+        </button>
     </div>
     </div>
     </>
