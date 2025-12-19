@@ -1,11 +1,11 @@
 // src/pages/AccountSettings.tsx
 import AppHeader from "../components/layout/AppHeader";
 import NotificationSettings from "../components/Notifications/NotificationSettings";
+import { isAuthenticated } from "../components/users/IsAuthenticated";
 import "./../styles/AboutUsStyle.css";
-
 export default function AccountSettings() {
   // TEMP until authentication exists
-  const userId = "chokodanika@gmail.com";
+  const userId = isAuthenticated() ? String(localStorage.getItem("Email")) : "userId";
 
   return (
     <>

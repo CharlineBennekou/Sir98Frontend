@@ -1,14 +1,12 @@
 import React from "react";
 import { subscribeAndBuildDto, getCurrentPushSubscription } from "../Notifications/PushHelper";
 import {useUpsertPushSubscriptionMutation,useDeletePushSubscriptionMutation} from "../../store/apis/api"; // adjust path
-
 type NotificationSettingsProps = { userId: string };
 type NotificationStatus = "unsupported" | "default" | "granted" | "denied";
 
 export default function NotificationSettings({ userId }: NotificationSettingsProps) {
   const [isWorking, setIsWorking] = React.useState(false);
   const [status, setStatus] = React.useState<NotificationStatus>("default");
-
   const [upsertPushSubscription] = useUpsertPushSubscriptionMutation();
   const [deletePushSubscription] = useDeletePushSubscriptionMutation();
 
