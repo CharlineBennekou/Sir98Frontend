@@ -105,7 +105,7 @@ export default function CreateInstructorForm() {
 
         <form className="create-activity-form" onSubmit={handleSubmit}>
           <label>
-            Navn
+            Navn *
             <input
               type="text"
               value={firstName}

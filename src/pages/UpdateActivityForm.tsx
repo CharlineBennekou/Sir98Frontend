@@ -191,12 +191,12 @@ export default function UpdateActivityForm() {
       <div className="create-activity-container">
         <form className="create-activity-form" onSubmit={handleSubmit}>
           <label>
-            Titel
+            Titel *
             <input value={title} onChange={(e) => setTitle(e.target.value)} />
           </label>
 
           <label>
-            Type
+            Type *
             <select value={type} onChange={(e) => setType(e.target.value)}>
               <option value="training">Træning</option>
               <option value="events">Begivenhed</option>
@@ -221,12 +221,12 @@ export default function UpdateActivityForm() {
           )}
 
           <label>
-            Start tidspunkt
+            Start tidspunkt *
             <input type="datetime-local" value={start} onChange={(e) => setStart(e.target.value)} />
           </label>
 
           <label>
-            Slut tidspunkt
+            Slut tidspunkt *
             <input type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} />
           </label>
 
