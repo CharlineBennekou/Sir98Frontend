@@ -42,6 +42,8 @@ export class LoginComp extends React.Component {
                 localStorage.setItem("JWToken", token);
                 const role = lines[1]
                 localStorage.setItem("Role",role);
+                const email = lines[2]
+                localStorage.setItem("Email",email);
                 this.setState({ submitted: true });
                 toast.success(`Logget ind`, {
                     iconTheme: {
