@@ -21,6 +21,8 @@ export default function CreateActivityForm() {
 
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
 
+  const [recurringInterval, setRecurringInterval] = useState<1 | 2>(1);
+
   const navigate = useNavigate();
 
   const [createActivity, { isLoading, isSuccess, isError }] =
@@ -117,7 +119,9 @@ export default function CreateActivityForm() {
       instructorids: instructorsIDs,
       tag: type,
       isRecurring,
-      rrule: isRecurring ? `FREQ=WEEKLY` : undefined,
+      rrule: isRecurring
+      ? `FREQ=WEEKLY;INTERVAL=${recurringInterval}`
+      : undefined,
     };
 
     console.log("SENDER:", newActivity);
@@ -158,12 +162,12 @@ export default function CreateActivityForm() {
         <form className="create-activity-form" onSubmit={handleSubmit}>
           {/* Almindelige felter */}
           <label>
-            Titel
+            Titel *
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
           </label>
 
           <label>
-            Type
+            Type *
             <select value={type} onChange={(e) => setType(e.target.value)}>
               <option value="training">Træning</option>
               <option value="events">Begivenhed</option>
@@ -175,18 +179,25 @@ export default function CreateActivityForm() {
             <input type="file" accept="image/png, image/jpeg, image/svg+xml, image/tiff, image/avif" onChange={(e) => postImage(e.target.files)} />
           </label>
 
+          {image && (
+            <div>
+              <p>Nuvarande billede:</p>
+              <img src={image} alt="Instruktør" style={{ width: "150px", borderRadius: "8px" }} />
+            </div>
+          )}
+
 
           <label>
-            Start tidspunkt
+            Start tidspunkt *
             <input type="datetime-local" value={start} onChange={(e) => setStart(e.target.value)} required />
           </label>
 
           <label>
-            Slut tidspunkt
+            Slut tidspunkt *
             <input type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} required />
           </label>
 
-          <label
+         <label
             style={{
               display: "flex",
               flexDirection: "row",
@@ -196,15 +207,28 @@ export default function CreateActivityForm() {
               cursor: "pointer"
             }}
           >
-            <input
-              type="checkbox"
-              checked={isRecurring}
-              onChange={(e) => setIsRecurring(e.target.checked)}
-              style={{ transform: "scale(1.2)" }} // gør den lidt pænere & tydeligere
-            />
+              <input
+                type="checkbox"
+                checked={isRecurring}
+                onChange={(e) => setIsRecurring(e.target.checked)}
+                style={{ transform: "scale(1.2)", accentColor: "#7ad51288" }}
+              />
+              <span>Aktiviteten gentages</span>
+            </label>
+            <label
+            >
+            {isRecurring && (
+              <select
+                value={recurringInterval}
+                onChange={(e) => setRecurringInterval(Number(e.target.value) as 1 | 2)}
+                style={{ width: "220px" }}
+              >
+                <option value={1}>Hver uge</option>
+                <option value={2}>Hver anden uge</option>
+              </select>
+            )}
+          </label>
 
-            <span>Aktiviteten gentages hver uge</span>
-          </label>  
 
           <label>
             Lokation

@@ -111,7 +111,7 @@ export default function UpdateInstructorForm() {
       <div className="create-activity-container">
         <form className="create-activity-form" onSubmit={handleSubmit}>
           <label>
-            Navn
+            Navn *
             <input
               type="text"
               value={firstName}
