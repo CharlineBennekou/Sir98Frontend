@@ -31,9 +31,9 @@ export default defineConfig({
       },
 
       // Extra options for the injectManifest build (what to precache)
-      injectManifest: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
-      },
+      //injectManifest: {
+     //   globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+      //},
 
       devOptions: {
         enabled: true,                   
