@@ -63,7 +63,7 @@ export default function Dashboard() {
       <div className="im-menu-wrapper">
     
 
-    <h2 className="im-Welcome-title">Velkommen til SIR98 Appen!</h2>
+    <h2 className="im-Welcome-title">Velkommen til SIR98 Appen! version 1.0.0</h2>
 
     <div className="im-menu-wrapper">
       <div className="im-menu-grid">
