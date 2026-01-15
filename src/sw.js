@@ -16,7 +16,14 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activating...');
+    event.waitUntil( // When service worker activates, clear old caches
+    (async () => {
+      const cacheKeys = await caches.keys();
+      await Promise.all(cacheKeys.map((key) => caches.delete(key)));
+    })()
+  );
 });
+  
 
 self.addEventListener('push', (event) => {
   console.log('Push event received', event);
