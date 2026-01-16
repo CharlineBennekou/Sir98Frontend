@@ -24,7 +24,7 @@ function App() {
       />
       <main>
           <Routes>
-          <Route path="/" element={<Dashboard />} /> --- Nummer 1 ---
+          <Route index element={<Dashboard />} /> --- Nummer 1 ---
           <Route path="/create" element={<CreateActivityForm />} />
           <Route path="/aktiviteter" element={<ActivityList />} />
           <Route path="/instructor" element={<InstructorList />} />
