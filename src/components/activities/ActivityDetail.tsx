@@ -36,6 +36,7 @@ export default function DialogBox({ activity, open, onClose }: Props) {
   const end = activity.endUtc ? new Date(activity.endUtc) : null;
 
   const imageUrl = activity.image?.trim() ? activity.image : DefaultImage;
+  const encodedStart = encodeURIComponent(activity.originalStartUtc);
 
   /* ---------- Delete handler ---------- */
   async function handleDelete() {
@@ -46,7 +47,7 @@ export default function DialogBox({ activity, open, onClose }: Props) {
     if (!confirmDelete) return;
 
     try {
-      await deleteActivity(activity.id).unwrap();
+      await deleteActivity(activity.activityId).unwrap();
       onClose();
       navigate("/");
     } catch (err) {
@@ -89,12 +90,22 @@ export default function DialogBox({ activity, open, onClose }: Props) {
             (localStorage.getItem("Role") === "Instructor") ? 
             <div className="activity-detail-actions">
               <Link
-                to={`/update-activity/${activity.id}`}
+                to={`/update-activity/${activity.activityId}`}
                 className="submit-btn"
                 onClick={onClose}
               >
                 Opdater aktivitet
               </Link>
+
+              <button
+                className="submit-btn"
+                onClick={() => {
+                  navigate(`/update-occurrence/${activity.activityId}?originalStartUtc=${encodedStart}`);
+                  onClose();
+                }}
+              >
+                Opdater enkel aktivitet
+              </button>
 
               <button
                 onClick={handleDelete}

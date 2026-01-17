@@ -5,13 +5,14 @@ import type { PushSubscriptionDto, DeletePushSubscriptionArgs } from '../../type
 import type { Activity } from '../../types/activity';
 import type { CreateActivityDTO, UpdateActivityDTO } from '../../types/activityDTO';
 import type { Instructor } from '../../types/instructors';
+import type { EditOccurrenceDto } from '../../types/newEditOccurrenceDTO';
 
 export const api = createApi({
   reducerPath: 'api',
 
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/',
-    //baseUrl:'https://localhost:7275/api/',
+    //baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/',
+    baseUrl:'https://localhost:7275/api/',
  
   }),
 
@@ -43,32 +44,37 @@ export const api = createApi({
       },
 
       transformResponse: (response: any) => {
-        console.log('API raw response:', response);
+      const list: any[] = Array.isArray(response) ? response : [];
 
-        const list: any[] = Array.isArray(response) ? response : [];
-        return list.map((o) => ({
-          id: o.activityId,
-          originalStartUtc: o.originalStartUtc,
-          startUtc: o.startUtc,
-          endUtc: o.endUtc,
-          title: o.title,
-          address: o.address,
-          image: o.image ?? null,
-          link: o.link ?? null,
-          description: o.description ?? null,
-          instructors:
-            o.instructors?.map((inst: any) => ({
-              id: inst.id,
-              email: inst.email,
-              number: inst.number,
-              firstName: inst.firstName,
-              image: inst.image,
-            })) ?? [],
-          tag: o.tag ?? null,
-          cancelled: o.cancelled,
-          isSubscribed: o.isSubscribed,
-        }));
-      },
+      return list.map((o) => ({
+        // 🔑 unik identitet for EN session
+        id: `${o.activityId}_${o.originalStartUtc}`,
+
+        // 🧠 behold begge dele eksplicit
+        activityId: o.activityId,
+        originalStartUtc: o.originalStartUtc,
+
+        startUtc: o.startUtc,
+        endUtc: o.endUtc,
+        title: o.title,
+        address: o.address,
+        image: o.image ?? null,
+        link: o.link ?? null,
+        description: o.description ?? null,
+        instructors:
+          o.instructors?.map((inst: any) => ({
+            id: inst.id,
+            email: inst.email,
+            number: inst.number,
+            firstName: inst.firstName,
+            image: inst.image,
+          })) ?? [],
+        tag: o.tag ?? null,
+        cancelled: o.cancelled,
+        isSubscribed: o.isSubscribed,
+      }));
+    },
+
 
       providesTags: (result) =>
         result
@@ -236,6 +242,52 @@ export const api = createApi({
       invalidatesTags: (_r, _e, id) => [{ type: 'Instructor', id }],
     }),
 
+
+    // ---------- OCCURRENCE ENDPOINTS ----------
+
+    fetchOccurrence: builder.query<ActivityOccurrence, { activityId: number; originalStartUtc: string }>({
+      query: ({ activityId, originalStartUtc }) => `activity-occurrences/${activityId}/${encodeURIComponent(originalStartUtc)}`,
+      transformResponse: (o: any) => ({
+        id: `${o.activityId}_${o.originalStartUtc}`,
+        activityId: o.activityId,
+        originalStartUtc: o.originalStartUtc,
+        startUtc: o.startUtc,
+        endUtc: o.endUtc,
+        title: o.title,
+        address: o.address,
+        image: o.image ?? null,
+        link: o.link ?? null,
+        description: o.description ?? null,
+        instructors:
+          o.instructors?.map((inst: any) => ({
+            id: inst.id,
+            email: inst.email,
+            number: inst.number,
+            firstName: inst.firstName,
+            image: inst.image,
+          })) ?? [],
+        tag: o.tag ?? null,
+        cancelled: o.cancelled,
+        isSubscribed: o.isSubscribed,
+      }),
+      providesTags: (_r, _e, { activityId, originalStartUtc }) => [
+        { type: "Occurrences" as const, id: `${activityId}_${originalStartUtc}` },
+      ],
+    }),
+
+    upsertOccurrence: builder.mutation<void, EditOccurrenceDto>({
+      query: (body) => ({
+        url: 'ChangedActivity',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: (_r, _e, { activityId, originalStartUtc }) => [
+        { type: 'Occurrences', id: `${activityId}_${originalStartUtc}` },
+        { type: 'Occurrences', id: 'LIST' },
+      ],
+    }),
+
+
   }),
 });
 
@@ -261,4 +313,9 @@ export const {
   useCreateInstructorMutation,
   useUpdateInstructorMutation,
   useDeleteInstructorMutation,
+
+  // Occurrences
+  useFetchOccurrenceQuery,
+  useUpsertOccurrenceMutation,
+
 } = api;
