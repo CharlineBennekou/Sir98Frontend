@@ -1,54 +1,35 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./../styles/CreateActivityFormStyle.css";
 import AppHeader from "../components/layout/AppHeader";
 import { FiX } from "react-icons/fi";
-import {
-  useUpsertOccurrenceMutation,
-  useFetchInstructorsQuery,
-  useFetchOccurrenceQuery,
-} from "../store/apis/api";
+import { useUpsertOccurrenceMutation, useFetchInstructorsQuery } from "../store/apis/api";
 import type { EditOccurrenceDto } from "../types/newEditOccurrenceDTO";
+import type { ActivityOccurrence } from "../types/activityOccurrence";
 
 type Props = {
-  activityId: number;
-  originalStartUtc: string;
+  activity: ActivityOccurrence; // hele aktiviteten sendes som prop
   open: boolean;
   onClose: () => void;
 };
 
-export default function UpdateOccurrenceForm({ activityId, originalStartUtc, open, onClose }: Props) {
-  const { data: occurrence, isLoading: isLoadingOccurrence } = useFetchOccurrenceQuery({ activityId, originalStartUtc });
-  const { data: instructors = [], isLoading: instructorsLoading } = useFetchInstructorsQuery();
+export default function UpdateOccurrenceForm({ activity, open, onClose }: Props) {
+  const { data: instructors = [] } = useFetchInstructorsQuery();
   const [upsertOccurrence, { isLoading: isUpdating }] = useUpsertOccurrenceMutation();
 
-  // Hooks skal initialiseres uanset om open er true/false
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState("training");
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
-  const [link, setLink] = useState("");
-  const [cancelled, setCancelled] = useState(false);
-  const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
-
-  // Prefill felter når occurrence hentes
-  useEffect(() => {
-    if (!occurrence) return;
-
-    setTitle(occurrence.title);
-    setType(occurrence.tag ?? "training");
-    setStart(occurrence.startUtc.slice(0, 16));
-    setEnd(occurrence.endUtc.slice(0, 16));
-    setLocation(occurrence.address ?? "");
-    setDescription(occurrence.description ?? "");
-    setLink(occurrence.link ?? "");
-    setCancelled(occurrence.cancelled ?? false);
-    setSelectedInstructors(occurrence.instructors?.map(i => String(i.id)) || [""]);
-  }, [occurrence]);
+  // Prefyld felter direkte fra props
+  const [title, setTitle] = useState(activity.title);
+  const [type, setType] = useState(activity.tag ?? "training");
+  const [start, setStart] = useState(activity.startUtc.slice(0,16));
+  const [end, setEnd] = useState(activity.endUtc.slice(0,16));
+  const [location, setLocation] = useState(activity.address ?? "");
+  const [description, setDescription] = useState(activity.description ?? "");
+  const [link, setLink] = useState(activity.link ?? "");
+  const [cancelled, setCancelled] = useState(activity.cancelled ?? false);
+  const [selectedInstructors, setSelectedInstructors] = useState(
+    activity.instructors?.map(i => String(i.id)) || [""]
+  );
 
   if (!open) return null;
-  if (isLoadingOccurrence) return <p>Henter session...</p>;
 
   function updateInstructor(index: number, value: string) {
     const list = [...selectedInstructors];
@@ -73,8 +54,8 @@ export default function UpdateOccurrenceForm({ activityId, originalStartUtc, ope
     e.preventDefault();
 
     const dto: EditOccurrenceDto = {
-      activityId,
-      originalStartUtc,
+      activityId: activity.activityId,
+      originalStartUtc: activity.startUtc,
       startUtc: new Date(start).toISOString(),
       endUtc: new Date(end).toISOString(),
       title,

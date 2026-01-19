@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import DefaultImage from "../../assets/placeHolderGreyPic.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDeleteActivityMutation } from "../../store/apis/api";
-import UpdateOccurrenceForm from "../../pages/UpdateOccurrenceForm";
+
 
 type Props = {
   activity: ActivityOccurrence;
@@ -47,8 +47,6 @@ export default function DialogBox({ activity, open, onClose }: Props) {
     }
   }
 
-  const encodedStart = encodeURIComponent(activity.originalStartUtc);
-
   return (
     <>
       <div className="dialog-overlay" onClick={onClose}>
@@ -86,10 +84,13 @@ export default function DialogBox({ activity, open, onClose }: Props) {
                   Opdater aktivitet
                 </Link>
 
-                {/* Opdater enkelt session */}
+                {/* Opdater enkel session – send activity via state */}
                 <button
                   className="submit-btn"
-                  onClick={() => setIsUpdateOccurrenceOpen(true)}
+                  onClick={() => {
+                    onClose(); // luk dialogen
+                    navigate(`/update-occurrence`, { state: { activity } });
+                  }}
                 >
                   Opdater enkel aktivitet
                 </button>
@@ -153,16 +154,6 @@ export default function DialogBox({ activity, open, onClose }: Props) {
           </div>
         </div>
       </div>
-
-      {/* UpdateOccurrenceForm – vises som overlay/dialog uden hook-fejl */}
-      {isUpdateOccurrenceOpen && (
-        <UpdateOccurrenceForm
-          activityId={activity.activityId}
-          originalStartUtc={activity.originalStartUtc}
-          open={isUpdateOccurrenceOpen}
-          onClose={() => setIsUpdateOccurrenceOpen(false)}
-        />
-      )}
     </>
   );
 }

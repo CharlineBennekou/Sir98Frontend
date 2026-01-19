@@ -11,6 +11,7 @@ import { RegisterComp } from "./components/users/Register";
 import CreateInstructorForm from './pages/CreateInstructorForm';
 import UpdateInstructorForm from './pages/UpdateInstructorForm';
 import UpdateActivityForm from './pages/UpdateActivityForm';
+import UpdateOccurrencePage from './pages/UpdateOccurrencePage';
 import AboutUs from './pages/AboutUs';
 import ActivateCodePage from './pages/ActivateCode';
 import Logout from './pages/Logout';
@@ -35,6 +36,7 @@ function App() {
           <Route path="/create-instructor" element={<CreateInstructorForm />} />
           <Route path="/update-instructor/:id" element={<UpdateInstructorForm />} />
           <Route path="/update-activity/:id" element={<UpdateActivityForm />} />
+          <Route path="/update-occurrence" element={<UpdateOccurrencePage />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/code" element={<ActivateCodePage />} />
           <Route path="/account-settings" element={<AccountSettings />} />
