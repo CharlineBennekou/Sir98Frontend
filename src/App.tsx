@@ -1,5 +1,6 @@
 import './App.css'
 import { Routes, Route } from 'react-router-dom';
+
 import ActivityList from './pages/ActivityList'
 import CreateActivityForm from './pages/CreateActivityForm';
 import Dashboard from './pages/Dashboard';
@@ -10,8 +11,6 @@ import { RegisterComp } from "./components/users/Register";
 import CreateInstructorForm from './pages/CreateInstructorForm';
 import UpdateInstructorForm from './pages/UpdateInstructorForm';
 import UpdateActivityForm from './pages/UpdateActivityForm';
-import UpdateOccurrenceForm from './pages/UpdateOccurrenceForm'; // <-- Tilføj import
-import UpdateOccurrenceFormWrapper from './wrapper/UpdateOccurrenceFormWrapper';
 import AboutUs from './pages/AboutUs';
 import ActivateCodePage from './pages/ActivateCode';
 import Logout from './pages/Logout';
@@ -19,14 +18,15 @@ import AccountSettings from './pages/AccountSettings';
 
 function App() {
   return (
-    <div className="app-root" style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>
-      <Toaster
-        position="bottom-center"
-        reverseOrder={false}
-      />
+    <div
+      className="app-root"
+      style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}
+    >
+      <Toaster position="bottom-center" reverseOrder={false} />
+
       <main>
         <Routes>
-          <Route path="/" element={<Dashboard />} /> 
+          <Route path="/" element={<Dashboard />} />
           <Route path="/create" element={<CreateActivityForm />} />
           <Route path="/aktiviteter" element={<ActivityList />} />
           <Route path="/instructor" element={<InstructorList />} />
@@ -35,10 +35,6 @@ function App() {
           <Route path="/create-instructor" element={<CreateInstructorForm />} />
           <Route path="/update-instructor/:id" element={<UpdateInstructorForm />} />
           <Route path="/update-activity/:id" element={<UpdateActivityForm />} />
-          <Route
-            path="/update-occurrence/:activityId"
-            element={<UpdateOccurrenceFormWrapper />}
-          />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/code" element={<ActivateCodePage />} />
           <Route path="/account-settings" element={<AccountSettings />} />
