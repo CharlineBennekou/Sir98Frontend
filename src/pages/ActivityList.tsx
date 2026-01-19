@@ -3,15 +3,14 @@ import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom';
 import ActivityCard from '../components/activities/ActivityCard'
 // Styling
-import { useFetchOccurrencesQuery } from '../store/apis/api';
+import { useFetchFutureOccurrencesQuery } from '../store/apis/api';
 import type { ActivityOccurrence } from '../types/activityOccurrence';
 import './../styles/ActivityListStyle.css';
 // Øverste header-komponent
 import AppHeader from "../components/layout/AppHeader";
-import { isAuthenticated } from '../components/users/IsAuthenticated';
+//import { isAuthenticated } from '../components/users/IsAuthenticated';
 import { LuSquarePlus } from 'react-icons/lu';
 
-// 🔍 Mapping af URL-typer → hvilke tags der tæller som training/events
 const TYPE_TAG_MAP: Record<string, string[]> = {
   training: ['træning', 'træninger', 'training'],
   events: ['begivenhed', 'begivenheder', 'event', 'events'],
@@ -23,9 +22,9 @@ export default function ActivityList() {
   const [daysForward, setDaysForward] = useState<number>(14); // default 7 dage
   //const userId = localStorage.getItem("Email");
   const { data: occurrences = [], isLoading, isError } =
-  useFetchOccurrencesQuery(
-    { days: daysForward, filter: null,  userId: isAuthenticated() ? String(localStorage.getItem("Email")) : "userId" },
-    { refetchOnMountOrArgChange: true }
+  useFetchFutureOccurrencesQuery(
+    // { days: daysForward, filter: null,  userId: isAuthenticated() ? String(localStorage.getItem("Email")) : "userId" },
+    // { refetchOnMountOrArgChange: true }
   );
 
   console.log({ isLoading, isError, occurrences, daysForward });

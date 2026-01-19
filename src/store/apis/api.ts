@@ -42,6 +42,9 @@ export const api = createApi({
         };
       },
 
+      
+
+
       transformResponse: (response: any) => {
         console.log('API raw response:', response);
 
@@ -81,6 +84,13 @@ export const api = createApi({
             ]
           : [{ type: 'Occurrences' as const, id: 'LIST' }],
     }),
+
+    fetchFutureOccurrences: builder.query<ActivityOccurrence[], void>({
+  query: () => ({
+    url: 'activity-occurrences/future',
+    method: 'GET',
+  }),
+}),
 
     // POST /ActivitySubscription
     subscribeToOccurrence: builder.mutation<void, ActivitySubscriptionPostDTO>({
@@ -242,6 +252,8 @@ export const api = createApi({
 export const {
   // Occurrences
   useFetchOccurrencesQuery,
+  useFetchFutureOccurrencesQuery,
+
   useSubscribeToOccurrenceMutation: useSubscribeToOccurrence,
   useUnsubscribeFromOccurrenceMutation: useUnsubscribeFromOccurrence,
   // Push
@@ -254,6 +266,7 @@ export const {
   useCreateActivityMutation,
   useUpdateActivityMutation,
   useDeleteActivityMutation,
+
 
   // Instructor
   useFetchInstructorsQuery,
