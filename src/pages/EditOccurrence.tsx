@@ -1,159 +1,199 @@
-import React, { useState } from 'react';
-import { useUpsertOccurrenceMutation } from "../store/apis/api"; 
+import { useState, useEffect } from "react";
+import "../styles/CreateActivityFormStyle.css";
+import AppHeader from "../components/layout/AppHeader";
+import { FiX } from "react-icons/fi";
+import { useFetchInstructorsQuery, useUpsertOccurrenceMutation } from "../store/apis/api";
 
 import type { EditOccurrenceDto } from "../types/newEditOccurrenceDTO";
 import type { ActivityOccurrence } from "../types/activityOccurrence";
 
 interface EditOccurrenceProps {
   activity: ActivityOccurrence;
-  onSaved?: () => void; // optional callback efter save
+  onSaved?: () => void;
 }
 
-const EditOccurrence: React.FC<EditOccurrenceProps> = ({ activity, onSaved }) => {
-  const [upsertOccurrence, { isLoading }] = useUpsertOccurrenceMutation();
+export default function EditOccurrence({ activity, onSaved }: EditOccurrenceProps) {
+  const { data: instructors = [], isLoading: instructorsLoading } =
+    useFetchInstructorsQuery();
 
-  // Local state for form fields
-  const [title, setTitle] = useState(activity.title);
-  const [description, setDescription] = useState(activity.description ?? '');
-  const [address, setAddress] = useState(activity.address ?? '');
-  const [tag, setTag] = useState(activity.tag ?? '');
-  const [startUtc, setStartUtc] = useState(activity.startUtc);
-  const [endUtc, setEndUtc] = useState(activity.endUtc);
-  const [isCancelled, setIsCancelled] = useState(activity.cancelled);
-  const [selectedInstructorIds, setSelectedInstructorIds] = useState<number[]>(
-    activity.instructors.map((i) => i.id)
-  );
+  const [upsertOccurrence, { isLoading }] =
+    useUpsertOccurrenceMutation();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  /* ---------- State (samme logik som før) ---------- */
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("training");
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [cancelled, setCancelled] = useState(false);
+  const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
+
+  /* ---------- Prefill ---------- */
+  useEffect(() => {
+    setTitle(activity.title);
+    setType(activity.tag ?? "training");
+    setStart(activity.startUtc.slice(0, 16));
+    setEnd(activity.endUtc.slice(0, 16));
+    setLocation(activity.address ?? "");
+    setDescription(activity.description ?? "");
+    setCancelled(activity.cancelled);
+
+    setSelectedInstructors(
+      activity.instructors.length > 0
+        ? activity.instructors.map(i => String(i.id))
+        : [""]
+    );
+  }, [activity]);
+
+  /* ---------- Instructor helpers ---------- */
+  function updateInstructor(index: number, value: string) {
+    const list = [...selectedInstructors];
+    list[index] = value;
+    setSelectedInstructors(list);
+  }
+
+  function addInstructor() {
+    setSelectedInstructors(prev => [...prev, ""]);
+  }
+
+  function removeInstructor(index: number) {
+    setSelectedInstructors(prev => prev.filter((_, i) => i !== index));
+  }
+
+  function availableOptions(currentIndex: number) {
+    const usedIds = selectedInstructors.filter(
+      (id, i) => id !== "" && i !== currentIndex
+    );
+    return instructors.filter(inst => !usedIds.includes(String(inst.id)));
+  }
+
+  /* ---------- Submit (UÆNDRET LOGIK) ---------- */
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    const payload: EditOccurrenceDto = {
+    const dto: EditOccurrenceDto = {
       activityId: activity.activityId,
       originalStartUtc: activity.originalStartUtc,
-      startUtc,
-      endUtc,
+      startUtc: new Date(start).toISOString(),
+      endUtc: new Date(end).toISOString(),
       title,
       description: description || null,
-      address: address || null,
-      tag: tag || null,
-      isCancelled,
-      instructorIds: selectedInstructorIds,
+      address: location || null,
+      tag: type || null,
+      isCancelled: cancelled,
+      instructorIds: selectedInstructors.filter(Boolean).map(Number),
     };
 
     try {
-      await upsertOccurrence(payload).unwrap();
-      if (onSaved) onSaved();
-      alert('Session saved!');
+      await upsertOccurrence(dto).unwrap();
+      alert("Session opdateret!");
+      onSaved?.();
     } catch (err) {
       console.error(err);
-      alert('Failed to save session.');
+      alert("Fejl ved opdatering");
     }
-  };
+  }
 
-  const toggleInstructor = (id: number) => {
-    setSelectedInstructorIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
-  };
-
+  /* ---------- RENDER (SAMME LOOK SOM UpdateActivityForm) ---------- */
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-4 space-y-4">
-      <div>
-        <label className="block font-semibold">Title</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 w-full"
-          required
-        />
-      </div>
+    <>
+      <AppHeader title="Opdater Session" />
+      <div style={{ marginTop: 70 }} />
 
-      <div>
-        <label className="block font-semibold">Description</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="border p-2 w-full"
-        />
-      </div>
+      <div className="create-activity-container">
+        <form className="create-activity-form" onSubmit={handleSubmit}>
+          <label>
+            Titel *
+            <input value={title} onChange={(e) => setTitle(e.target.value)} />
+          </label>
 
-      <div>
-        <label className="block font-semibold">Address</label>
-        <input
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          className="border p-2 w-full"
-        />
-      </div>
+          <label>
+            Type *
+            <select value={type} onChange={(e) => setType(e.target.value)}>
+              <option value="training">Træning</option>
+              <option value="events">Begivenhed</option>
+            </select>
+          </label>
 
-      <div>
-        <label className="block font-semibold">Tag</label>
-        <input
-          type="text"
-          value={tag}
-          onChange={(e) => setTag(e.target.value)}
-          className="border p-2 w-full"
-        />
-      </div>
+          <label>
+            Start tidspunkt *
+            <input
+              type="datetime-local"
+              value={start}
+              onChange={(e) => setStart(e.target.value)}
+            />
+          </label>
 
-      <div>
-        <label className="block font-semibold">Start UTC</label>
-        <input
-          type="datetime-local"
-          value={startUtc.slice(0, 16)}
-          onChange={(e) => setStartUtc(e.target.value)}
-          className="border p-2 w-full"
-          required
-        />
-      </div>
+          <label>
+            Slut tidspunkt *
+            <input
+              type="datetime-local"
+              value={end}
+              onChange={(e) => setEnd(e.target.value)}
+            />
+          </label>
 
-      <div>
-        <label className="block font-semibold">End UTC</label>
-        <input
-          type="datetime-local"
-          value={endUtc.slice(0, 16)}
-          onChange={(e) => setEndUtc(e.target.value)}
-          className="border p-2 w-full"
-          required
-        />
-      </div>
+          <label>
+            Lokation
+            <input value={location} onChange={(e) => setLocation(e.target.value)} />
+          </label>
 
-      <div>
-        <label className="block font-semibold">Cancelled</label>
-        <input
-          type="checkbox"
-          checked={isCancelled}
-          onChange={(e) => setIsCancelled(e.target.checked)}
-        />
-      </div>
+          <label>
+            Instruktører
+            {selectedInstructors.map((value, index) => (
+              <div key={index} style={{ display: "flex", gap: 12 }}>
+                {instructorsLoading ? (
+                  <p>Henter...</p>
+                ) : (
+                  <select
+                    value={value}
+                    onChange={(e) => updateInstructor(index, e.target.value)}
+                  >
+                    <option value="">Vælg instruktør</option>
+                    {availableOptions(index).map(inst => (
+                      <option key={inst.id} value={inst.id}>
+                        {inst.firstName}
+                      </option>
+                    ))}
+                  </select>
+                )}
 
-      <div>
-        <label className="block font-semibold">Instructors</label>
-        <div className="space-y-1">
-          {activity.instructors.map((instr) => (
-            <label key={instr.id} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={selectedInstructorIds.includes(instr.id)}
-                onChange={() => toggleInstructor(instr.id)}
-              />
-              <span>{instr.firstName}</span>
-            </label>
-          ))}
-        </div>
-      </div>
+                {selectedInstructors.length > 1 && (
+                  <button type="button" onClick={() => removeInstructor(index)}>
+                    <FiX />
+                  </button>
+                )}
+              </div>
+            ))}
 
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        {isLoading ? 'Saving...' : 'Save Changes'}
-      </button>
-    </form>
+            <button type="button" onClick={addInstructor}>
+              + Tilføj instruktør
+            </button>
+          </label>
+
+          <label>
+            Beskrivelse
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              checked={cancelled}
+              onChange={(e) => setCancelled(e.target.checked)}
+            />
+            Aflyst
+          </label>
+
+          <button className="submit-btn" disabled={isLoading}>
+            {isLoading ? "Opdaterer..." : "Opdater Session"}
+          </button>
+        </form>
+      </div>
+    </>
   );
-};
-
-export default EditOccurrence;
+}
