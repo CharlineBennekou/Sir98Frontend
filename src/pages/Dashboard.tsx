@@ -83,12 +83,12 @@ export default function Dashboard() {
           
         ))}
       </div>
-      <button
+      {/* <button
             type="button"
             onClick={() => window.location.href = "/account-settings"}
         >
             administer notifikationer
-        </button>
+        </button> */}
     </div>
     </div>
     </>
