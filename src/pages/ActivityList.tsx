@@ -136,7 +136,8 @@ export default function ActivityList() {
     }
 
       {/* Dropdown til antal dage frem */}
-      <div style={{ margin: '1rem 0' }}>
+     
+      {/* <div style={{ margin: '1rem 0' }}>
         <label htmlFor="days-forward" style={{ marginRight: 10 }}>Vis {pageTitle.toLowerCase()} i de næste:</label>
         <select
           id="days-forward"
@@ -148,6 +149,27 @@ export default function ActivityList() {
           <option value={30}>30 dage</option>
         </select>
       </div>
+       */}
+
+    {typeParam !== "events" && (
+     <div style={{ margin: '1rem 0' }}>
+    <label htmlFor="days-forward" style={{ marginRight: 10 }}>
+      Vis {pageTitle.toLowerCase()} i de næste:
+    </label>
+
+    <select
+      id="days-forward"
+      value={daysForward}
+      onChange={(e) => setDaysForward(Number(e.target.value))}
+    >
+      <option value={7}>7 dage</option>
+      <option value={14}>14 dage</option>
+      <option value={30}>30 dage</option>
+    </select>
+  </div>
+)}
+
+
 
       {sortedDates.length === 0 ? (
         // Hvis ingen aktiviteter matcher filtreringen
