@@ -21,6 +21,7 @@ export class LoginComp extends React.Component {
         try {
             const response = await fetch(
                 'https://api.mnoergaard.dk/api/User/Login',
+                //'https://localhost:7275/api/User/Login',
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

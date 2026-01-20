@@ -12,7 +12,18 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://api.mnoergaard.dk/api/',
     //baseUrl:'https://localhost:7275/api/',
- 
+
+    //taken from official website - https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("JWToken");
+
+      // If we have a token set in state, let's assume that we should be passing it.
+      if (token) {
+        headers.set('authorization', `${token}`)
+      }
+
+      return headers
+    }
   }),
 
   tagTypes: ['Occurrences', 'Activity', 'Instructor'],
