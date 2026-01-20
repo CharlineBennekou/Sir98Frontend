@@ -52,6 +52,18 @@ export default function Dashboard() {
       icon: <FiInfo />,
       onClick: () => navigate("/aboutus"),
       color: "#4d7b26ff",
+    },
+    {
+      label: "Konto indstillinger",
+      icon: null,
+      onClick: () => navigate("/account-settings"),
+      color: "rgb(226, 78, 226)",
+    },
+    {
+      label: "Installations guide",
+      icon: null,
+      onClick: () => navigate("/installation-guide"),
+      color: "rgb(71, 136, 210)",
     }
 
 
@@ -83,12 +95,6 @@ export default function Dashboard() {
           
         ))}
       </div>
-      <button
-            type="button"
-            onClick={() => window.location.href = "/account-settings"}
-        >
-            administer notifikationer
-        </button>
     </div>
     </div>
     </>
