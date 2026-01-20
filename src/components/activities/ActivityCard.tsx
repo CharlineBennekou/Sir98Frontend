@@ -33,7 +33,6 @@ export default function ActivityCard({ activity }: Props) {
 
     // use default if no specific image
     const imageUrl = activity.image?.trim() ? activity.image : DefaultImage;
-    console.log("Activity image URL:", imageUrl);
 
     async function SingleOccurrencePayload(){
        await  PostSubscription(false);

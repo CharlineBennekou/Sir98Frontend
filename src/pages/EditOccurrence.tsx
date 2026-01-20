@@ -3,6 +3,8 @@ import "../styles/CreateActivityFormStyle.css";
 import AppHeader from "../components/layout/AppHeader";
 import { FiX } from "react-icons/fi";
 import { useFetchInstructorsQuery, useUpsertOccurrenceMutation } from "../store/apis/api";
+import { utcIsoToDkDateTimeLocal, dkDateTimeLocalToUtcIso } from "../utils/dateTimeService";
+
 
 import type { EditOccurrenceDto } from "../types/newEditOccurrenceDTO";
 import type { ActivityOccurrence } from "../types/activityOccurrence";
@@ -31,10 +33,11 @@ export default function EditOccurrence({ activity, onSaved }: EditOccurrenceProp
 
   /* ---------- Prefill ---------- */
   useEffect(() => {
+    console.log("Prefilling form with activity:", activity);
     setTitle(activity.title);
     setType(activity.tag ?? "training");
-    setStart(activity.startUtc.slice(0, 16));
-    setEnd(activity.endUtc.slice(0, 16));
+    setStart(utcIsoToDkDateTimeLocal(activity.startUtc));
+    setEnd(utcIsoToDkDateTimeLocal(activity.endUtc));
     setLocation(activity.address ?? "");
     setDescription(activity.description ?? "");
     setCancelled(activity.cancelled);
@@ -75,8 +78,8 @@ export default function EditOccurrence({ activity, onSaved }: EditOccurrenceProp
     const dto: EditOccurrenceDto = {
       id: activity.activityId,
       originalStartUtc: activity.originalStartUtc,
-      startUtc: new Date(start).toISOString(),
-      endUtc: new Date(end).toISOString(),
+      startUtc: dkDateTimeLocalToUtcIso(start),
+      endUtc: dkDateTimeLocalToUtcIso(end),
       title,
       description: description || null,
       address: location || null,

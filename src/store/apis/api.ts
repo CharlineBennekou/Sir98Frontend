@@ -12,7 +12,8 @@ export const api = createApi({
 
   baseQuery: fetchBaseQuery({
     //baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/',
-    baseUrl:'https://localhost:7275/api/',
+    //baseUrl:'https://localhost:7275/api/',
+    baseUrl: 'https://api.mnoergaard.dk/api/'
  
   }),
 

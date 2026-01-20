@@ -30,18 +30,4 @@ export interface ActivityOccurrence {
   isSubscribed: boolean;
 }
 
-// export interface UpdateOccurrenceDTO {
-//   activityId: number;           // ID på aktiviteten
-//   originalStartUtc: string;     // Den originale startdato/tid for sessionen
-//   startUtc: string;             // Ny startdato/tid
-//   endUtc: string;               // Ny slutdato/tid
-//   title: string;
-//   address?: string;
-//   description?: string;
-//   image?: string | null;
-//   link?: string | null;
-//   cancelled?: boolean;
-//   tag?: string | null;
-//   instructorIds?: number[];
-// }
 
