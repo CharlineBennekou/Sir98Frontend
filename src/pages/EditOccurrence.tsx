@@ -73,7 +73,7 @@ export default function EditOccurrence({ activity, onSaved }: EditOccurrenceProp
     e.preventDefault();
 
     const dto: EditOccurrenceDto = {
-      activityId: activity.activityId,
+      id: activity.activityId,
       originalStartUtc: activity.originalStartUtc,
       startUtc: new Date(start).toISOString(),
       endUtc: new Date(end).toISOString(),
@@ -141,6 +141,7 @@ export default function EditOccurrence({ activity, onSaved }: EditOccurrenceProp
 
           <label>
             Instruktører
+            {/* <h6>Husk at tilføje instruktør igen <b/> </h6> */}
             {selectedInstructors.map((value, index) => (
               <div key={index} style={{ display: "flex", gap: 12 }}>
                 {instructorsLoading ? (

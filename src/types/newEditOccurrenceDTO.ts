@@ -3,7 +3,7 @@
  * Bruges KUN til create/update (POST)
  */
 export interface EditOccurrenceDto {
-  activityId: number;
+  id: number;
 
   /** Identificerer hvilken session i serien der ændres */
   originalStartUtc: string;

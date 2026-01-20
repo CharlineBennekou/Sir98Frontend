@@ -281,8 +281,8 @@ export const api = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: (_r, _e, { activityId, originalStartUtc }) => [
-        { type: 'Occurrences', id: `${activityId}_${originalStartUtc}` },
+      invalidatesTags: (_r, _e, { id, originalStartUtc }) => [
+        { type: 'Occurrences', id: `${id}_${originalStartUtc}` },
         { type: 'Occurrences', id: 'LIST' },
       ],
     }),
