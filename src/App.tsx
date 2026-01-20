@@ -14,6 +14,7 @@ import AboutUs from './pages/AboutUs';
 import ActivateCodePage from './pages/ActivateCode';
 import Logout from './pages/Logout';
 import AccountSettings from './pages/AccountSettings';
+import InstallationGuide from './pages/InstallationGuide';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="code" element={<ActivateCodePage />} />
           <Route path="/account-settings" element={<AccountSettings />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/installation-guide" element={<InstallationGuide/>}/>
         </Routes>
       </main>
     </div>

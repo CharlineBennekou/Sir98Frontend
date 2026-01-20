@@ -3,6 +3,28 @@
   text-align: center;
   margin-bottom: 40px;
 }
+/*
+@media (display-mode: browser) {
+  .im-Welcome-title {
+    color: magenta;
+  }
+}
+@media (display-mode: fullscreen) {
+  .im-Welcome-title {
+    color: yellow;
+  }
+}
+@media (display-mode: minimal-ui) {
+  .im-Welcome-title {
+    color: green;
+  }
+}
+@media (display-mode: standalone) {
+  .im-Welcome-title {
+    color: red;
+  }
+}
+*/
 
 /* Wrapper */
 .im-menu-wrapper {
