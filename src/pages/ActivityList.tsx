@@ -3,13 +3,14 @@ import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom';
 import ActivityCard from '../components/activities/ActivityCard'
 // Styling
-import { useFetchFutureOccurrencesQuery } from '../store/apis/api';
+import { useFetchOccurrencesQuery } from '../store/apis/api';
 import type { ActivityOccurrence } from '../types/activityOccurrence';
 import './../styles/ActivityListStyle.css';
 // Øverste header-komponent
 import AppHeader from "../components/layout/AppHeader";
 //import { isAuthenticated } from '../components/users/IsAuthenticated';
 import { LuSquarePlus } from 'react-icons/lu';
+import { isAuthenticated } from '../components/users/IsAuthenticated';
 
 const TYPE_TAG_MAP: Record<string, string[]> = {
   training: ['træning', 'træninger', 'training'],
@@ -22,9 +23,9 @@ export default function ActivityList() {
   const [daysForward, setDaysForward] = useState<number>(14); // default 7 dage
   //const userId = localStorage.getItem("Email");
   const { data: occurrences = [], isLoading, isError } =
-  useFetchFutureOccurrencesQuery(
-    // { days: daysForward, filter: null,  userId: isAuthenticated() ? String(localStorage.getItem("Email")) : "userId" },
-    // { refetchOnMountOrArgChange: true }
+  useFetchOccurrencesQuery(
+    { days: daysForward, filter: null,  userId: isAuthenticated() ? String(localStorage.getItem("Email")) : "userId" },
+    { refetchOnMountOrArgChange: true }
   );
 
   console.log({ isLoading, isError, occurrences, daysForward });

@@ -85,13 +85,7 @@ export const api = createApi({
           : [{ type: 'Occurrences' as const, id: 'LIST' }],
     }),
 
-    fetchFutureOccurrences: builder.query<ActivityOccurrence[], void>({
-  query: () => ({
-    url: 'activity-occurrences/future',
-    method: 'GET',
-  }),
-}),
-
+   
     // POST /ActivitySubscription
     subscribeToOccurrence: builder.mutation<void, ActivitySubscriptionPostDTO>({
       query: (body) => ({
@@ -252,7 +246,6 @@ export const api = createApi({
 export const {
   // Occurrences
   useFetchOccurrencesQuery,
-  useFetchFutureOccurrencesQuery,
 
   useSubscribeToOccurrenceMutation: useSubscribeToOccurrence,
   useUnsubscribeFromOccurrenceMutation: useUnsubscribeFromOccurrence,
