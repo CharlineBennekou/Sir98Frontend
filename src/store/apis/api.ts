@@ -91,7 +91,7 @@ export const api = createApi({
           ? [
               ...result.map((occ) => ({
                 type: 'Occurrences' as const,
-                id: occ.id,
+                id: occ.activityId,
               })),
               { type: 'Occurrences' as const, id: 'LIST' },
             ]
