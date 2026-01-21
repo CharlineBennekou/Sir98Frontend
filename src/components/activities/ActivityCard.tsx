@@ -33,7 +33,6 @@ export default function ActivityCard({ activity }: Props) {
 
     // use default if no specific image
     const imageUrl = activity.image?.trim() ? activity.image : DefaultImage;
-    console.log("Activity image URL:", imageUrl);
 
     async function SingleOccurrencePayload(){
        await  PostSubscription(false);
@@ -54,18 +53,19 @@ export default function ActivityCard({ activity }: Props) {
                         secondary: "#fff",      // white background
                     },
                 });
-                const Deletepayload = { //types/activitysubscription.ts // ActivitySubscriptionDeleteDTO
-                   userId: String(userId),
-                    activityId: activity.id,
+                const Deletepayload = {
+                    userId: String(userId),
+                    activityId: activity.activityId,
                     originalStartUtc: activity.originalStartUtc,
                 };
+
                 console.log("Unsubscribing from activity:", Deletepayload);
                 await unsubscribeFromOccurrence(Deletepayload); // DELETE
             } 
             else {
-                const Postpayload = { //types/activitysubscription.ts // ActivitySubscriptionPostDTO
+                const Postpayload = {
                     userId: String(userId),
-                    activityId: activity.id,
+                    activityId: activity.activityId,
                     originalStartUtc: activity.originalStartUtc,
                     AllOccurrences: all,
                 };
@@ -201,9 +201,9 @@ export default function ActivityCard({ activity }: Props) {
                         try {
                             await unsubscribeFromOccurrence({
                                 userId,
-                                activityId: activity.id,
-                                originalStartUtc: activity.originalStartUtc
-                            });
+                                activityId: activity.activityId,
+                                originalStartUtc: activity.originalStartUtc,
+                                });
                             toast.success(`Afmeldt ${activity.title}`, {
                                 iconTheme: {
                                     primary: "#ff9800",

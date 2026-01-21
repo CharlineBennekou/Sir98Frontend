@@ -6,6 +6,8 @@ import { useFetchInstructorsQuery } from "../store/apis/api";
 import { FiX } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import type { UpdateActivityDTO } from "../types/activityDTO";
+import { utcIsoToDkDateTimeLocal, dkDateTimeLocalToUtcIso } from "../utils/dateTimeService";
+
 
 export default function UpdateActivityForm() {
   const { id } = useParams();
@@ -36,27 +38,14 @@ export default function UpdateActivityForm() {
   const [isRecurring, setIsRecurring] = useState(false);
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([""]);
 
-  function dateToTimezone(date: Date, timezone: string) {
-    const year = date.toLocaleTimeString('da-DK', { year:"numeric", timeZone:  timezone }).slice(0,4).padStart(2,"0")
-    const month = date.toLocaleTimeString('da-DK', { month:"2-digit", timeZone:  timezone }).slice(0,2).padStart(2,"0")
-    const day = date.toLocaleTimeString('da-DK', { day:"2-digit", timeZone:  timezone }).slice(0,2).padStart(2,"0")
-    const hour = date.toLocaleTimeString('da-DK', { hour:"2-digit",timeZone:  timezone }).padStart(2,"0")
-    const minute = date.toLocaleTimeString('da-DK', { minute:"2-digit", timeZone:  timezone }).padStart(2,"0")
-    console.log(`${year}-${month.padStart(2,"0")}-${day.padStart(2,"0")}T${hour.padStart(2,"0")}:${minute.padStart(2,"0")}`)
-    return`${year}-${month}-${day}T${hour}:${minute}`;
-  }
 
   /* ---------- Prefill når activity hentes ---------- */
   useEffect(() => {
     if (!activity) return;
-
-    const startDate = dateToTimezone(new Date(activity.startUtc), 'Europe/Copenhagen')
-    const endDate = dateToTimezone(new Date(activity.endUtc), 'Europe/Copenhagen')
-    
     setTitle(activity.title);
     setType(activity.tag ?? "training");
-    setStart(startDate);
-    setEnd(endDate);
+    setStart(utcIsoToDkDateTimeLocal(activity.startUtc));
+    setEnd(utcIsoToDkDateTimeLocal(activity.endUtc));
     setImage(activity.image ?? "");
     setLocation(activity.address ?? "");
     setDescription(activity.description ?? "");
@@ -145,8 +134,9 @@ export default function UpdateActivityForm() {
       return;
     }
 
-    const startUtc = new Date(start).toISOString();
-    const endUtc = new Date(end).toISOString();
+   const startUtc = dkDateTimeLocalToUtcIso(start);
+   const endUtc = dkDateTimeLocalToUtcIso(end);
+
 
     const instructorsIDs: number[] = [];
     selectedInstructors.forEach((id) => {

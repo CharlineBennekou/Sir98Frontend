@@ -1,5 +1,6 @@
 import './App.css'
 import { Routes, Route } from 'react-router-dom';
+
 import ActivityList from './pages/ActivityList'
 import CreateActivityForm from './pages/CreateActivityForm';
 import Dashboard from './pages/Dashboard';
@@ -10,6 +11,7 @@ import { RegisterComp } from "./components/users/Register";
 import CreateInstructorForm from './pages/CreateInstructorForm';
 import UpdateInstructorForm from './pages/UpdateInstructorForm';
 import UpdateActivityForm from './pages/UpdateActivityForm';
+import UpdateOccurrencePage from './pages/UpdateOccurrencePage';
 import AboutUs from './pages/AboutUs';
 import ActivateCodePage from './pages/ActivateCode';
 import Logout from './pages/Logout';
@@ -18,11 +20,12 @@ import InstallationGuide from './pages/InstallationGuide';
 
 function App() {
   return (
-    <div className="app-root" style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>
-      <Toaster
-        position="bottom-center"
-        reverseOrder={false}
-      />
+    <div
+      className="app-root"
+      style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}
+    >
+      <Toaster position="bottom-center" reverseOrder={false} />
+
       <main>
           <Routes>
           <Route index element={<Dashboard />} /> --- Nummer 1 ---
@@ -34,6 +37,7 @@ function App() {
           <Route path="/create-instructor" element={<CreateInstructorForm />} />
           <Route path="/update-instructor/:id" element={<UpdateInstructorForm />} />
           <Route path="/update-activity/:id" element={<UpdateActivityForm />} />
+          <Route path="/update-occurrence" element={<UpdateOccurrencePage />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="code" element={<ActivateCodePage />} />
           <Route path="/account-settings" element={<AccountSettings />} />
