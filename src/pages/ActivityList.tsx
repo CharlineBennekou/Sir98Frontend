@@ -8,10 +8,10 @@ import type { ActivityOccurrence } from '../types/activityOccurrence';
 import './../styles/ActivityListStyle.css';
 // Øverste header-komponent
 import AppHeader from "../components/layout/AppHeader";
-import { isAuthenticated } from '../components/users/IsAuthenticated';
+//import { isAuthenticated } from '../components/users/IsAuthenticated';
 import { LuSquarePlus } from 'react-icons/lu';
+import { isAuthenticated } from '../components/users/IsAuthenticated';
 
-// 🔍 Mapping af URL-typer → hvilke tags der tæller som training/events
 const TYPE_TAG_MAP: Record<string, string[]> = {
   training: ['træning', 'træninger', 'training'],
   events: ['begivenhed', 'begivenheder', 'event', 'events'],
@@ -135,19 +135,27 @@ export default function ActivityList() {
         null
     }
 
-      {/* Dropdown til antal dage frem */}
-      <div style={{ margin: '1rem 0' }}>
-        <label htmlFor="days-forward" style={{ marginRight: 10 }}>Vis {pageTitle.toLowerCase()} i de næste:</label>
-        <select
-          id="days-forward"
-          value={daysForward}
-          onChange={(e) => setDaysForward(Number(e.target.value))}
-        >
-          <option value={7}>7 dage</option>
-          <option value={14}>14 dage</option>
-          <option value={30}>30 dage</option>
-        </select>
-      </div>
+   
+
+    {typeParam !== "events" && (
+     <div style={{ margin: '1rem 0' }}>
+    <label htmlFor="days-forward" style={{ marginRight: 10 }}>
+      Vis {pageTitle.toLowerCase()} i de næste:
+    </label>
+
+    <select
+      id="days-forward"
+      value={daysForward}
+      onChange={(e) => setDaysForward(Number(e.target.value))}
+    >
+      <option value={7}>7 dage</option>
+      <option value={14}>14 dage</option>
+      <option value={30}>30 dage</option>
+    </select>
+  </div>
+)}
+
+
 
       {sortedDates.length === 0 ? (
         // Hvis ingen aktiviteter matcher filtreringen

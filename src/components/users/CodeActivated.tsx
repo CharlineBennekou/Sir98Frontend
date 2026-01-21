@@ -14,7 +14,7 @@ export class CodeActivationComp extends React.Component<{}, { progress: string}>
         const parameters = new URLSearchParams(location.search)
         const code: string | null = parameters.get("code");
         if(this.state.progress === "load") {
-            fetch(`https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/User/Activate/code=${code}`, {
+            fetch(`https://api.mnoergaard.dk/api/User/Activate/code=${code}`, {
                 method: 'GET',
             }).then((response) => {
                 this.setState({ progress: (response.status == 200) ? "ok" : "fail" })

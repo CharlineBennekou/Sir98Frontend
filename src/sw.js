@@ -1,9 +1,14 @@
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
+import { clientsClaim } from 'workbox-core';
+
+//Initialize the service worker and take control of clients as soon as possible
+self.skipWaiting();
+clientsClaim();
+
 
 cleanupOutdatedCaches();
+// no precacheAndRoute call
 
-// This array is injected by vite-plugin-pwa / workbox at build time
-precacheAndRoute(self.__WB_MANIFEST.filter(() =>false));
 
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing...');
@@ -11,7 +16,14 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activating...');
+    event.waitUntil( // When service worker activates, clear old caches
+    (async () => {
+      const cacheKeys = await caches.keys();
+      await Promise.all(cacheKeys.map((key) => caches.delete(key)));
+    })()
+  );
 });
+  
 
 self.addEventListener('push', (event) => {
   console.log('Push event received', event);

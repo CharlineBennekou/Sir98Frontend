@@ -11,10 +11,20 @@ export const api = createApi({
   reducerPath: 'api',
 
   baseQuery: fetchBaseQuery({
-    //baseUrl: 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/',
+    baseUrl: 'https://api.mnoergaard.dk/api/',
     //baseUrl:'https://localhost:7275/api/',
-    baseUrl: 'https://api.mnoergaard.dk/api/'
- 
+
+    //taken from official website - https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("JWToken");
+
+      // If we have a token set in state, let's assume that we should be passing it.
+      if (token) {
+        headers.set('authorization', `${token}`)
+      }
+
+      return headers
+    }
   }),
 
   tagTypes: ['Occurrences', 'Activity', 'Instructor'],
@@ -43,6 +53,9 @@ export const api = createApi({
           method: 'GET',
         };
       },
+
+      
+
 
       transformResponse: (response: any) => {
       const list: any[] = Array.isArray(response) ? response : [];
@@ -89,6 +102,7 @@ export const api = createApi({
           : [{ type: 'Occurrences' as const, id: 'LIST' }],
     }),
 
+   
     // POST /ActivitySubscription
     subscribeToOccurrence: builder.mutation<void, ActivitySubscriptionPostDTO>({
       query: (body) => ({
@@ -295,6 +309,7 @@ export const api = createApi({
 export const {
   // Occurrences
   useFetchOccurrencesQuery,
+
   useSubscribeToOccurrenceMutation: useSubscribeToOccurrence,
   useUnsubscribeFromOccurrenceMutation: useUnsubscribeFromOccurrence,
   // Push
@@ -307,6 +322,7 @@ export const {
   useCreateActivityMutation,
   useUpdateActivityMutation,
   useDeleteActivityMutation,
+
 
   // Instructor
   useFetchInstructorsQuery,

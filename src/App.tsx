@@ -16,6 +16,7 @@ import AboutUs from './pages/AboutUs';
 import ActivateCodePage from './pages/ActivateCode';
 import Logout from './pages/Logout';
 import AccountSettings from './pages/AccountSettings';
+import InstallationGuide from './pages/InstallationGuide';
 
 function App() {
   return (
@@ -26,8 +27,8 @@ function App() {
       <Toaster position="bottom-center" reverseOrder={false} />
 
       <main>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Routes>
+          <Route index element={<Dashboard />} /> --- Nummer 1 ---
           <Route path="/create" element={<CreateActivityForm />} />
           <Route path="/aktiviteter" element={<ActivityList />} />
           <Route path="/instructor" element={<InstructorList />} />
@@ -38,9 +39,10 @@ function App() {
           <Route path="/update-activity/:id" element={<UpdateActivityForm />} />
           <Route path="/update-occurrence" element={<UpdateOccurrencePage />} />
           <Route path="/aboutus" element={<AboutUs />} />
-          <Route path="/code" element={<ActivateCodePage />} />
+          <Route path="code" element={<ActivateCodePage />} />
           <Route path="/account-settings" element={<AccountSettings />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/installation-guide" element={<InstallationGuide/>}/>
         </Routes>
       </main>
     </div>
