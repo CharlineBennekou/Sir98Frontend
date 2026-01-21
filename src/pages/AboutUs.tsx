@@ -11,7 +11,7 @@ export default function AboutUs() {
       <div className="about-container">
 
 
-            {/* 🔹 Boks: Om foreningen */}
+            {/*Boks: Om foreningen */}
         <div className="about-box-3">
           <h3>Om foreningen</h3>
           <p>
@@ -33,7 +33,7 @@ export default function AboutUs() {
 
 
 
-        {/* 🔹 Boks: Om applikationen */}
+        {/* Boks: Om applikationen */}
         <div className="about-box-1">
           <h3>Om applikationen</h3>
           <p>
@@ -47,7 +47,7 @@ export default function AboutUs() {
           </p>
         </div>
 
-        {/* 🔹 Boks: Formål */}
+        {/* Boks: Formål */}
         <div className="about-box-2">
           <h3>Formål</h3>
           <p>
