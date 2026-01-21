@@ -1,7 +1,7 @@
 import "../../styles/ActivityDetailStyle.css";
 import type { ActivityOccurrence } from "../../types/activityOccurrence";
 import { FiArrowLeft } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import DefaultImage from "../../assets/placeHolderGreyPic.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDeleteActivityMutation } from "../../store/apis/api";
@@ -15,7 +15,6 @@ type Props = {
 
 export default function DialogBox({ activity, open, onClose }: Props) {
   const navigate = useNavigate();
-  const [isUpdateOccurrenceOpen, setIsUpdateOccurrenceOpen] = useState(false);
   const [deleteActivity, { isLoading: isDeleting }] = useDeleteActivityMutation();
 
   useEffect(() => {
