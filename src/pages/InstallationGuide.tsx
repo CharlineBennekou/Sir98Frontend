@@ -1,5 +1,9 @@
 import AppHeader from "../components/layout/AppHeader";
-import "./../styles/AboutUsStyle.css";
+import "./../styles/installation.css";
+
+import androidGoogle1 from "../assets/installation/Android-Google-1.png";
+import androidGoogle2 from "../assets/installation/Android-Google-2.png";
+import androidGoogle3 from "../assets/installation/Android-Google-3.png";
 
 export default function AboutUs() {
   return (
@@ -13,7 +17,14 @@ export default function AboutUs() {
 
             {/* 🔹 Boks: Om foreningen */}
         <div className="about-box-3">
-          <h3>Android</h3>
+          <h3>Android - guide</h3>
+          <p>Sådan installerer du denne app på android med Google.</p>
+          <div className="installation">
+            <img src={androidGoogle1}/>
+            <img src={androidGoogle2}/>
+            <img src={androidGoogle3}/>
+          </div>
+          <b>Færdig!</b>
         </div>
 
 
