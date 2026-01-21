@@ -174,7 +174,7 @@ export default function ActivityList() {
           <div className="activity-grid">
             {grouped[dateKey].map((occ: ActivityOccurrence) => (
               <ActivityCard 
-                key={`${occ.id}-${occ.startUtc}`}
+                key={`${occ.activityId}-${occ.startUtc}`}
                 activity={occ}
               />
             ))}
