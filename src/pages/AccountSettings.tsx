@@ -13,7 +13,7 @@ export default function AccountSettings() {
       <div style={{ marginTop: 70 }} />
 
       <div className="about-container">
-        {/* 🔹 Boks: Notifikationer */}
+        {/* Boks: Notifikationer */}
         <div className="about-box-1">
           <NotificationSettings userId={userId} />
         </div>
