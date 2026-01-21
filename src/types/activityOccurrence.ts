@@ -1,11 +1,5 @@
 export interface ActivityOccurrence {
-  /** Unik identitet for én session */
-  id: string;
-
-  /** Serie-id */
   activityId: number;
-
-  /** Bruges til redigering og subscriptions */
   originalStartUtc: string;
 
   startUtc: string;

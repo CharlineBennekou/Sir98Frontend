@@ -61,10 +61,6 @@ export const api = createApi({
       const list: any[] = Array.isArray(response) ? response : [];
 
       return list.map((o) => ({
-        // 🔑 unik identitet for EN session
-        id: `${o.activityId}_${o.originalStartUtc}`,
-
-        // 🧠 behold begge dele eksplicit
         activityId: o.activityId,
         originalStartUtc: o.originalStartUtc,
 
