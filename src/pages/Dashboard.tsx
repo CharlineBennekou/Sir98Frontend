@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import {FiActivity, FiCalendar, FiBell, FiInfo, FiLogOut, FiLogIn} from "react-icons/fi";
+import {FiActivity, FiCalendar, FiBell, FiInfo, FiLogOut, FiLogIn, FiSettings} from "react-icons/fi";
 import { LiaUserTieSolid } from "react-icons/lia";
+import { MdOutlineInstallMobile } from "react-icons/md";
 import "./../styles/DashboardStyle.css";
 
 import AppHeader from "../components/layout/AppHeader";
@@ -55,15 +56,15 @@ export default function Dashboard() {
     },
     {
       label: "Konto indstillinger",
-      icon: null,
+      icon: <FiSettings />,
       onClick: () => navigate("/account-settings"),
-      color: "rgb(226, 78, 226)",
+      color: "#3F51B5",
     },
     {
       label: "Installations guide",
-      icon: null,
+      icon: <MdOutlineInstallMobile />,
       onClick: () => navigate("/installation-guide"),
-      color: "rgb(71, 136, 210)",
+      color: "rgb(226, 78, 226)",
     }
 
 

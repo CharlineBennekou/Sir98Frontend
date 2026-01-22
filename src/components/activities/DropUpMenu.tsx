@@ -10,6 +10,7 @@ type DropUpMenuProps = {
     onUnfollow: () => void;
     isSubscribed: boolean;
     activityTitle: string;
+    isRecurring: boolean;
 };
 
 
@@ -20,7 +21,8 @@ export default function DropUpMenu({
     onFollowAll,
     onUnfollow,
     isSubscribed,
-    activityTitle
+    activityTitle,
+    isRecurring
 }: DropUpMenuProps) {
 
     if (!open) return null;
@@ -39,10 +41,12 @@ export default function DropUpMenu({
                              Følg denne {activityTitle} aktivitet
                         </button>
 
+                        {isRecurring && (
                         <button className="dropup-item" onClick={() => { onFollowAll(); onClose(); }}>
                             <span className="icon-wrapper"><LuCopyPlus /></span>
                             Følg alle {activityTitle} aktiviteter
                         </button>
+                        )}
 
                         <button className="dropup-item danger" onClick={onClose}>
                             <span className="icon-wrapper"><LuX /></span>

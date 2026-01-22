@@ -190,6 +190,7 @@ export default function ActivityCard({ activity }: Props) {
            <DropUpMenu
                 open={menuOpen}
                 onClose={() => setMenuOpen(false)}
+                isRecurring={activity.isRecurring}
                 onFollowSingle={async () => {
                     await SingleOccurrencePayload();
                 }}

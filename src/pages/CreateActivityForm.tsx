@@ -181,7 +181,7 @@ export default function CreateActivityForm() {
 
           {image && (
             <div>
-              <p>Nuvarande billede:</p>
+              <p>Nuværende billede:</p>
               <img src={image} alt="Instruktør" style={{ width: "150px", borderRadius: "8px" }} />
             </div>
           )}

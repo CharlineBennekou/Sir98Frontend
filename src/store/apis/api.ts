@@ -82,6 +82,7 @@ export const api = createApi({
         tag: o.tag ?? null,
         cancelled: o.cancelled,
         isSubscribed: o.isSubscribed,
+        isRecurring: o.isRecurring,
       }));
     },
 
@@ -280,6 +281,7 @@ export const api = createApi({
         tag: o.tag ?? null,
         cancelled: o.cancelled,
         isSubscribed: o.isSubscribed,
+        isRecurring: o.isRecurring,
       }),
       providesTags: (_r, _e, { activityId, originalStartUtc }) => [
         { type: "Occurrences" as const, id: `${activityId}_${originalStartUtc}` },

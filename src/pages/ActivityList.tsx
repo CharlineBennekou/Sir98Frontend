@@ -161,7 +161,7 @@ export default function ActivityList() {
         // Hvis ingen aktiviteter matcher filtreringen
         <p style={{ padding: 16 }}>
           {typeParam === 'mine'
-            ? 'Der er ingen fulgte aktiviteter i de næste dagse. Prøv at følge nogle aktiviteter for at få notifikationer om ændringer.'
+            ? 'Der er ingen fulgte aktiviteter i de næste dage. Prøv at følge nogle aktiviteter for at få notifikationer om ændringer.'
             : `Ingen ${pageTitle.toLowerCase()} fundet.`}
         </p>
       ) : (

@@ -22,6 +22,7 @@ export interface ActivityOccurrence {
   tag: string | null;
   cancelled: boolean;
   isSubscribed: boolean;
+  isRecurring: boolean;
 }
 
 
