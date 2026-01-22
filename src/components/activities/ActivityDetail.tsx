@@ -195,7 +195,14 @@ export default function ActivityDetail({ activity, open, onClose }: Props) {
           }}
           onUpdateSingle={() => {
             onClose();
-            navigate(`/update-occurrence`, { state: { activity } });
+            if  (!activity.isRecurring)
+            {
+              navigate(`/update-activity/${activity.activityId}`);
+            }
+            else
+            {
+              navigate(`/update-occurrence`, { state: { activity } });
+            }
           }}
         />
     </>
