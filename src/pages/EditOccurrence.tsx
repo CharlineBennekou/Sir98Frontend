@@ -184,14 +184,24 @@ export default function EditOccurrence({ activity, onSaved }: EditOccurrenceProp
             />
           </label>
 
-          <label>
-            <input
-              type="checkbox"
-              checked={cancelled}
-              onChange={(e) => setCancelled(e.target.checked)}
-            />
-            Aflyst
-          </label>
+        <label
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <span>Aflyst</span>
+          <input
+            type="checkbox"
+            checked={cancelled}
+            onChange={(e) => setCancelled(e.target.checked)}
+          />
+          
+        </label>
+
+
 
           <button className="submit-btn" disabled={isLoading}>
             {isLoading ? "Opdaterer..." : "Opdater Session"}

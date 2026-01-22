@@ -1,11 +1,11 @@
 import "../../styles/ActivityDetailStyle.css";
 import type { ActivityOccurrence } from "../../types/activityOccurrence";
 import { FiArrowLeft } from "react-icons/fi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DefaultImage from "../../assets/placeHolderGreyPic.jpg";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDeleteActivityMutation } from "../../store/apis/api";
-
+import UpdateDropUp from "./UpdateDropUp";
 
 type Props = {
   activity: ActivityOccurrence;
@@ -13,9 +13,10 @@ type Props = {
   onClose: () => void;
 };
 
-export default function DialogBox({ activity, open, onClose }: Props) {
+export default function ActivityDetail({ activity, open, onClose }: Props) {
   const navigate = useNavigate();
   const [deleteActivity, { isLoading: isDeleting }] = useDeleteActivityMutation();
+  const [updateMenuOpen, setUpdateMenuOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -34,8 +35,11 @@ export default function DialogBox({ activity, open, onClose }: Props) {
   const imageUrl = activity.image?.trim() ? activity.image : DefaultImage;
 
   async function handleDelete() {
-    const confirmDelete = window.confirm("Er du sikker på, at du vil slette denne aktivitet?");
+    const confirmDelete = window.confirm(
+      "Er du sikker på, at du vil slette denne aktivitet?"
+    );
     if (!confirmDelete) return;
+
     try {
       await deleteActivity(activity.activityId).unwrap();
       onClose();
@@ -67,31 +71,21 @@ export default function DialogBox({ activity, open, onClose }: Props) {
                   className="dialog-image"
                   style={{ backgroundImage: `url(${imageUrl})` }}
                 />
-                {activity.cancelled && <div className="image-cancelled-overlay">AFLYST</div>}
+                {activity.cancelled && (
+                  <div className="image-cancelled-overlay">AFLYST</div>
+                )}
               </div>
             )}
 
             {/* Handlinger */}
             {localStorage.getItem("Role") === "Instructor" && (
               <div className="activity-detail-actions">
-                {/* Opdater hele serien */}
-                <Link
-                  to={`/update-activity/${activity.activityId}`}
-                  className="submit-btn"
-                  onClick={onClose}
-                >
-                  Opdater aktivitet
-                </Link>
-
-                {/* Opdater enkel session – send activity via state */}
+                {/* OPDATER (drop-up) */}
                 <button
                   className="submit-btn"
-                  onClick={() => {
-                    onClose(); // luk dialogen
-                    navigate(`/update-occurrence`, { state: { activity } });
-                  }}
+                  onClick={() => setUpdateMenuOpen(true)}
                 >
-                  Opdater enkel aktivitet
+                  Opdater
                 </button>
 
                 {/* Slet */}
@@ -105,14 +99,32 @@ export default function DialogBox({ activity, open, onClose }: Props) {
               </div>
             )}
 
-            {activity.address && <p><strong>Adresse:</strong> {activity.address}</p>}
+            {activity.address && (
+              <p>
+                <strong>Adresse:</strong> {activity.address}
+              </p>
+            )}
 
             <p>
               <strong>Tidspunkt:</strong>{" "}
               {start
-                ? `${start.toLocaleDateString("da-DK", { day: "numeric", month: "long", timeZone: "Europe/Copenhagen" })} kl. ${start.toLocaleTimeString("da-DK", { hour: '2-digit', minute: '2-digit', timeZone: "Europe/Copenhagen" })}`
+                ? `${start.toLocaleDateString("da-DK", {
+                    day: "numeric",
+                    month: "long",
+                    timeZone: "Europe/Copenhagen",
+                  })} kl. ${start.toLocaleTimeString("da-DK", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    timeZone: "Europe/Copenhagen",
+                  })}`
                 : ""}
-              {end ? ` - ${end.toLocaleTimeString("da-DK", { hour: '2-digit', minute: '2-digit', timeZone: "Europe/Copenhagen" })}` : ""}
+              {end
+                ? ` - ${end.toLocaleTimeString("da-DK", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    timeZone: "Europe/Copenhagen",
+                  })}`
+                : ""}
             </p>
 
             {activity.description && (
@@ -124,23 +136,41 @@ export default function DialogBox({ activity, open, onClose }: Props) {
               </div>
             )}
 
-            <p className="activity-detail-instructor"><strong>Instruktør:</strong></p>
+            <p className="activity-detail-instructor">
+              <strong>Instruktør:</strong>
+            </p>
+
             {activity.instructors && activity.instructors.length > 0 ? (
               <div className="detail-instructor-card">
                 {activity.instructors.map((inst) => (
                   <div className="detail-instructor-item" key={inst.id}>
                     <div className="detail-instructor-image-wrap">
-                      <img src={inst.image ?? "/assets/instructors/placeholder.png"} alt={inst.firstName} />
+                      <img
+                        src={inst.image ?? "/assets/instructors/placeholder.png"}
+                        alt={inst.firstName}
+                      />
                     </div>
                     <div className="detail-instructor-info">
-                      <div className="detail-instructor-name">{inst.firstName}</div>
-                      {inst.number && <div className="detail-instructor-contact">{inst.number}</div>}
-                      {inst.email && <div className="detail-instructor-contact">{inst.email}</div>}
+                      <div className="detail-instructor-name">
+                        {inst.firstName}
+                      </div>
+                      {inst.number && (
+                        <div className="detail-instructor-contact">
+                          {inst.number}
+                        </div>
+                      )}
+                      {inst.email && (
+                        <div className="detail-instructor-contact">
+                          {inst.email}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
               </div>
-            ) : <p className="detail-instructor-none">Ingen</p>}
+            ) : (
+              <p className="detail-instructor-none">Ingen</p>
+            )}
 
             {activity.link && (
               <p>
@@ -153,6 +183,28 @@ export default function DialogBox({ activity, open, onClose }: Props) {
           </div>
         </div>
       </div>
+
+      {/* DROP-UP MENU */}
+        <UpdateDropUp
+          open={updateMenuOpen}
+          onClose={() => setUpdateMenuOpen(false)}
+          isRecurring={activity.isRecurring}
+          onUpdateAll={() => {
+            onClose();
+            navigate(`/update-activity/${activity.activityId}`);
+          }}
+          onUpdateSingle={() => {
+            onClose();
+            if  (!activity.isRecurring)
+            {
+              navigate(`/update-activity/${activity.activityId}`);
+            }
+            else
+            {
+              navigate(`/update-occurrence`, { state: { activity } });
+            }
+          }}
+        />
     </>
   );
 }
