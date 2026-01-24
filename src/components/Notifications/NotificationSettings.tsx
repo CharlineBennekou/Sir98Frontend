@@ -31,9 +31,9 @@ export default function NotificationSettings({ userId }: NotificationSettingsPro
       await upsertPushSubscription(dto).unwrap();
 
       setStatus("granted");
-      alert("Subscription registered on server!");
+      alert("Notifikationer er nu aktiveret!");
     } catch (e: any) {
-      alert(e?.message ?? "Failed to enable notifications.");
+      alert(e?.message ?? "Det lykkedes ikke at aktivere notifikationer.");
     } finally {
       setIsWorking(false);
     }
