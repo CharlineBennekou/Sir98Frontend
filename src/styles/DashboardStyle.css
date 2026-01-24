@@ -2,6 +2,7 @@
 .im-Welcome-title {
   text-align: center;
   margin-bottom: 40px;
+  margin-top: 60px; /* sikre at titlen ikke er under navbaren */
 }
 /*
 @media (display-mode: browser) {
