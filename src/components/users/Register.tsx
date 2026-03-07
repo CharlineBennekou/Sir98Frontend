@@ -28,7 +28,7 @@ export class RegisterComp extends React.Component {
             };
 
 //Todo: Move this to redux api slice
-            fetch('https://api.sir98.dk/api/User/Register', {
+            fetch('https://api.ifsir98.dk/api/User/Register', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',

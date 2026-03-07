@@ -11,7 +11,7 @@ export const api = createApi({
   reducerPath: 'api',
 
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://api.sir98.dk/api/',
+    baseUrl: 'https://api.ifsir98.dk/api/',
     //baseUrl:'https://localhost:7275/api/',
 
     //taken from official website - https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery
