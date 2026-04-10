@@ -58,7 +58,7 @@ export default function CreateActivityForm() {
     }
     const form = new FormData();
     form.set("images", images[0])
-    const URL = 'https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/Image';
+    const URL = 'https://api.ifsir98.dk/api/Image';
     //const URL = "https://localhost:7275/api/Image";
     fetch(URL, {
         method: 'POST',

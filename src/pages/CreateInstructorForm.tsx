@@ -31,7 +31,7 @@ export default function CreateInstructorForm() {
     form.set("images", images[0]);
 
     const URL =
-      "https://sir98backendv3-hbbdgpawc0a8a3fp.canadacentral-01.azurewebsites.net/api/Image";
+      "https://api.ifsir98.dk/api/Image";
 
     fetch(URL, {
       method: "POST",
