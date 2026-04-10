@@ -180,7 +180,10 @@ export const api = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: [{ type: 'Activity', id: 'LIST' }],
+      invalidatesTags: [
+    { type: 'Activity', id: 'LIST' },
+    { type: 'Occurrences', id: 'LIST' },
+  ],
     }),
 
     updateActivity: builder.mutation<Activity, UpdateActivityDTO>({
@@ -189,7 +192,11 @@ export const api = createApi({
         method: 'PUT',
         body: activity,
       }),
-      invalidatesTags: (_r, _e, a) => [{ type: 'Activity', id: a.id }],
+      invalidatesTags: (_r, _e, a) => [
+    { type: 'Activity', id: a.id },
+    { type: 'Activity', id: 'LIST' },
+    { type: 'Occurrences', id: 'LIST' },
+  ],
     }),
 
     deleteActivity: builder.mutation<void, number>({
@@ -197,7 +204,11 @@ export const api = createApi({
         url: `activity/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (_r, _e, id) => [{ type: 'Activity', id }],
+      invalidatesTags: (_r, _e, id) => [
+    { type: 'Activity', id },
+    { type: 'Activity', id: 'LIST' },
+    { type: 'Occurrences', id: 'LIST' },
+  ],
     }),
 
     // ---------- INSTRUCTOR ----------
@@ -300,6 +311,22 @@ export const api = createApi({
       ],
     }),
 
+    // ---------- UPLOAD IMAGE ENDPOINT ----------
+    uploadImage: builder.mutation<string, File>({
+    query: (file) => {
+      const formData = new FormData();
+     formData.append("images", file);
+
+      return {
+      url: "Image",
+      method: "POST",
+      body: formData,
+    };
+  },
+  transformResponse: (response: string) => {
+    return `https://api.ifsir98.dk/api/Image/${response}`;
+  },
+}),
 
   }),
 });
@@ -308,7 +335,7 @@ export const {
   // Occurrences
   useFetchOccurrencesQuery,
 
-  useSubscribeToOccurrenceMutation: useSubscribeToOccurrence,
+  useSubscribeToOccurrenceMutation: useSubscribeToOccurrence, //Renamed because we didn't like the mutation suffix, but should probably be consistent and change all of them at some point
   useUnsubscribeFromOccurrenceMutation: useUnsubscribeFromOccurrence,
   // Push
   useUpsertPushSubscriptionMutation,
@@ -332,5 +359,8 @@ export const {
   // Occurrences
   useFetchOccurrenceQuery,
   useUpsertOccurrenceMutation,
+
+  // Image
+  useUploadImageMutation,
 
 } = api;

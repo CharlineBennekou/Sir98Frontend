@@ -5,25 +5,30 @@ import AppHeader from "../components/layout/AppHeader";
 import {
   useFetchInstructorByIdQuery,
   useUpdateInstructorMutation,
+  useUploadImageMutation,
 } from "../store/apis/api";
-
 
 export default function UpdateInstructorForm() {
   const { id } = useParams<{ id: string }>();
   const instructorId = Number(id);
   const navigate = useNavigate();
 
-  const { data: instructor, isLoading, isError } = useFetchInstructorByIdQuery(instructorId);
-  const [updateInstructor, { isLoading: isUpdating, isSuccess, isError: updateError }] =
-    useUpdateInstructorMutation();
+  const { data: instructor, isLoading, isError } =
+    useFetchInstructorByIdQuery(instructorId);
+
+  const [
+    updateInstructor,
+    { isLoading: isUpdating, isSuccess, isError: updateError },
+  ] = useUpdateInstructorMutation();
+
+  const [uploadImage, { isLoading: isUploadingImage }] =
+    useUploadImageMutation();
 
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [image, setImage] = useState("");
-  let postingImage: boolean = false;
 
-  // ---------- Prefill form ----------
   useEffect(() => {
     if (instructor) {
       setFirstName(instructor.firstName);
@@ -33,26 +38,22 @@ export default function UpdateInstructorForm() {
     }
   }, [instructor]);
 
-  // ---------- Image upload ----------
   async function postImage(images: FileList | null): Promise<void> {
     if (!images || !images[0]) {
       alert("Intet billede valgt");
       return;
     }
 
-    postingImage = true;
+    try {
+      const imageUrl = await uploadImage(images[0]).unwrap();
+      setImage(imageUrl);
+      alert("Billede uploadet");
+    } catch (err: any) {
+      console.error(err);
 
-    const form = new FormData();
-    form.set("images", images[0]);
+      const status = err?.status;
 
-    const URL =
-      "https://api.ifsir98.dk/api/Image";
-
-    fetch(URL, {
-      method: "POST",
-      body: form,
-    }).then((response: Response) => {
-      switch (response.status) {
+      switch (status) {
         case 415:
           alert("Filtype ikke understøttet");
           break;
@@ -62,24 +63,17 @@ export default function UpdateInstructorForm() {
         case 500:
           alert("Serverfejl");
           break;
-        case 200:
-          response.text().then((text) => {
-            setImage(`${URL}/${text}`);
-          });
-          alert("Billede uploadet");
-          break;
         default:
-          response.text().then((text) => alert(text));
+          alert("Fejl ved upload af billede");
+          break;
       }
-      postingImage = false;
-    });
+    }
   }
 
-  // ---------- Submit ----------
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (postingImage) {
+    if (isUploadingImage) {
       alert("Billede bliver uploadet");
       return;
     }
@@ -95,7 +89,7 @@ export default function UpdateInstructorForm() {
     try {
       await updateInstructor(updatedInstructor).unwrap();
       alert("Instruktør opdateret!");
-      navigate("/instructor"); // Naviger tilbage til liste
+      navigate("/instructor");
     } catch (err) {
       console.error(err);
       alert("Fejl ved opdatering af instruktør");
@@ -150,12 +144,24 @@ export default function UpdateInstructorForm() {
           {image && (
             <div>
               <p>Nuværende billede:</p>
-              <img src={image} alt="Instruktør" style={{ width: "150px", borderRadius: "8px" }} />
+              <img
+                src={image}
+                alt="Instruktør"
+                style={{ width: "150px", borderRadius: "8px" }}
+              />
             </div>
           )}
 
-          <button type="submit" className="submit-btn" disabled={isUpdating}>
-            {isUpdating ? "Opdaterer..." : "Opdater Instruktør"}
+          <button
+            type="submit"
+            className="submit-btn"
+            disabled={isUpdating || isUploadingImage}
+          >
+            {isUpdating
+              ? "Opdaterer..."
+              : isUploadingImage
+              ? "Uploader billede..."
+              : "Opdater Instruktør"}
           </button>
 
           {isSuccess && <p style={{ color: "green" }}>Instruktør opdateret!</p>}

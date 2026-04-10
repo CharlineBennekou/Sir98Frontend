@@ -1,14 +1,16 @@
 import { useState } from "react";
 import "./../styles/CreateActivityFormStyle.css";
 import AppHeader from "../components/layout/AppHeader";
-import { useCreateActivityMutation } from "../store/apis/api";
-import { useFetchInstructorsQuery } from "../store/apis/api";
+import {
+  useCreateActivityMutation,
+  useFetchInstructorsQuery,
+  useUploadImageMutation,
+} from "../store/apis/api";
 import { FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import type { CreateActivityDTO } from "../types/activityDTO";
 
 export default function CreateActivityForm() {
-  var postingImage: boolean = false;
   const [title, setTitle] = useState("");
   const [type, setType] = useState("training");
   const [start, setStart] = useState("");
@@ -28,6 +30,8 @@ export default function CreateActivityForm() {
   const [createActivity, { isLoading, isSuccess, isError }] =
     useCreateActivityMutation();
 
+  const [uploadImage, { isLoading: isUploadingImage }] = useUploadImageMutation();
+
   const { data: instructors = [], isLoading: instructorsLoading } =
     useFetchInstructorsQuery();
 
@@ -46,59 +50,56 @@ export default function CreateActivityForm() {
   }
 
 
-  //https://stackoverflow.com/questions/60782060/cannot-post-a-multipart-form-data-using-fetch-typescript
-  async function postImage(images: FileList | null): Promise<void> {
-    if(!images) {
-      alert("Intet billede");
-      return;
-    }
-    if(!images[0]) {
-      alert("Intet billede");
-      return;
-    }
-    const form = new FormData();
-    form.set("images", images[0])
-    const URL = 'https://api.ifsir98.dk/api/Image';
-    //const URL = "https://localhost:7275/api/Image";
-    fetch(URL, {
-        method: 'POST',
-        body: form
-    }).then((response: Response) => {
-      switch(response.status){
-        case 415:
-          alert("Fil type er ikke understøttet")
-          break;
-        case 400: 
-          alert("Billede upload fejlede")
-          break;
-        case 500:
-          alert("Server fejl")
-          break;
-        case 200:
-          response.text().then(text => {
-            setImage(`${URL}/${text}`)
-          });
-          alert("Billede uploadet")
-          break;
-        default:
-          response.text().then(text => {
-            alert(text)
-          });
-      }
-      postingImage = false;
-    });
+async function postImage(images: FileList | null): Promise<void> {
+  if (!images || !images[0]) {
+    alert("Intet billede");
+    return;
   }
+
+  try {
+    const imageUrl = await uploadImage(images[0]).unwrap();
+    setImage(imageUrl);
+    alert("Billede uploadet");
+  } catch (err: any) {
+    console.error(err);
+
+    const status = err?.status;
+
+    switch (status) {
+      case 415:
+        alert("Fil type er ikke understøttet");
+        break;
+      case 400:
+        alert("Billede upload fejlede");
+        break;
+      case 500:
+        alert("Server fejl");
+        break;
+      default:
+        alert("Fejl ved upload af billede");
+        break;
+    }
+  }
+}
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if(postingImage) {
-      alert("Billede bliver uploadet");
-      return;
-    }
+    if (isUploadingImage) {
+    alert("Billede bliver uploadet");
+    return;
+  }
 
-    const startUtc = new Date(start).toISOString();
-    const endUtc = new Date(end).toISOString();
+      const startDate = new Date(start);
+    const endDate = new Date(end);
+
+   if (endDate <= startDate) {
+    alert("Sluttidspunkt skal være efter starttidspunkt.");
+    return;
+  }
+
+  const startUtc = startDate.toISOString();
+  const endUtc = endDate.toISOString();
 
     const instructorsIDs: number[] = [];
     selectedInstructors.forEach((id) => {
@@ -329,8 +330,8 @@ export default function CreateActivityForm() {
             <input type="text" value={link} onChange={(e) => setLink(e.target.value)} />
           </label>
 
-          <button type="submit" className="submit-btn" disabled={isLoading}>
-            {isLoading ? "Opretter..." : "Opret Aktivitet"}
+          <button type="submit" className="submit-btn" disabled={isLoading || isUploadingImage}>
+          {isLoading ? "Opretter..." : isUploadingImage ? "Uploader billede..." : "Opret Aktivitet"}
           </button>
 
           {isSuccess && <p style={{ color: "green" }}>Aktivitet oprettet!</p>}

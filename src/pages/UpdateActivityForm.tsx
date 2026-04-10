@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import "./../styles/CreateActivityFormStyle.css";
 import AppHeader from "../components/layout/AppHeader";
-import { useFetchActivityByIdQuery, useUpdateActivityMutation } from "../store/apis/api";
-import { useFetchInstructorsQuery } from "../store/apis/api";
+import {
+  useFetchActivityByIdQuery,
+  useUpdateActivityMutation,
+  useFetchInstructorsQuery,
+  useUploadImageMutation,
+} from "../store/apis/api";
 import { FiX } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import type { UpdateActivityDTO } from "../types/activityDTO";
@@ -24,7 +28,8 @@ export default function UpdateActivityForm() {
   const { data: instructors = [], isLoading: instructorsLoading } =
     useFetchInstructorsQuery();
 
-  let postingImage: boolean = false;
+  const [uploadImage, { isLoading: isUploadingImage }] =
+     useUploadImageMutation();
 
   /* ---------- State ---------- */
   const [title, setTitle] = useState("");
@@ -62,45 +67,36 @@ export default function UpdateActivityForm() {
 
     // ---------- Image upload ----------
   async function postImage(images: FileList | null): Promise<void> {
-    if (!images || !images[0]) {
-      alert("Intet billede valgt");
-      return;
-    }
-
-    postingImage = true;
-
-    const form = new FormData();
-    form.set("images", images[0]);
-
-    const URL =
-      "https://api.ifsir98.dk/api/Image";
-
-    fetch(URL, {
-      method: "POST",
-      body: form,
-    }).then((response: Response) => {
-      switch (response.status) {
-        case 415:
-          alert("Filtype ikke understøttet");
-          break;
-        case 400:
-          alert("Billede upload fejlede");
-          break;
-        case 500:
-          alert("Serverfejl");
-          break;
-        case 200:
-          response.text().then((text) => {
-            setImage(`${URL}/${text}`);
-          });
-          alert("Billede uploadet");
-          break;
-        default:
-          response.text().then((text) => alert(text));
-      }
-      postingImage = false;
-    });
+  if (!images || !images[0]) {
+    alert("Intet billede valgt");
+    return;
   }
+
+  try {
+    const imageUrl = await uploadImage(images[0]).unwrap();
+    setImage(imageUrl);
+    alert("Billede uploadet");
+  } catch (err: any) {
+    console.error(err);
+
+    const status = err?.status;
+
+    switch (status) {
+      case 415:
+        alert("Filtype ikke understøttet");
+        break;
+      case 400:
+        alert("Billede upload fejlede");
+        break;
+      case 500:
+        alert("Serverfejl");
+        break;
+      default:
+        alert("Fejl ved upload af billede");
+        break;
+    }
+  }
+}
 
 
   /* ---------- Instruktør helpers ---------- */
@@ -129,10 +125,19 @@ export default function UpdateActivityForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-     if (postingImage) {
-      alert("Billede bliver uploadet");
-      return;
-    }
+     if (isUploadingImage) {
+  alert("Billede bliver uploadet");
+  return;
+}
+
+// Validating that end date is after start date    
+const startDate = new Date(start);
+const endDate = new Date(end);
+
+if (endDate <= startDate) {
+  alert("Sluttidspunkt skal være efter starttidspunkt.");
+  return;
+}
 
    const startUtc = dkDateTimeLocalToUtcIso(start);
    const endUtc = dkDateTimeLocalToUtcIso(end);
@@ -268,9 +273,13 @@ export default function UpdateActivityForm() {
             <input value={link} onChange={(e) => setLink(e.target.value)} />
           </label>
 
-          <button className="submit-btn" disabled={isUpdating}>
-            {isUpdating ? "Opdaterer..." : "Opdater Aktivitet"}
-          </button>
+          <button className="submit-btn" disabled={isUpdating || isUploadingImage}>
+          {isUpdating
+            ? "Opdaterer..."
+            : isUploadingImage
+            ? "Uploader billede..."
+            : "Opdater Aktivitet"}
+        </button>
         </form>
       </div>
     </>
